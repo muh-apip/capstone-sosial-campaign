@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Navbar from './components/Navbar'
-import HeroSection from './components/HeroSection'
+import HeroSection from './pages/HeroSection'
+import Testimoni from './pages/Testimoni'
+import Footer from './pages/Footer'
 
 function App() {
 
@@ -8,6 +10,8 @@ function App() {
     <>
      <Navbar />
      <HeroSection/>
+     <Testimoni/>
+     <Footer/>
     </>
   )
 }
