@@ -29,7 +29,6 @@ export default function Login() {
             Selamat datang kembali. Login untuk mengakses akun Anda.
           </p>
           <form className="space-y-5">
-            {/* Username Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Username

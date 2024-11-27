@@ -91,7 +91,7 @@ export default function SignUp() {
 
             {/* Login Link */}
             <p className="text-center text-sm text-gray-600">
-              Sudah punya akun?{" "}
+              Sudah punya akun?
               <a href="/login" className="text-green-600 hover:underline">
                 Login
               </a>
