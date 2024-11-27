@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import HeroSection from './pages/HeroSection'
-import Testimoni from './pages/Testimoni'
-import Footer from './pages/Footer'
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import HeroSection from "./pages/HeroSection";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
-function App() {
-
+const App = () => {
   return (
-    <>
-     <Navbar />
-     <HeroSection/>
-     <Testimoni/>
-     <Footer/>
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<HeroSection />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
