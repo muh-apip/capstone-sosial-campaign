@@ -1,15 +1,19 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import HeroSection from './components/HeroSection'
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import HeroSection from "./pages/HeroSection";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-function App() {
-
+const App = () => {
   return (
-    <>
-     <Navbar />
-     <HeroSection/>
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<HeroSection />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
