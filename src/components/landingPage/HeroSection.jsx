@@ -1,9 +1,9 @@
 import React from "react";
-import HeroImg from "../assets/images/photos/heroimg.png";
-import DanationBox from "../assets/images/photos/danationbox.png";
-import BackgroundImage from "../assets/images/photos/backgroundimage.png";
+import HeroImg from "../../assets/images/photos/heroimg.png";
+import DanationBox from "../../assets/images/photos/danationbox.png";
+import BackgroundImage from "../../assets/images/photos/backgroundimage.png";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import "../index.css";
+import "../../index.css";
 
 export default function HeroSection() {
   return (

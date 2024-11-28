@@ -1,23 +1,17 @@
-import { useState } from "react";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import HeroSection from "./pages/HeroSection";
-import AboutUs from "./pages/AboutUs";
-import Fitur from "./pages/Fitur";
-import FAQ from "./pages/FAQ";
-import Testimoni from "./pages/Testimoni";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import SignUp from "./pages/Signup";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <HeroSection />
-      <AboutUs />
-      <Fitur />
-      <FAQ />
-      <Testimoni />
-      <Footer />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </Router>
   );
 }
 

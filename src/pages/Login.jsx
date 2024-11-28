@@ -2,11 +2,11 @@ import React from "react";
 
 export default function Login() {
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-gray-100">
       {/* Bagian Kiri */}
       <div className="hidden md:flex items-center justify-center w-1/2 bg-green-900 text-white p-8">
         <div className="max-w-md text-center">
-          <h2 className="text-1xl font-bold mb-4 text-left break-words">
+          <h2 className="text-2xl font-semibold mb-4 text-left break-words">
             Langkah kecilmu hari ini bisa membawa perubahan besar di masa depan
           </h2>
           <div className="mt-20">
@@ -20,15 +20,16 @@ export default function Login() {
       </div>
 
       {/* Bagian Kanan */}
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-white p-8">
+      <div className="w-full md:w-1/2 flex items-center justify-center bg-white p-8 rounded-lg shadow-lg">
         <div className="max-w-md w-full">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">
             Login
           </h2>
           <p className="text-center text-gray-500 mb-6">
             Selamat datang kembali. Login untuk mengakses akun Anda.
           </p>
           <form className="space-y-5">
+            {/* Input Username */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Username
@@ -40,7 +41,7 @@ export default function Login() {
               />
             </div>
 
-            {/* Password Field */}
+            {/* Input Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
@@ -66,11 +67,11 @@ export default function Login() {
               </a>
             </div>
 
-            {/* Button */}
+            {/* Login Button */}
             <div>
               <button
                 type="submit"
-                className="w-full py-3 px-6 text-white font-semibold rounded-lg bg-green-600 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-300"
+                className="w-full py-3 px-6 text-white font-semibold rounded-lg bg-[#4caf50] text-white hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]"
               >
                 Login
               </button>

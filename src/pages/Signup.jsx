@@ -4,9 +4,9 @@ export default function SignUp() {
   return (
     <div className="min-h-screen flex">
       {/* Bagian Kiri */}
-      <div className="hidden md:flex items-center justify-center w-1/2 bg-green-900 text-white p-8">
+      <div className="hidden md:flex items-center justify-center w-1/2 bg-green-900 text-white p-4">
         <div className="max-w-md text-center">
-          <h2 className="text-1xl font-bold mb-4 text-left break-words">
+          <h2 className="text-2xl font-semibold mb-4 text-left break-words">
             Langkah kecilmu hari ini bisa membawa perubahan besar di masa depan
           </h2>
           <div className="mt-20">
@@ -22,7 +22,7 @@ export default function SignUp() {
       {/* Bagian Kanan */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-white p-8">
         <div className="max-w-md w-full">
-          <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">
             Sign Up
           </h2>
           <p className="text-center text-gray-500 mb-6">
@@ -83,7 +83,7 @@ export default function SignUp() {
             <div>
               <button
                 type="submit"
-                className="w-full py-3 px-6 text-white font-semibold rounded-lg bg-green-600 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 transition duration-300"
+                className="w-full py-3 px-6 text-white font-semibold rounded-lg bg-[#4caf50] text-white hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]"
               >
                 Sign Up
               </button>

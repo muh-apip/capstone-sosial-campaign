@@ -1,7 +1,8 @@
 import React from "react";
-import SitiNurjanah from "../assets/images/photos/SitiNurjanah.png";
-import AndiPrasetyo from "../assets/images/photos/AndiPrasetyo.png";
-import BudiSantoso from "../assets/images/photos/BudiSantoso.png";
+import SitiNurjanah from "../../assets/images/photos/SitiNurjanah.png";
+import AndiPrasetyo from "../../assets/images/photos/AndiPrasetyo.png";
+import BudiSantoso from "../../assets/images/photos/BudiSantoso.png";
+
 
 const Testimoni = () => {
   const testimonials = [
