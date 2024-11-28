@@ -4,6 +4,9 @@ import HeroSection from "./pages/HeroSection";
 import AboutUs from "./pages/AboutUs";
 import Fitur from "./pages/Fitur";
 import FAQ from "./pages/FAQ";
+import Testimoni from './pages/Testimoni'
+import Footer from './pages/Footer'
+
 
 function App() {
   return (
@@ -13,6 +16,8 @@ function App() {
       <AboutUs />
       <Fitur />
       <FAQ />
+      <Testimoni/>
+     <Footer/>
     </>
   );
 }
