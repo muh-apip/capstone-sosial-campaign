@@ -32,7 +32,7 @@ const Fitur = () => {
                 Bantu kami memberikan dukungan finansial untuk program sosial
                 dan lingkungan yang membutuhkan.
               </p>
-              <button className="bg-[#4caf50] text-white px-6 py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
+              <button className="font-semibold bg-[#4caf50] text-white px-6 py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
                 Lihat selengkapnya
               </button>
             </div>
@@ -53,7 +53,7 @@ const Fitur = () => {
                 Ayo ambil bagian dalam kegiatan relawan untuk menjaga dan
                 memperbaiki kondisi lingkungan sekitar.
               </p>
-              <button className="bg-[#4caf50] text-white px-6 py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
+              <button className="font-semibold bg-[#4caf50] text-white px-6 py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
                 Lihat selengkapnya
               </button>
             </div>
@@ -74,7 +74,7 @@ const Fitur = () => {
                 Temukan artikel terbaru yang membahas isu sosial dan lingkungan
                 serta cara-cara untuk mengatasi masalah tersebut.
               </p>
-              <button className="bg-[#4caf50] text-white px-6 py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
+              <button className="font-semibold bg-[#4caf50] text-white px-6 py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
                 Lihat selengkapnya
               </button>
             </div>
