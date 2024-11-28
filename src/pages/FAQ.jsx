@@ -3,18 +3,19 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
-    <div className="bg-white rounded-md shadow-md border border-gray-300 w-full mb-2">
+    <div className="bg-white rounded-lg shadow-md border border-gray-300 w-full mb-4">
       <div
         className="flex items-center justify-between px-6 py-4 cursor-pointer"
         onClick={onClick}
       >
-        <h2 className="text-base font-semibold text-gray-900">{question}</h2>
+        {/* Teks pada dropdown menjadi semibold dan lebih lebar */}
+        <h2 className="text-lg font-semibold text-gray-900 w-full">{question}</h2>
         <i
           className={`fas fa-chevron-${isOpen ? "up" : "down"} text-gray-600`}
         ></i>
       </div>
       {isOpen && (
-        <div className="px-6 py-3 border-t text-gray-700 text-sm leading-relaxed">
+        <div className="px-6 py-6 border-t text-gray-700 text-base leading-relaxed h-[300px] overflow-y-auto">
           {answer}
         </div>
       )}
@@ -58,14 +59,16 @@ const FAQ = () => {
   };
 
   return (
-    <div className="bg-gray-100">
-      {/* Kontainer FAQ */}
-      <div className="w-full max-w-6xl mx-auto px-4 pt-8">
+    <div className="bg-gray-100 py-20 px-8">
+      <div className="max-w-4xl mx-auto">
         {/* Header FAQ */}
-        <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
-          Pertanyaan yang Sering Diajukan
-        </h1>
-        {/* Item FAQ */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-semibold text-gray-800">
+            Pertanyaan yang Sering Diajukan
+          </h1>
+        </div>
+
+        {/* Daftar FAQ */}
         {faqs.map((faq, index) => (
           <FAQItem
             key={index}
