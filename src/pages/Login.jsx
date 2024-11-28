@@ -2,6 +2,7 @@ import React from "react";
 
 export default function Login() {
   return (
+    <>
     <div className="min-h-screen flex bg-gray-100">
       {/* Bagian Kiri */}
       <div className="hidden md:flex items-center justify-center w-1/2 bg-green-900 text-white p-8">
@@ -88,5 +89,6 @@ export default function Login() {
         </div>
       </div>
     </div>
+    </>
   );
 }
