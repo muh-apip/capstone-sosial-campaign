@@ -60,8 +60,6 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
-      <Testimoni />
-      <Footer />
     </div>
   );
 }
