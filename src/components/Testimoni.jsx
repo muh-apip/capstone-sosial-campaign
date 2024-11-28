@@ -26,9 +26,9 @@ const Testimoni = () => {
   ];
 
   return (
-    <div className="py-16 bg-gray-50">
+    <div className="py-16 bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-3xl font-semibold text-gray-900 mb-6">
+        <h2 className="text-center text-4xl font-semibold text-gray-900 mb-6">
           Apa Kata Mereka
         </h2>
         <p className="text-center font-normal text-gray-600 mb-12">
