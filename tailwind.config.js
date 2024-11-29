@@ -7,7 +7,11 @@ export default {
   ],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'], 
+      },
+    },
   },
   plugins: [require("preline/plugin")],
 };

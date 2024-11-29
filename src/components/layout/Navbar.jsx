@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/images/logos/Logo.png";
+import logo from "../../assets/images/logos/Logo.png";
 
 const Navbar = () => {
   // State untuk mengontrol hamburger menu

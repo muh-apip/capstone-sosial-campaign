@@ -1,25 +1,18 @@
-import { useState } from "react";
-import Navbar from "./components/Navbar";
-import HeroSection from "./pages/HeroSection";
-import AboutUs from "./pages/AboutUs";
-import Fitur from "./pages/Fitur";
-import FAQ from "./pages/FAQ";
-import Artikel from "./components/Beranda/Artikel";
-import Sidebar from "./components/Beranda/Sidebar";
-import Footer from "./components/Beranda/Footerberanda";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import SignUp from "./pages/Signup";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <HeroSection />
-      <AboutUs />
-      <Fitur />
-      <FAQ />
-      <Artikel />
-      <Sidebar />
-      <Footer />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </Router>
+
   );
 }
 
