@@ -8,7 +8,7 @@ const Sidebar = () => {
         <img
           src="/img/Logo.png" // Ganti dengan path logo
           alt="RelawanKu Logo"
-          className="h-10"
+          className="h-6"
         />
       </div>
 
