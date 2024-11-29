@@ -1,4 +1,5 @@
 import React from "react";
+import { Article, AttachMoney, Handshake, Event, Help, Info, AccountCircle, ExitToApp } from "@mui/icons-material";
 
 const Sidebar = () => {
   return (
@@ -15,39 +16,39 @@ const Sidebar = () => {
       {/* Menu Items */}
       <nav className="flex-grow">
         <ul className="mt-4 space-y-2">
-          <li className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md">
-            <i className="fas fa-file-alt mr-3"></i>
+          <li className="flex items-center px-4 py-2 bg-custom-green text-white rounded-md">
+            <Article className="mr-3" />
             <span>Artikel</span>
           </li>
           <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-            <i className="fas fa-donate mr-3"></i>
+            <AttachMoney className="mr-3" />
             <span>Donasi</span>
           </li>
           <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-            <i className="fas fa-hands-helping mr-3"></i>
+            <Handshake className="mr-3" />
             <span>Relawan</span>
           </li>
           <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-            <i className="fas fa-calendar-check mr-3"></i>
+            <Event className="mr-3" />
             <span>Kegiatanku</span>
           </li>
           <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-            <i className="fas fa-question-circle mr-3"></i>
+            <Help className="mr-3" />
             <span>FAQ</span>
           </li>
           <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-            <i className="fas fa-info-circle mr-3"></i>
+            <Info className="mr-3" />
             <span>About Us</span>
           </li>
           <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-            <i className="fas fa-user mr-3"></i>
+            <AccountCircle className="mr-3" />
             <span>Profil</span>
           </li>
         </ul>
       </nav>
 
       <div className="flex items-center px-4 py-4 border-t border-gray-200 text-gray-700 hover:bg-gray-100">
-        <i className="fas fa-sign-out-alt mr-3"></i>
+        <ExitToApp className="mr-3" />
         <span>Logout</span>
       </div>
     </div>

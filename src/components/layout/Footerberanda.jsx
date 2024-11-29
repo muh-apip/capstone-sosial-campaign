@@ -1,4 +1,5 @@
 import React from "react";
+import { Facebook, Twitter, WhatsApp } from "@mui/icons-material";
 
 const Footer = () => {
   return (
@@ -48,18 +49,18 @@ const Footer = () => {
           <div className="flex space-x-4 justify-end">
             {/* Ikon Media Sosial */}
             <a href="#" className="text-blue-600 text-xl">
-              <i className="fab fa-facebook"></i> {/* Facebook */}
+              <Facebook />
             </a>
             <a href="#" className="text-blue-400 text-xl">
-              <i className="fab fa-twitter"></i> {/* Twitter */}
+              <Twitter />
             </a>
-            <a href="#" className="text-green-500 text-xl">
-              <i className="fab fa-whatsapp"></i> {/* WhatsApp */}
+            <a href="#" className="text-custom-green text-xl">
+              <WhatsApp />
             </a>
           </div>
         </div>
       </div>
-      <div className="bg-green-500 h-12"></div> {/* Garis Hijau */}
+      <div className="bg-custom-green h-12"></div> {/* Garis Hijau */}
     </footer>
   );
 };
