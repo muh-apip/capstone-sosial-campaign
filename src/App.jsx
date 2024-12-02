@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import DetailArticle from "./components/Artikel/DetailArtikel";
 import Artikel from "./components/Artikel/Artikel";
 import SignUp from "./pages/Signup";
+import Home from "./components/Beranda/Home"
 
 
 function App() {
@@ -15,9 +16,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/detail" element={<DetailArticle />} />
         <Route path="/artikel" element={<Artikel />} />
-
       </Routes>
     </Router>
 

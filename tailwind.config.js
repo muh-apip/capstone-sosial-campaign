@@ -9,7 +9,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        'custom-green': '#4caf50', 
+        'custom-green': '#4caf50',
+        'primary-green': '#5FBA63',
+        'secondary-green': '#83C985', 
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'], 
