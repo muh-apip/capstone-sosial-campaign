@@ -8,6 +8,9 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      colors: {
+        'custom-green': '#4caf50', 
+      },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'], 
       },

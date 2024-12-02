@@ -3,7 +3,6 @@ import SitiNurjanah from "../../assets/images/photos/SitiNurjanah.png";
 import AndiPrasetyo from "../../assets/images/photos/AndiPrasetyo.png";
 import BudiSantoso from "../../assets/images/photos/BudiSantoso.png";
 
-
 const Testimoni = () => {
   const testimonials = [
     {
@@ -27,35 +26,42 @@ const Testimoni = () => {
   ];
 
   return (
-    <div className="py-16 bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-4xl font-semibold text-gray-900 mb-6">
+    <div className="py-12 bg-gray-100">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Heading Section */}
+        <h2 className="text-center text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900 mb-6">
           Apa Kata Mereka
         </h2>
-        <p className="text-center font-normal text-gray-600 mb-12">
+        <p className="text-center text-sm sm:text-base font-normal text-gray-600 mb-12">
           Beberapa cerita nyata dari mereka yang telah ambil bagian dalam program kami.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        {/* Testimonial Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="p-6 bg-white shadow-md rounded-[24px] flex flex-col items-start"
+              className="p-6 bg-white shadow-md rounded-[24px] flex flex-col"
             >
               {/* Gambar dan Nama */}
-              <div className="flex items-center w-full">
+              <div className="flex items-center mb-4">
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full"
+                  className="w-12 h-12 rounded-full object-cover"
                 />
                 <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-800">{testimonial.name}</h3>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-800">
+                    {testimonial.name}
+                  </h3>
                 </div>
               </div>
               {/* Garis Pembatas */}
-              <hr className="mt-4 border-gray-300 w-full" />
+              <hr className="border-gray-300 w-full" />
               {/* Pesan */}
-              <p className="text-gray-600 mt-4 text-justify">{testimonial.message}</p>
+              <p className="text-gray-600 mt-4 text-sm sm:text-base text-justify">
+                {testimonial.message}
+              </p>
             </div>
           ))}
         </div>
