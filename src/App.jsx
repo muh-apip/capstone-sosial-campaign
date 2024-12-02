@@ -16,6 +16,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/detail" element={<DetailArticle />} />
         <Route path="/artikel" element={<Artikel />} />
+        <Route path="/artikel/:id" element={<DetailArticle />} />
       </Routes>
     </Router>
   );
