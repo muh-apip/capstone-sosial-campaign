@@ -36,6 +36,31 @@ const Artikel = () => {
       date: "26 Desember 2024",
       image: "/img/artikel3.png",
     },
+    {
+      id: 4,
+      title: "Erupsi Gunung Berapi",
+      category: "LINGKUNGAN",
+      description: "Kekuatan alam akan membawa dampak besar.",
+      date: "27 Desember 2024",
+      image: "/img/artikel4.jpeg", // Ganti dengan path gambar yang sesuai
+    },
+    {
+      id: 5,
+      title: "Bersatu Untuk Bumi",
+      category: "LINGKUNGAN",
+      description: "Membangun dunia yang lebih hijau dan inklusif.",
+      date: "24 Desember 2024",
+      image: "/img/artikel5.jpeg", // Ganti dengan path gambar yang sesuai
+    },
+    {
+      id: 6,
+      title: "Membangun Keadilan Sosial",
+      category: "Sosial",
+      description:
+        "Peran kita dalam menciptakan masyarakat yang inklusif dan adil.",
+      date: "26 Desember 2024",
+      image: "/img/artikel6.jpeg", // Ganti dengan path gambar yang sesuai
+    },
   ];
 
   return (
