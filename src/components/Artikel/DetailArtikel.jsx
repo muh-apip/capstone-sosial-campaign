@@ -61,7 +61,6 @@ const DetailArtikel = () => {
               {articleData.title2}
             </h3>
             <p className="text-sm text-gray-500 mb-4">{articleData.date}</p>
-
             <img
               src={articleData.image}
               alt={articleData.title}
@@ -170,11 +169,13 @@ const DetailArtikel = () => {
                 </a>
               </div>
             </div>
+
           </div>
         </div>
 
         <Footer />
       </div>
+
     </div>
   );
 };

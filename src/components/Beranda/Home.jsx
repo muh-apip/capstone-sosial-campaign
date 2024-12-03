@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import NavbarBeranda from "../layout/NavbarBeranda";
 import Sidebar from "../layout/Sidebar";
 import Footerberanda from "../layout/Footerberanda";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const Artikel = () => {
+const Home = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -45,7 +46,7 @@ const Artikel = () => {
         <NavbarBeranda />
       </div>
 
-      {/* Konten Utama */}
+      {/* Main Content */}
       <div className="flex flex-1">
         {/* Sidebar */}
         <div
@@ -56,33 +57,58 @@ const Artikel = () => {
           <Sidebar />
         </div>
 
-        {/* Konten Artikel */}
+        {/* Content Area */}
         <div className="flex-1 p-4 bg-gray-100">
-          {/* Breadcrumb */}
-          <div className="text-sm text-gray-500 mb-4">
-            Beranda /{" "}
-            <span className="text-gray-800 font-semibold">Artikel</span>
+          {/* Hero Section */}
+          <div className="bg-custom-green text-white rounded-lg p-6 mb-8 flex flex-wrap items-center justify-between lg:justify-center shadow-lg relative overflow-hidden">
+            <div className="relative w-full lg:w-1/4 flex justify-center mb-6 lg:mb-0 lg:justify-start">
+              <img
+                src="/img/homeSection.png"
+                alt="Relawan Kiri"
+                className="absolute aspect-square w-[150px] sm:w-[200px] lg:w-[315px] lg:left-[-115px] lg:top-[-148px] rounded-full border-8 border-white object-cover shadow-xl hidden lg:block"
+              />
+            </div>
+            <div className="w-full lg:w-1/2 text-center lg:text-left mb-6 lg:mb-0">
+              <h1 className="text-xl sm:text-2xl lg:text-4xl font-semibold mb-4">
+                Daftar Relawan Sekarang,
+                <br /> Gratis untuk Semua!
+              </h1>
+              <p className="text-sm sm:text-base lg:text-lg font-normal mb-6">
+                Dapatkan pengalaman bermakna, perluas jaringan, dan jadilah
+                bagian dari aksi nyata untuk bumi.
+              </p>
+              <button className="px-6 py-2 bg-[#275929] text-base font-semibold rounded-md hover:bg-[#63ab65] transition duration-300">
+                Ambil Peranmu
+                <ArrowForwardIosIcon
+                  className="ml-1 sm:ml-2"
+                  fontSize="small"
+                />
+              </button>
+            </div>
+            <div className="relative w-full lg:w-1/4 flex justify-center lg:justify-end">
+              <img
+                src="/img/homeSection2.png"
+                alt="Relawan Kanan"
+                className="absolute w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] lg:w-72 lg:h-72 lg:top-[-120px] lg:right-[-110px] border-8 border-white object-cover shadow-md transform rotate-[-15deg] hidden lg:block"
+              />
+            </div>
           </div>
 
-          {/* Filter Buttons */}
-          <div className="flex flex-wrap space-x-2 mb-8">
-            <button className="px-4 py-2 bg-custom-green text-white rounded-md hover:bg-custom-green-dark">
-              Semua
-            </button>
-            <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
-              Sosial
-            </button>
-            <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
-              Lingkungan
+          {/* Article Section */}
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-gray-800">
+              Artikel yang mungkin kamu suka
+            </h2>
+            <button className="text-lg font-normal text-[#0C81DF] hover:text-blue-500">
+              Selengkapnya
             </button>
           </div>
 
-          {/* Grid Artikel */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {articles.map((article) => (
               <div
                 key={article.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
+                className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 relative"
               >
                 <img
                   src={article.image}
@@ -93,19 +119,15 @@ const Artikel = () => {
                   <p className="text-sm font-bold text-custom-green tracking-wider uppercase">
                     {article.category}
                   </p>
-                  <h2 className="text-lg font-semibold text-gray-800 mt-2">
+                  <h3 className="text-lg font-semibold text-gray-800 mt-2">
                     {article.title}
-                  </h2>
+                  </h3>
                   <p className="text-sm text-gray-600 mt-2 line-clamp-2">
                     {article.description}
                   </p>
+                  {/* Horizontal Line Above Date */}
+                  <hr className="my-2 border-t-2 border-gray-100" />
                   <div className="mt-4 flex justify-between items-center">
-                    <a
-                      href="#"
-                      className="text-sm font-semibold text-custom-green hover:underline"
-                    >
-                      Selengkapnya &rarr;
-                    </a>
                     <span className="text-xs text-gray-500">
                       {article.date}
                     </span>
@@ -123,4 +145,4 @@ const Artikel = () => {
   );
 };
 
-export default Artikel;
+export default Home;
