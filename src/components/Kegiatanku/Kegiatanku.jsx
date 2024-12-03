@@ -11,7 +11,7 @@ const activities = [
     daysLeft: "7",
     description:
       "Ribuan warga terdampak hingga harus kehilangan nyawa. Ayo bantu segera!",
-    image: "https://via.placeholder.com/300x150",
+    image: "/img/kegiatanku1.png",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const activities = [
     daysLeft: "5",
     description:
       "Gempa bumi melanda dan merusak ribuan rumah. Bantuan Anda sangat berarti!",
-    image: "https://via.placeholder.com/300x150",
+    image: "/img/kegiatanku1.png",
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const activities = [
     daysLeft: "3",
     description:
       "Kebakaran hutan mengancam satwa liar dan warga. Ayo bantu memulihkan lingkungan!",
-    image: "https://via.placeholder.com/300x150",
+    image: "/img/kegiatanku1.png",
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ const activities = [
     daysLeft: "10",
     description:
       "Akses air bersih terbatas bagi warga. Mari bergabung untuk mendukung kebutuhan dasar mereka!",
-    image: "https://via.placeholder.com/300x150",
+    image: "/img/kegiatanku1.png",
   },
   {
     id: 5,
@@ -47,7 +47,7 @@ const activities = [
     daysLeft: "4",
     description:
       "Tsunami melanda dan banyak warga kehilangan tempat tinggal. Ayo bantu mereka bangkit kembali!",
-    image: "https://via.placeholder.com/300x150",
+    image: "/img/kegiatanku1.png",
   },
   {
     id: 6,
@@ -56,7 +56,7 @@ const activities = [
     daysLeft: "6",
     description:
       "Kekeringan melanda, dan kebutuhan pangan menjadi mendesak. Mari berbagi kebaikan!",
-    image: "https://via.placeholder.com/300x150",
+    image: "/img/kegiatanku1.png",
   },
 ];
 
