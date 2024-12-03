@@ -7,7 +7,6 @@ import Artikel from "./components/Artikel/Artikel";
 import SignUp from "./pages/Signup";
 import Home from "./components/Beranda/Home"
 
-
 function App() {
   return (
     <Router>
@@ -17,11 +16,10 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/detail" element={<DetailArticle />} />
         <Route path="/artikel" element={<Artikel />} />
+        <Route path="/artikel/:id" element={<DetailArticle />} />
       </Routes>
     </Router>
-
   );
 }
 
