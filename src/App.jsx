@@ -5,7 +5,8 @@ import Signup from "./pages/Signup";
 import DetailArticle from "./components/Artikel/DetailArtikel";
 import Artikel from "./components/Artikel/Artikel";
 import SignUp from "./pages/Signup";
-import Home from "./components/Beranda/Home"
+import Home from "./components/Beranda/Home";
+import Kegiatanku from "./components/Kegiatanku/Kegiatanku";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/artikel" element={<Artikel />} />
         <Route path="/artikel/:id" element={<DetailArticle />} />
+        <Route path="/kegiatanku" element={<Kegiatanku />} />
       </Routes>
     </Router>
   );
