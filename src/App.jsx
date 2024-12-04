@@ -6,7 +6,6 @@ import DetailArticle from "./components/Artikel/DetailArtikel";
 import Artikel from "./components/Artikel/Artikel";
 import SignUp from "./pages/Signup";
 import Home from "./components/Beranda/Home";
-import Kegiatanku from "./components/Kegiatanku/Kegiatanku";
 import DetailKegiatan from "./components/Kegiatanku/DetailKegiatan";
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/artikel" element={<Artikel />} />
         <Route path="/artikel/:id" element={<DetailArticle />} />
-        <Route path="/kegiatanku" element={<Kegiatanku />} />
         <Route path="/detailkegiatan" element={<DetailKegiatan />} />
       </Routes>
     </Router>
