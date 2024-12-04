@@ -6,7 +6,11 @@ import DetailArticle from "./components/Artikel/DetailArtikel";
 import Artikel from "./components/Artikel/Artikel";
 import SignUp from "./pages/Signup";
 import Home from "./components/Beranda/Home";
+import Relawan from "./components/Relawan/Relawan";
+import DetailRelawan from "./components/Relawan/DetailRelawan";
+import PendaftaranRelawan from "./components/Relawan/PendaftaranRelawan";
 import DetailKegiatan from "./components/Kegiatanku/DetailKegiatan";
+
 
 function App() {
   return (
@@ -19,6 +23,9 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/artikel" element={<Artikel />} />
         <Route path="/artikel/:id" element={<DetailArticle />} />
+        <Route path="/relawan" element={<Relawan />} />
+        <Route path="/relawan/:id" element={<DetailRelawan />} />
+        <Route path="/relawan/pendaftaran" element={<PendaftaranRelawan />} />
         <Route path="/detailkegiatan" element={<DetailKegiatan />} />
       </Routes>
     </Router>
