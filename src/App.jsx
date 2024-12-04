@@ -9,6 +9,8 @@ import Home from "./components/Beranda/Home";
 import Relawan from "./components/Relawan/Relawan";
 import DetailRelawan from "./components/Relawan/DetailRelawan";
 import PendaftaranRelawan from "./components/Relawan/PendaftaranRelawan";
+import DetailKegiatan from "./components/Kegiatanku/DetailKegiatan";
+
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
         <Route path="/relawan" element={<Relawan />} />
         <Route path="/relawan/:id" element={<DetailRelawan />} />
         <Route path="/relawan/pendaftaran" element={<PendaftaranRelawan />} />
+        <Route path="/detailkegiatan" element={<DetailKegiatan />} />
       </Routes>
     </Router>
   );
