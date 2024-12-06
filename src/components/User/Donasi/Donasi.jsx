@@ -81,7 +81,7 @@ const Donasi = () => {
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 p-4 bg-gray-100">
+      <div className="flex-1 p-8 bg-gray-100">
         {/* Header Section */}
         {/* Breadcrumb */}
         <div className="text-sm text-gray-500 mb-4">
