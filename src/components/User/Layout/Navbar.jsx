@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import logo from "../../assets/images/logos/Logo.png";
+import { Link } from "react-router-dom";
+import logo from "../../../assets/images/logos/Logo.png";
 
 const Navbar = () => {
   // State to control the hamburger menu
@@ -46,7 +47,11 @@ const Navbar = () => {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             )}
           </button>
@@ -65,10 +70,10 @@ const Navbar = () => {
                 <div className="flex flex-col md:flex-row md:justify-end md:items-center gap-4">
                   {/* Navbar Links */}
                   <NavItem href="#" label="Beranda" />
-                  <NavItem href="#" label="About Us" />
-                  <NavItem href="#" label="Program" />
-                  <NavItem href="#" label="FAQ" />
-                  <NavItem href="#" label="Testimoni" />
+                  <NavItem href="#about" label="About Us" />
+                  <NavItem href="#program" label="Program" />
+                  <NavItem href="#faq" label="FAQ" />
+                  <NavItem href="#testimoni" label="Testimoni" />
                 </div>
               </div>
 
@@ -79,12 +84,12 @@ const Navbar = () => {
 
               {/* Login Button */}
               <div className="flex flex-wrap items-center gap-x-1.5">
-                <a
+                <Link
+                  to="/login"
                   className="py-2 px-2.5 inline-flex items-center font-medium text-sm rounded-lg bg-[#4caf50] text-white hover:bg-[#45a049] focus:outline-none focus:bg-[#45a049] disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
                 >
                   Login
-                </a>
+                </Link>
               </div>
             </div>
           </div>
