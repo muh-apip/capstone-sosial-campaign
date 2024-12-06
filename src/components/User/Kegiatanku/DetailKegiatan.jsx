@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import NavbarBeranda from "../layout/NavbarBeranda";
-import Sidebar from "../layout/Sidebar";
-import Footerberanda from "../layout/Footerberanda";
+import NavbarHome from "../Layout/NavbarHome";
+import FooterHome from "../Layout/FooterHome";
 
 const activities = [
   {
@@ -67,17 +66,9 @@ const DetailKegiatan = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="sticky top-0 z-50 w-full md:w-[calc(100%-16rem)] ml-0 md:ml-64 bg-white shadow-md">
-        <NavbarBeranda />
+        <NavbarHome />
       </div>
 
-      <div className="flex flex-1">
-        <div
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } md:block w-full md:w-64 bg-gray-200 h-screen fixed md:static top-0 left-0 z-50 transition-transform`}
-        >
-          <Sidebar />
-        </div>
 
         <div className="min-h-screen bg-gray-100 flex flex-col">
           <div className="bg-white shadow-md py-3 px-6 flex items-center">
@@ -165,10 +156,9 @@ const DetailKegiatan = () => {
             </div>
           </div>
         </div>
+        <FooterHome />
       </div>
 
-      <Footerberanda />
-    </div>
   );
 };
 
