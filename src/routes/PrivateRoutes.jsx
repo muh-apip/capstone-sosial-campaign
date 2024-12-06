@@ -11,6 +11,7 @@ import DetailDonasi from "../components/User/Donasi/DetailDonasi";
 import Relawan from "../components/User/Relawan/Relawan";
 import DetailRelawan from "../components/User/Relawan/DetailRelawan";
 import PendaftaranRelawan from "../components/User/Relawan/PendaftaranRelawan";
+import Kegiatanku from "../components/User/Kegiatanku/Kegiatanku"
 
 const PrivateRoutes = () => {
   return (
@@ -26,6 +27,8 @@ const PrivateRoutes = () => {
       <Route path="/relawan" element={<Relawan />} />
       <Route path="/relawan/:id" element={<DetailRelawan />} />
       <Route path="/relawan/pendaftaran" element={<PendaftaranRelawan />} />
+      <Route path="/kegiatanku" element={<Kegiatanku />} />
+
     </Routes>
   );
 };
