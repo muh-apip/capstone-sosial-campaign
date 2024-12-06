@@ -8,18 +8,24 @@ import SignUp from "../pages/Signup";
 import Home from "../components/User/Beranda/Home";
 import Donasi from "../components/User/Donasi/Donasi";
 import DetailDonasi from "../components/User/Donasi/DetailDonasi";
+import Relawan from "../components/User/Relawan/Relawan";
+import DetailRelawan from "../components/User/Relawan/DetailRelawan";
+import PendaftaranRelawan from "../components/User/Relawan/PendaftaranRelawan";
 
 const PrivateRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/artikel" element={<Artikel />} />
-        <Route path="/artikel/:id" element={<DetailArticle />} />
-        <Route path="/donasi" element={<Donasi />} />
-        <Route path="/donasi/:id" element={<DetailDonasi />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/artikel" element={<Artikel />} />
+      <Route path="/artikel/:id" element={<DetailArticle />} />
+      <Route path="/donasi" element={<Donasi />} />
+      <Route path="/donasi/:id" element={<DetailDonasi />} />
+      <Route path="/relawan" element={<Relawan />} />
+      <Route path="/relawan/:id" element={<DetailRelawan />} />
+      <Route path="/relawan/pendaftaran" element={<PendaftaranRelawan />} />
     </Routes>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import NavbarBeranda from "../layout/NavbarBeranda";
-import Sidebar from "../layout/Sidebar";
-import Footerberanda from "../layout/Footerberanda";
+import NavbarHome from "../Layout/NavbarHome";
+import FooterHome from "../Layout/FooterHome";
 
 const Artikel = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -66,21 +65,12 @@ const Artikel = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar */}
-      <div className="sticky top-0 z-50 w-full md:w-[calc(100%-16rem)] ml-0 md:ml-64 bg-white shadow-md">
-        <NavbarBeranda />
+      <div className="sticky top-0 z-50 w-full bg-white shadow-md">
+        <NavbarHome />
       </div>
 
       {/* Konten Utama */}
       <div className="flex flex-1">
-        {/* Sidebar */}
-        <div
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } md:block w-full md:w-64 bg-gray-200 h-screen fixed md:static top-0 left-0 z-50 transition-transform`}
-        >
-          <Sidebar />
-        </div>
-
         {/* Konten Artikel */}
         <div className="flex-1 p-4 bg-gray-100">
           {/* Breadcrumb */}
@@ -143,7 +133,7 @@ const Artikel = () => {
       </div>
 
       {/* Footer */}
-      <Footerberanda />
+      <FooterHome />
     </div>
   );
 };
