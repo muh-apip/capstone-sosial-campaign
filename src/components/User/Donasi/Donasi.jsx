@@ -83,10 +83,6 @@ const Donasi = () => {
       {/* Content Area */}
       <div className="flex-1 p-8 bg-gray-100">
         {/* Header Section */}
-        {/* Breadcrumb */}
-        <div className="text-sm text-gray-500 mb-4">
-          Beranda / <span className="text-gray-800 font-semibold">Donasi</span>
-        </div>
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">
             Mari Bantu Mereka yang Membutuhkan
@@ -119,8 +115,9 @@ const Donasi = () => {
         {/* Campaign Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {campaigns.map((campaign) => (
-            <div
+            <Link
               key={campaign.id}
+              to={`/donasi/${campaign.id}`}
               className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col h-full"
             >
               {/* Bagian gambar */}
@@ -159,7 +156,7 @@ const Donasi = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

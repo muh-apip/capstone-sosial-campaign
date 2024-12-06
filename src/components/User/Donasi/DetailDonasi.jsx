@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom"; // Untuk mendapatkan ID dari URL
-import NavbarHome from "../Layout/NavbarHome";
+import { useParams } from "react-router-dom";
+import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const DetailDonasi = () => {
-  const { id } = useParams(); // Ambil ID dari parameter URL
+  const { id } = useParams();
   const [activeTab, setActiveTab] = useState("detailDonasi");
 
-  // Contoh data kampanye (ini bisa diganti dengan API call jika data dinamis)
   const campaigns = [
     {
       id: 1,
@@ -27,7 +26,6 @@ const DetailDonasi = () => {
     },
   ];
 
-  // Cari data kampanye berdasarkan ID
   const campaign = campaigns.find((c) => c.id === parseInt(id));
 
   if (!campaign) {
@@ -53,94 +51,96 @@ const DetailDonasi = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
-        <NavbarHome />
+        <NavbarDetail />
       </div>
 
-        {/* Konten Detail */}
-        <div className="flex-1 p-4 bg-gray-100">
-          {/* Breadcrumb */}
-          <div className="text-sm text-gray-500 mb-4">
-            Beranda / Donasi /{" "}
-            <span className="text-gray-800 font-semibold">DetailDonasi</span>
-          </div>
-          {/* Card Donasi */}
-          <div className="flex flex-col md:flex-row gap-6 mb-6">
-            {/* Section Gambar */}
-            <div className="flex-1">
-              <img
-                src={campaign.image}
-                alt={campaign.title}
-                className="rounded-lg w-full"
-              />
-            </div>
+      {/* Konten Detail */}
+      <div className="flex-1 px-4 py-6 sm:px-6 lg:px-8 bg-gray-100">
+        {/* Breadcrumb */}
+        <div className="text-sm text-gray-500 mb-6">
+          Donasi /{" "}
+          <span className="text-gray-800 font-semibold">Detail Donasi</span>
+        </div>
 
-            {/* Section Detail Donasi */}
-            <div className="shadow-md bg-white rounded-lg p-4 sm:p-6 md:w-1/3 flex flex-col">
-              <h1 className="text-xl sm:text-2xl font-normal mt-2 sm:mt-4 mb-2">
-                {campaign.title}
-              </h1>
-              <p className="text-gray-500 text-xs sm:text-sm font-normal mb-4 sm:mb-8">
-                <LocationOnIcon fontSize="small" /> {campaign.location}
-              </p>
-
-              <p className="text-lg font-semibold mb-2">{campaign.collected}</p>
-              <div className="bg-gray-200 rounded-full h-3 sm:h-4 mb-2">
-                <div
-                  className="bg-custom-green h-3 sm:h-4 rounded-full"
-                  style={{ width: `${campaign.progress}%` }}
-                ></div>
-              </div>
-              <p className="text-xs sm:text-sm text-gray-500 mb-4">
-                {campaign.progress}% dari Target {campaign.target}
-              </p>
-              <button className="bg-custom-green text-white text-sm sm:text-base font-semibold py-2 mt-4 sm:mt-8 rounded-lg w-full">
-                Donasi Sekarang
-              </button>
-            </div>
+        {/* Card Donasi */}
+        <div className="flex flex-col md:flex-row gap-8 mb-8">
+          {/* Section Gambar */}
+          <div className="flex-1">
+            <img
+              src={campaign.image}
+              alt={campaign.title}
+              className="rounded-lg w-full object-cover"
+            />
           </div>
 
-          {/* Tab Navigation */}
-          <div className="bg-white shadow-md rounded-lg p-4 mb-6">
-            <div className="flex border-b mb-4">
-              <button
-                className={`flex-1 text-center p-2 ${
-                  activeTab === "detailDonasi"
-                    ? "border-b-2 border-green-500 font-semibold"
-                    : "text-gray-500"
-                }`}
-                onClick={() => setActiveTab("detailDonasi")}
-              >
-                Detail Donasi
-              </button>
-              <button
-                className={`flex-1 text-center p-2 ${
-                  activeTab === "kabarTerbaru"
-                    ? "border-b-2 border-green-500 font-semibold"
-                    : "text-gray-500"
-                }`}
-                onClick={() => setActiveTab("kabarTerbaru")}
-              >
-                Kabar Terbaru
-              </button>
-              <button
-                className={`flex-1 text-center p-2 ${
-                  activeTab === "donatur"
-                    ? "border-b-2 border-green-500 font-semibold"
-                    : "text-gray-500"
-                }`}
-                onClick={() => setActiveTab("donatur")}
-              >
-                Donatur
-              </button>
+          {/* Section Detail Donasi */}
+          <div className="shadow-md bg-white rounded-lg p-6 sm:p-8 md:w-1/3 flex flex-col">
+            <h1 className="text-xl sm:text-2xl font-semibold mb-4">
+              {campaign.title}
+            </h1>
+            <p className="text-gray-500 text-sm sm:text-base flex items-center mb-6">
+              <LocationOnIcon fontSize="small" className="mr-2" />
+              {campaign.location}
+            </p>
+
+            <p className="text-lg font-bold mb-4">{campaign.collected}</p>
+            <div className="bg-gray-200 rounded-full h-3 sm:h-4 mb-4">
+              <div
+                className="bg-custom-green h-3 sm:h-4 rounded-full"
+                style={{ width: `${campaign.progress}%` }}
+              ></div>
             </div>
-            <div>{renderContent()}</div>
+            <p className="text-sm sm:text-base text-gray-500">
+              {campaign.progress}% dari Target {campaign.target}
+            </p>
+            <button className="bg-custom-green text-white font-semibold py-3 mt-6 rounded-lg hover:bg-green-600">
+              Donasi Sekarang
+            </button>
           </div>
         </div>
-        <FooterHome/>
+
+        {/* Tab Navigation */}
+        <div className="bg-white shadow-md rounded-lg p-6 sm:p-8">
+          <div className="flex border-b mb-6">
+            <button
+              className={`flex-1 text-center py-2 ${
+                activeTab === "detailDonasi"
+                  ? "border-b-2 border-custom-green font-bold"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("detailDonasi")}
+            >
+              Detail Donasi
+            </button>
+            <button
+              className={`flex-1 text-center py-2 ${
+                activeTab === "kabarTerbaru"
+                  ? "border-b-2 border-custom-green font-bold"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("kabarTerbaru")}
+            >
+              Kabar Terbaru
+            </button>
+            <button
+              className={`flex-1 text-center py-2 ${
+                activeTab === "donatur"
+                  ? "border-b-2 border-custom-green font-bold"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("donatur")}
+            >
+              Donatur
+            </button>
+          </div>
+          <div>{renderContent()}</div>
+        </div>
       </div>
+      <FooterHome />
+    </div>
   );
 };
 
