@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const DetailDonasi = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // Inisialisasi navigasi
   const [activeTab, setActiveTab] = useState("detailDonasi");
 
   const campaigns = [
@@ -31,6 +32,11 @@ const DetailDonasi = () => {
   if (!campaign) {
     return <p>Kampanye dengan ID {id} tidak ditemukan.</p>;
   }
+
+  const handleDonasiSekarang = () => {
+    // Navigasi ke halaman InputDonasi
+    navigate(`/input-donasi/${campaign.id}`);
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -96,7 +102,10 @@ const DetailDonasi = () => {
             <p className="text-sm sm:text-base text-gray-500">
               {campaign.progress}% dari Target {campaign.target}
             </p>
-            <button className="bg-custom-green text-white font-semibold py-3 mt-6 rounded-lg hover:bg-green-600">
+            <button
+              onClick={handleDonasiSekarang} // Tambahkan onClick untuk navigasi
+              className="bg-custom-green text-white font-semibold py-3 mt-6 rounded-lg hover:bg-green-600"
+            >
               Donasi Sekarang
             </button>
           </div>

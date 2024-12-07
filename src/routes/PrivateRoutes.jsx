@@ -8,6 +8,8 @@ import SignUp from "../pages/Signup";
 import Home from "../components/User/Beranda/Home";
 import Donasi from "../components/User/Donasi/Donasi";
 import DetailDonasi from "../components/User/Donasi/DetailDonasi";
+import InputDonasi from "../components/User/Donasi/InputDonasi"
+import BayarDonasi from "../components/User/Donasi/BayarDonasi";
 import Relawan from "../components/User/Relawan/Relawan";
 import DetailRelawan from "../components/User/Relawan/DetailRelawan";
 import PendaftaranRelawan from "../components/User/Relawan/PendaftaranRelawan";
@@ -24,10 +26,13 @@ const PrivateRoutes = () => {
       <Route path="/artikel/:id" element={<DetailArticle />} />
       <Route path="/donasi" element={<Donasi />} />
       <Route path="/donasi/:id" element={<DetailDonasi />} />
+      <Route path="/input-donasi/:id" element={<InputDonasi />} />
+      <Route path="/bayar-donasi/:id" element={<BayarDonasi />} />
       <Route path="/relawan" element={<Relawan />} />
       <Route path="/relawan/:id" element={<DetailRelawan />} />
       <Route path="/relawan/pendaftaran" element={<PendaftaranRelawan />} />
       <Route path="/kegiatanku" element={<Kegiatanku />} />
+
 
     </Routes>
   );
