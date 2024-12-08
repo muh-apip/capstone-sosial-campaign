@@ -1,3 +1,7 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const preline = require("preline/plugin");
+
 /** @type {import('tailwindcss').Config} */
 const config = {
   content: [
@@ -18,6 +22,7 @@ const config = {
       },
     },
   },
-  plugins: [require("preline/plugin")],
+  plugins: [preline],
 };
-module.exports = config;
+
+export default config;
