@@ -14,6 +14,7 @@ import Relawan from "../components/User/Relawan/Relawan";
 import DetailRelawan from "../components/User/Relawan/DetailRelawan";
 import PendaftaranRelawan from "../components/User/Relawan/PendaftaranRelawan";
 import Kegiatanku from "../components/User/Kegiatanku/Kegiatanku"
+import Profile from "../components/User/Profile/Profile";
 
 const PrivateRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const PrivateRoutes = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/artikel" element={<Artikel />} />
       <Route path="/artikel/:id" element={<DetailArticle />} />
       <Route path="/donasi" element={<Donasi />} />
