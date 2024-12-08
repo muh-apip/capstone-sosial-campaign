@@ -36,8 +36,8 @@ const NavbarHome = () => {
     { href: "/donasi", label: "Donasi" },
     { href: "/relawan", label: "Relawan" },
     { href: "/kegiatanku", label: "Kegiatanku" },
-    { href: "/faq", label: "FAQ" },
-    { href: "/tentang-kami", label: "Tentang Kami" },
+    { href: "", label: "FAQ" },
+    { href: "", label: "Tentang Kami" },
   ];
 
   return (
