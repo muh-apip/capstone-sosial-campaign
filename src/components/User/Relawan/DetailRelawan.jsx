@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Layout/Navbar";
+import Navbar from "../Layout/NavbarDetail";
 import Footer from "../Layout/Footer";
 import { CheckIcon } from "@heroicons/react/20/solid";
 
 const DetailRelawan = () => {
   const { id } = useParams(); // Mengambil id
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); //State sidebar
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   const relawan = [
     {
@@ -94,7 +88,7 @@ const DetailRelawan = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar */}
-      <div className="sticky top-0 z-50 w-full md:w-[calc(100%-16rem)] ml-0 md:ml-64 bg-white shadow-md">
+      <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <Navbar />
       </div>
 
@@ -121,7 +115,7 @@ const DetailRelawan = () => {
               <p className="text-sm text-gray-500 mb-4">{RelawanData.date}</p>
               <div className="mt-6">
                 <a
-                  href="/daftar-relawan"
+                  href="/relawan/pendaftaran"
                   className="px-6 py-3 bg-custom-green text-white rounded-md hover:bg-custom-green-dark"
                 >
                   Daftar Sebagai Relawan

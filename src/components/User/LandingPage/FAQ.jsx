@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import NavbarHome from "../Layout/NavbarHome";
+import FooterHome from "../Layout/FooterHome";
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
@@ -8,7 +9,6 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
         className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 cursor-pointer"
         onClick={onClick}
       >
-        {/* Teks pada dropdown menjadi semibold dan lebih lebar */}
         <h2 className="text-base sm:text-lg font-semibold text-gray-900 w-full">
           {question}
         </h2>
@@ -61,25 +61,51 @@ const FAQ = () => {
   };
 
   return (
-    <div className="bg-gray-100 py-10 sm:py-16 lg:py-20 px-4 sm:px-8">
-      <div className="max-w-3xl lg:max-w-4xl mx-auto">
-        {/* Header FAQ */}
-        <div className="text-center mb-10 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-800">
-            Pertanyaan yang Sering Diajukan
-          </h1>
-        </div>
+    <div className="flex flex-col min-h-screen">
+      {/* Navbar */}
+      <div className="sticky top-0 z-50 w-full bg-white shadow-md">
+        <NavbarHome />
+      </div>
 
-        {/* Daftar FAQ */}
-        {faqs.map((faq, index) => (
-          <FAQItem
-            key={index}
-            question={faq.question}
-            answer={faq.answer}
-            isOpen={faq.isOpen}
-            onClick={() => toggleFAQ(index)}
-          />
-        ))}
+      <div className="text-sm text-gray-500 mb-5 mt-5 px-4 sm:px-6">
+        Beranda / <span className="text-gray-800 font-semibold">Relawan</span>
+      </div>
+
+      {/* Full-Width Image */}
+      <div className="w-full">
+        <img
+          src="../src/assets/images/photos/Faq.png" // Replace with your image URL
+          alt="FAQ Banner"
+          className="w-full h-auto object-cover rounded-b-lg"
+        />
+      </div>
+
+      {/* FAQ Content */}
+      <div className="flex-1 bg-gray-100 py-10 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-0">
+        <div className="max-w-3xl lg:max-w-4xl mx-auto relative z-10">
+          {/* Header FAQ */}
+          <div className="text-center mt-20 sm:mb-12">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-800">
+              Pertanyaan yang Sering Diajukan
+            </h1>
+          </div>
+
+          {/* Daftar FAQ */}
+          {faqs.map((faq, index) => (
+            <FAQItem
+              key={index}
+              question={faq.question}
+              answer={faq.answer}
+              isOpen={faq.isOpen}
+              onClick={() => toggleFAQ(index)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-white border-t">
+        <FooterHome />
       </div>
     </div>
   );
