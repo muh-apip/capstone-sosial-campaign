@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Assuming you are using React Router
+import LoginImage from "../assets/images/logos/Login.png";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -49,7 +50,7 @@ export default function SignUp() {
             </h2>
             <div className="mt-20">
               <img
-                src="src/assets/images/logos/login.png"
+                src={LoginImage}
                 alt="Illustration"
                 className="w-full rounded-lg"
               />

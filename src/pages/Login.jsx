@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import LoginImage from "../assets/images/logos/Login.png";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -51,7 +52,7 @@ export default function Login() {
             </h2>
             <div className="mt-20">
               <img
-                src="src/assets/images/logos/login.png"
+                src={LoginImage}
                 alt="Illustration"
                 className="w-full rounded-lg"
               />
