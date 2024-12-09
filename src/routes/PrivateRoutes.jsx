@@ -18,6 +18,7 @@ import DetailKegiatan from "../components/User/Kegiatanku/DetailKegiatan";
 import PresensiKegiatan from "../components/User/Kegiatanku/PresensiKegiatan";
 import Profile from "../components/User/Profile/Profile";
 import Hero from "../components/User/TentangKami/Hero";
+import ChatBot from "../components/User/ChatBot/ChatBot";
 
 const PrivateRoutes = () => {
   return (
@@ -40,6 +41,7 @@ const PrivateRoutes = () => {
       <Route path="/detail-kegiatan" element={<DetailKegiatan />} />
       <Route path="/presensi-kegiatan" element={<PresensiKegiatan />} />
       <Route path="/tentang-kami" element={<Hero />} />
+      <Route path="/ChatBot" element={<ChatBot />} />
     </Routes>
   );
 };
