@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
+import { Link } from "react-router-dom";
 
 const activities = [
   {
@@ -60,71 +61,103 @@ const activities = [
 ];
 
 const Kegiatanku = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Untuk kontrol sidebar
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
       </div>
 
-      {/* Konten Aktivitas */}
-      <div className="flex-1 flex">
-        {/* Sidebar Aktivitas */}
-        <div className="w-1/3 p-4 space-y-4">
-          {activities.map((activity) => (
-            <div
-              key={activity.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
-              onClick={() => setSelectedActivity(activity)}
-            >
-              <img
-                src={activity.image}
-                alt={activity.title}
-                className="w-full h-32 object-cover"
-              />
-              <div className="p-3">
-                <p className="text-gray-600 font-bold">{activity.title}</p>
-                <p className="text-sm text-gray-400">{activity.location}</p>
-                <p className="text-sm text-gray-600 mt-2">
-                  {activity.description}
-                </p>
-                <div className="flex justify-end">
-                  <p className="text-sm font-semibold text-red-500">
-                    Sisa hari {activity.daysLeft}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="min-h-screen bg-gray-100 flex flex-col">
+        <div className="bg-white shadow-md py-3 px-6 flex items-center">
+          <p className="text-black-500 text-sm">
+            Beranda &gt; <span className="text-black-900">Kegiatanku</span>
+          </p>
         </div>
 
-        {/* Detail Panel */}
-        <div className="w-2/3 flex items-center justify-center bg-white">
-          {selectedActivity ? (
-            <div className="absolute top-4 right-4 p-4 bg-gray-50 rounded-lg shadow-md w-1/4">
-              <h2 className="text-lg font-bold text-red-600 mb-2">
-                {selectedActivity.title}
-              </h2>
-              <p className="text-gray-600 mb-2">{selectedActivity.location}</p>
-              <p className="text-sm text-gray-700 mb-4">
-                {selectedActivity.description}
-              </p>
-              <div className="flex justify-end">
-                <p className="text-sm font-semibold text-red-500">
-                  Sisa hari {selectedActivity.daysLeft}
-                </p>
+        <div className="flex flex-1">
+          <div className="w-1/3 bg-white shadow-md p-4 overflow-y-auto">
+            {activities.map((activity) => (
+              <div
+                key={activity.id}
+                className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer"
+                onClick={() => setSelectedActivity(activity)}
+              >
+                <img
+                  src={activity.image || "/img/default.png"}
+                  alt={activity.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-3">
+                  <h3 className="text-gray-800 font-bold">{activity.title}</h3>
+                  <p className="text-gray-500 text-sm">{activity.location}</p>
+                  <p className="text-gray-600 text-sm mt-2">
+                    {activity.description}
+                  </p>
+                  <div className="flex justify-end mt-3">
+                    <p className="text-red-500 text-sm font-semibold">
+                      Sisa hari {activity.daysLeft}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          ) : (
-            <p className="text-gray-500 text-center">
-              Silakan pilih aktivitas di sebelah kiri untuk melihat detailnya
-            </p>
-          )}
+            ))}
+          </div>
+
+          <div className="w-2/3 bg-white shadow-md p-6">
+            {selectedActivity ? (
+              <>
+                <div className="bg-green-100 border-l-4 border-custom-green p-4">
+                  <h3 className="text-green-700 text-lg font-bold">
+                    {selectedActivity.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Periode kegiatan: 1 - 4 Desember 2024
+                  </p>
+                </div>
+
+                <div className="mt-6">
+                  <h4 className="text-gray-700 font-bold mb-2">PRESENSI</h4>
+                  <p className="text-gray-500 text-sm mb-4">
+                    Jangan lupa untuk melakukan presensi setiap hari sebagai
+                    syarat untuk memperoleh sertifikat.
+                  </p>
+
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4].map((day) => (
+                      <div
+                        key={day}
+                        className="border rounded-lg p-4 flex justify-between items-center hover:bg-green-50 cursor-pointer"
+                      >
+                        <p className="text-gray-700 font-semibold">
+                          Hari Ke-{day}
+                          <span className="block text-sm text-gray-500">
+                            {day} Desember 2024
+                          </span>
+                        </p>
+                        <span className="text-green-600 font-bold text-lg">›</span>
+                      </div>
+                    ))}
+                    {/* Add the Presensi button here */}
+                    <Link to="/presensi-kegiatan">
+                      <button className="w-full mt-6 bg-custom-green text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-all">
+                        Masuk untuk Presensi Kegiatan
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-500 text-center">
+                Silakan pilih aktivitas di sebelah kiri untuk melihat detailnya.
+              </p>
+            )}
+          </div>
         </div>
       </div>
+
       <FooterHome />
     </div>
   );
