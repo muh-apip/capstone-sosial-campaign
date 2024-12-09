@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -10,6 +10,7 @@ const NavbarDetail = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   const navLinks = [
     { href: "/home", label: "Beranda" },
@@ -31,6 +32,12 @@ const NavbarDetail = () => {
       ) {
         setIsProfileMenuOpen(false);
       }
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -42,7 +49,7 @@ const NavbarDetail = () => {
   return (
     <nav className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 shadow-sm md:px-6 md:py-4">
       {/* Mobile Menu Toggle */}
-      <div className="flex items-center md:hidden">
+      <div className="flex items-center md:hidden" ref={mobileMenuRef}>
         <button
           className="text-gray-500 hover:text-gray-700"
           onClick={handleToggle(setIsMobileMenuOpen)}
@@ -94,7 +101,7 @@ const NavbarDetail = () => {
           className="text-gray-500 hover:text-gray-700 focus:outline-none"
           aria-label="Help"
         >
-          <HelpOutlineIcon className="h-6 w-6" />
+          <SupportAgentIcon className="h-6 w-6" />
         </button>
         <button
           className="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -104,7 +111,7 @@ const NavbarDetail = () => {
         </button>
 
         {/* Profile Menu */}
-        <div className="relative flex items-center">
+        <div className="relative flex items-center" ref={profileMenuRef}>
           <button
             className="focus:outline-none"
             onClick={handleToggle(setIsProfileMenuOpen)}

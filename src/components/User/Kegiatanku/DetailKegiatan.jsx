@@ -65,7 +65,7 @@ const DetailKegiatan = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="sticky top-0 z-50 w-full md:w-[calc(100%-16rem)] ml-0 md:ml-64 bg-white shadow-md">
+     <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
       </div>
 
