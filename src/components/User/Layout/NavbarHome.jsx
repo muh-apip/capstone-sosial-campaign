@@ -2,15 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
-const NavbarHome = () => {
+const NavbarHome = ({ onSearch }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const profileMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   const handleToggle = (setter) => () => setter((prev) => !prev);
 
@@ -22,6 +24,12 @@ const NavbarHome = () => {
       ) {
         setIsProfileMenuOpen(false);
       }
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setIsMobileMenuOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -30,21 +38,29 @@ const NavbarHome = () => {
     };
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "auto";
+  }, [isMobileMenuOpen]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    onSearch(e.target.value); // Kirim kata kunci pencarian ke parent
+  };
+
   const navLinks = [
     { href: "/home", label: "Beranda" },
     { href: "/artikel", label: "Artikel" },
     { href: "/donasi", label: "Donasi" },
     { href: "/relawan", label: "Relawan" },
     { href: "/kegiatanku", label: "Kegiatanku" },
-    { href: "", label: "FAQ" },
-    { href: "", label: "Tentang Kami" },
+    { href: "/faq", label: "FAQ" },
+    { href: "/tentang-kami", label: "Tentang Kami" },
   ];
 
   return (
     <nav className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 shadow-sm md:px-6 md:py-4">
-      {/* Bagian Kiri - Logo dan Search */}
+      {/* Bagian Kiri */}
       <div className="flex items-center justify-between w-full md:w-auto">
-        {/* Tombol Mobile Menu */}
         <button
           className="text-gray-500 hover:text-gray-700 md:hidden"
           onClick={handleToggle(setIsMobileMenuOpen)}
@@ -54,11 +70,12 @@ const NavbarHome = () => {
           {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
 
-        {/* Search Bar (Desktop Only) */}
         <div className="hidden md:flex items-center ml-4">
           <SearchIcon className="text-gray-400 mr-2" />
           <input
             type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
             placeholder="Search"
             className="w-[200px] md:w-[300px] pl-4 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
           />
@@ -81,7 +98,6 @@ const NavbarHome = () => {
         </div>
       )}
 
-      {/* Desktop Navbar Links */}
       <div className="hidden md:flex items-center space-x-6">
         {navLinks.map((link) => (
           <Link
@@ -94,7 +110,6 @@ const NavbarHome = () => {
         ))}
       </div>
 
-      {/* Bagian Kanan - Ikon dan Profil */}
       <div className="flex items-center space-x-4">
         <button
           className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -106,7 +121,7 @@ const NavbarHome = () => {
           className="text-gray-500 hover:text-gray-700 focus:outline-none"
           aria-label="Help"
         >
-          <HelpOutlineIcon className="h-6 w-6" />
+          <SupportAgentIcon className="h-6 w-6" />
         </button>
         <button
           className="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -115,8 +130,7 @@ const NavbarHome = () => {
           <EmailOutlinedIcon className="h-6 w-6" />
         </button>
 
-        {/* Profile Menu */}
-        <div className="relative flex items-center">
+        <div className="relative flex items-center" ref={profileMenuRef}>
           <button
             className="focus:outline-none"
             onClick={handleToggle(setIsProfileMenuOpen)}
