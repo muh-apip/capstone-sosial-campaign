@@ -115,7 +115,7 @@ const Profile = () => {
                   onChange={handleProfileImageChange}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
-                <IconButton className="absolute top-14 left-16 z-10 bg-blue-500 p-2 rounded-full">
+                <IconButton className="absolute top-14 left-14 z-10 bg-blue-500 p-2 rounded-full hover:bg-blue-600 transition-all">
                   <EditIcon className="text-white" />
                 </IconButton>
               </div>

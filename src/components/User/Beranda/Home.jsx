@@ -1,9 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Home = () => {
+  const navigate = useNavigate();
   const articles = [
     {
       id: 1,
@@ -108,16 +110,17 @@ const Home = () => {
             Selengkapnya
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {articles.map((article) => (
             <div
               key={article.id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 relative"
+              className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
+              onClick={() => navigate(`/artikel/${article.id}`)}
             >
               <img
                 src={article.image}
                 alt={article.title}
-                className="h-48 sm:h-52 w-full object-cover"
+                className="h-48 w-full object-cover"
               />
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">
