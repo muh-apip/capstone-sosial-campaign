@@ -14,14 +14,14 @@ export default function SignUp() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
     if (!username || !email || !password) {
+      console.log("Fields are missing:", { username, email, password });
       setModalMessage("Please fill in all fields");
       setIsModalOpen(true);
       return;
     }
-
     setLoading(true);
-
     try {
       const response = await axios.post(
         "https://relawanku.xyz/api/v1/register",
@@ -31,12 +31,12 @@ export default function SignUp() {
           password,
         }
       );
+
+      console.log("API response:", response.data);
       setModalMessage("Registration successful! Please log in.");
       setIsModalOpen(true);
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
     } catch (error) {
+      console.error("Sign up error:", error);
       setModalMessage(
         error.response?.data?.message || "Error signing up. Please try again."
       );
