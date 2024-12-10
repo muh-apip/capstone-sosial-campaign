@@ -65,10 +65,7 @@ const NavbarAdmin = () => {
         </button>
 
         {/* Menu Profil */}
-        <div
-          className="relative flex items-center space-x-3"
-          ref={profileMenuRef}
-        >
+        <div className="relative flex items-center space-x-3" ref={profileMenuRef}>
           <button
             className="focus:outline-none flex items-center"
             onClick={handleToggleProfileMenu}
