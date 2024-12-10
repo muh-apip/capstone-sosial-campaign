@@ -12,20 +12,20 @@ const icons = {
 
 const CardStats = ({ title, count }) => {
   return (
-    <div className="relative flex items-center bg-white shadow-lg rounded-2xl px-8 py-8">
+    <div className="relative flex flex-col sm:flex-row items-center bg-white shadow-lg rounded-2xl p-4 sm:p-8">
       {/* Icon Wrapper */}
-      <div className="mr-4 flex items-center justify-center bg-[#CAE8CB] rounded-full p-3">
+      <div className="mb-4 sm:mb-0 sm:mr-4 flex items-center justify-center bg-[#CAE8CB] rounded-full p-3">
         {icons[title]}
       </div>
 
       {/* Content */}
-      <div>
+      <div className="text-center sm:text-left">
         <h3 className="text-gray-700 text-sm font-medium">{title}</h3>
         <p className="text-2xl font-bold">{count}</p>
       </div>
 
       {/* Decorative Green Line */}
-      <div className="absolute top-0 right-0 h-full w-2 bg-[#CAE8CB] rounded-tr-lg rounded-br-lg"></div>
+      <div className="absolute top-0 right-0 h-full w-2 bg-[#CAE8CB] rounded-tr-lg rounded-br-lg hidden sm:block"></div>
     </div>
   );
 };
