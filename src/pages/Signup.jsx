@@ -8,6 +8,11 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false); // New loading state
+  const [successMessage, setSuccessMessage] = useState(""); // To track success
+  const [isError, setIsError] = useState(false); // To track error state
+  const [isModalOpen, setIsModalOpen] = useState(false); // To handle popup visibility
+  const [modalMessage, setModalMessage] = useState(""); // Message to show in the modal
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -18,23 +23,46 @@ export default function SignUp() {
       return;
     }
 
+    setLoading(true); // Start loading
+    setIsError(false); // Reset error state
+    setSuccessMessage(""); // Reset success message
+
     try {
+      // Make API call to the registration endpoint
       const response = await axios.post(
-        "https://6718b48d7fc4c5ff8f4aac7c.mockapi.io/users",
+        "https://relawanku.xyz/api/v1/register",
         {
           username,
           email,
           password,
-          role: "user",
         }
       );
 
       console.log("Response from API:", response.data);
 
-      navigate("/login");
+      // If signup is successful, show success modal and navigate to login page
+      setModalMessage("Registration successful! Please log in.");
+      setIsModalOpen(true); // Show modal
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       console.error("Error during sign up:", error);
-      setErrorMessage("Error signing up. Please try again.");
+
+      // Set error message based on the error response
+      setIsError(true);
+      if (error.response && error.response.data) {
+        setModalMessage(
+          error.response.data.message || "Error signing up. Please try again."
+        );
+      } else {
+        setModalMessage(
+          "Network error or server issue. Please try again later."
+        );
+      }
+      setIsModalOpen(true); // Show modal
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -57,87 +85,102 @@ export default function SignUp() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Bagian Kanan */}
-        <div className="w-full md:w-1/2 flex items-center justify-center bg-white p-8">
-          <div className="max-w-md w-full">
-            <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">
-              Sign Up
-            </h2>
-            <p className="text-center text-gray-500 mb-6">
-              Selamat datang! Daftar untuk membuat akun baru.
+      {/* Right Section */}
+      <div className="w-full md:w-1/2 flex items-center justify-center bg-white p-8">
+        <div className="max-w-md w-full">
+          <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">
+            Sign Up
+          </h2>
+          <p className="text-center text-gray-500 mb-6">
+            Selamat datang! Daftar untuk membuat akun baru.
+          </p>
+
+          <form className="space-y-5" onSubmit={handleSignUp}>
+            {/* Username Field */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your username"
+                className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
+              />
+            </div>
+
+            {/* Email Field */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
+              />
+            </div>
+
+            {/* Button */}
+            <div>
+              <button
+                type="submit"
+                disabled={loading} // Disable the button when loading
+                className={`w-full py-3 px-6 text-white font-semibold rounded-lg ${
+                  loading ? "bg-gray-400" : "bg-[#4caf50]"
+                } text-white hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]`}
+              >
+                {loading ? "Signing Up..." : "Sign Up"}
+              </button>
+            </div>
+
+            {/* Login Link */}
+            <p className="text-center text-sm text-gray-600">
+              Sudah punya akun?{" "}
+              <a href="/login" className="text-green-600 hover:underline">
+                Login
+              </a>
             </p>
-
-            {errorMessage && (
-              <div className="mb-4 text-red-600 text-center">
-                {errorMessage}
-              </div>
-            )}
-
-            <form className="space-y-5" onSubmit={handleSignUp}>
-              {/* Username Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
-                  className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
-                />
-              </div>
-
-              {/* Email Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
-                />
-              </div>
-
-              {/* Password Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
-                />
-              </div>
-
-              {/* Button */}
-              <div>
-                <button
-                  type="submit"
-                  className="w-full py-3 px-6 text-white font-semibold rounded-lg bg-[#4caf50] text-white hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]"
-                >
-                  Sign Up
-                </button>
-              </div>
-
-              {/* Login Link */}
-              <p className="text-center text-sm text-gray-600">
-                Sudah punya akun?{" "}
-                <a href="/login" className="text-green-600 hover:underline">
-                  Login
-                </a>
-              </p>
-            </form>
-          </div>
+          </form>
         </div>
       </div>
-    </>
+
+      {/* Modal Popup */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 backdrop-blur-md">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <h3 className="text-lg font-semibold text-gray-800">
+              {isError ? "Sign Up Failed" : "Sign Up Successful"}
+            </h3>
+            <p className="mt-4 text-gray-600">{modalMessage}</p>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="mt-6 px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
