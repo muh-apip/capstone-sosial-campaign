@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import NavbarBeranda from "../layout/NavbarBeranda";
-import Sidebar from "../layout/Sidebar";
-import Footerberanda from "../layout/Footerberanda";
+import NavbarHome from "../Layout/NavbarHome";
+import FooterHome from "../Layout/FooterHome";
+import { Link, useNavigate } from "react-router-dom";
 
 const activities = [
   {
@@ -62,87 +62,107 @@ const activities = [
 
 const Kegiatanku = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Untuk kontrol sidebar
+  const navigate = useNavigate();
+
+  const handlePresensiClick = () => {
+    navigate("/presensi-kegiatan");
+  };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Navbar */}
-      <div className="sticky top-0 z-50 w-full md:w-[calc(100%-16rem)] ml-0 md:ml-64 bg-white shadow-md">
-        <NavbarBeranda />
+      <div className="sticky top-0 z-50 w-full bg-white shadow-md">
+        <NavbarHome />
       </div>
 
-      {/* Konten Utama */}
-      <div className="flex flex-1">
-        {/* Sidebar */}
-        <div
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } md:block w-full md:w-64 bg-gray-200 h-screen fixed md:static top-0 left-0 z-50 transition-transform`}
-        >
-          <Sidebar />
+      <div className="flex flex-1 p-6 space-x-6">
+        {/* Sidebar kiri */}
+        <div className="w-1/3 bg-white rounded-lg shadow-md p-4 overflow-y-auto">
+          {activities.map((activity) => (
+            <div
+              key={activity.id}
+              className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer transition-transform transform hover:scale-105"
+              onClick={() => setSelectedActivity(activity)}
+            >
+              <img
+                src={activity.image || "/img/default.png"}
+                alt={activity.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-3">
+                <h3 className="text-gray-800 font-bold">{activity.title}</h3>
+                <p className="text-gray-500 text-sm">{activity.location}</p>
+                <p className="text-gray-600 text-sm mt-2">
+                  {activity.description}
+                </p>
+                <div className="flex justify-end mt-3">
+                  <p className="text-red-500 text-sm font-semibold">
+                    Sisa hari {activity.daysLeft}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Konten Aktivitas */}
-        <div className="flex-1 flex">
-          {/* Sidebar Aktivitas */}
-          <div className="w-1/3 p-4 space-y-4">
-            {activities.map((activity) => (
-              <div
-                key={activity.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
-                onClick={() => setSelectedActivity(activity)}
-              >
-                <img
-                  src={activity.image}
-                  alt={activity.title}
-                  className="w-full h-32 object-cover"
-                />
-                <div className="p-3">
-                  <p className="text-gray-600 font-bold">{activity.title}</p>
-                  <p className="text-sm text-gray-400">{activity.location}</p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    {activity.description}
-                  </p>
-                  <div className="flex justify-end">
-                    <p className="text-sm font-semibold text-red-500">
-                      Sisa hari {activity.daysLeft}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* Kotak konten kanan */}
+        <div
+          className="relative bg-white rounded-lg shadow-md overflow-hidden"
+          style={{ width: "859px", height: "587px" }}
+        >
+          {/* Header Hijau */}
+          <div className="bg-green-500 p-4">
+            <h3 className="text-white text-lg font-bold">
+              {selectedActivity?.title || "Detail Kegiatan"}
+            </h3>
           </div>
 
-          {/* Detail Panel */}
-          <div className="w-2/3 flex items-center justify-center bg-white">
+          {/* Konten Utama */}
+          <div className="p-6 bg-white rounded-b-lg h-full">
             {selectedActivity ? (
-              <div className="absolute top-4 right-4 p-4 bg-gray-50 rounded-lg shadow-md w-1/4">
-                <h2 className="text-lg font-bold text-red-600 mb-2">
-                  {selectedActivity.title}
-                </h2>
-                <p className="text-gray-600 mb-2">
-                  {selectedActivity.location}
-                </p>
-                <p className="text-sm text-gray-700 mb-4">
-                  {selectedActivity.description}
-                </p>
-                <div className="flex justify-end">
-                  <p className="text-sm font-semibold text-red-500">
-                    Sisa hari {selectedActivity.daysLeft}
+              <>
+                <div className="mt-6">
+                  <h4 className="text-gray-700 font-bold mb-2">PRESENSI</h4>
+                  <p className="text-gray-500 text-sm mb-4">
+                    Jangan lupa untuk melakukan presensi setiap hari sebagai
+                    syarat untuk memperoleh sertifikat.
                   </p>
+
+                  <div className="space-y-4">
+                    {[1, 2, 3, 4].map((day) => (
+                      <div
+                        key={day}
+                        className="border rounded-lg p-4 flex justify-between items-center hover:bg-green-50 cursor-pointer"
+                        onClick={handlePresensiClick}
+                      >
+                        <p className="text-gray-700 font-semibold">
+                          Hari Ke-{day}
+                          <span className="block text-sm text-gray-500">
+                            {day} Desember 2024
+                          </span>
+                        </p>
+                        <span className="text-green-600 font-bold text-lg">
+                          ›
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </>
             ) : (
-              <p className="text-gray-500 text-center">
-                Silakan pilih aktivitas di sebelah kiri untuk melihat detailnya
-              </p>
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-500 text-center">
+                  Silakan pilih aktivitas di sebelah kiri untuk melihat
+                  detailnya.
+                </p>
+              </div>
             )}
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <Footerberanda />
+      <FooterHome />
     </div>
   );
 };

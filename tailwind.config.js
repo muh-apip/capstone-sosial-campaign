@@ -1,5 +1,9 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const preline = require("preline/plugin");
+
 /** @type {import('tailwindcss').Config} */
-export default {
+const config = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -11,12 +15,14 @@ export default {
       colors: {
         'custom-green': '#4caf50',
         'primary-green': '#5FBA63',
-        'secondary-green': '#83C985', 
+        'secondary-green': '#83C985',
       },
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'], 
+        sans: ['Poppins', 'sans-serif'],
       },
     },
   },
-  plugins: [require("preline/plugin")],
+  plugins: [preline],
 };
+
+export default config;

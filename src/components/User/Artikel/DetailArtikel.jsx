@@ -18,8 +18,7 @@ const DetailArtikel = () => {
       id: 1,
       title: "Komunitas Untuk Kemanusiaan",
       title2: "Kisah solidaritas dalam membantu korban bencana.",
-      description: `
-        Bencana alam sering kali datang tanpa peringatan, membawa kehancuran dan kesedihan bagi banyak orang. Namun, di tengah kepedihan, muncul kisah-kisah inspiratif tentang solidaritas dan kepedulian antar sesama manusia. 
+      description: `Bencana alam sering kali datang tanpa peringatan, membawa kehancuran dan kesedihan bagi banyak orang. Namun, di tengah kepedihan, muncul kisah-kisah inspiratif tentang solidaritas dan kepedulian antar sesama manusia. 
         Saat banjir besar melanda sebuah kota, misalnya, warga yang rumahnya tidak terdampak dengan sigap membuka pintu rumah mereka untuk menjadi tempat penampungan sementara bagi korban. 
         Tidak hanya itu, komunitas setempat bersama relawan dari berbagai daerah bahu-membahu menyalurkan makanan, pakaian, dan perlengkapan kebutuhan dasar lainnya.
 
@@ -30,8 +29,7 @@ const DetailArtikel = () => {
 
         Semua kisah ini menunjukkan bahwa, meskipun bencana datang tanpa diundang, kekuatan solidaritas masyarakat selalu mampu memberikan harapan baru. 
         Kita semua bisa berperan, sekecil apapun bantuan yang diberikan, untuk membuat perbedaan yang besar bagi mereka yang membutuhkan. 
-        Kini, mari kita bergabung dan saling mendukung untuk meringankan beban mereka yang terdampak bencana.
-      `,
+        Kini, mari kita bergabung dan saling mendukung untuk meringankan beban mereka yang terdampak bencana.`, // Potongan deskripsi
       date: "27 Desember 2024",
       image: "../src/assets/images/photos/detailArticel.png",
       donation: {
@@ -52,17 +50,17 @@ const DetailArtikel = () => {
       </div>
 
       {/* Artikel Content */}
-      <div className="flex-1 p-4 bg-gray-100">
+      <div className="flex-1 px-4 py-6 sm:px-6 lg:px-8 bg-gray-100">
         {/* Breadcrumb */}
-        <div className="text-sm text-gray-500 mb-4">
-          Beranda / Artikel /{" "}
+        <div className="text-sm text-gray-500 mb-6">
+          Artikel /{" "}
           <span className="text-gray-800 font-semibold">Detail Artikel</span>
         </div>
 
         {/* Konten Artikel */}
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Artikel Content (Kiri) */}
-          <div className="flex-1 lg:w-2/3 bg-white p-6 rounded-lg shadow-md">
+          <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
               {articleData.title}
             </h1>
@@ -79,7 +77,7 @@ const DetailArtikel = () => {
           </div>
 
           {/* Sidebar Donasi (Kanannya) */}
-          <div className="lg:w-1/3 p-6 bg-white rounded-lg shadow-md">
+          <div className="lg:col-span-1 p-4 bg-white rounded-lg shadow-md">
             <div className="mb-6">
               <p className="text-sm text-black mb-4">
                 Ingin membantu mereka yang terkena bencana? Mulailah dengan
@@ -87,26 +85,26 @@ const DetailArtikel = () => {
               </p>
 
               {/* Donasi 1 */}
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+              <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <img
                   src="../src/assets/images/photos/Donasi1.png"
                   alt="Donasi"
-                  className="w-full h-48 object-cover rounded-t-lg mb-6"
+                  className="w-full h-48 object-cover rounded-t-lg mb-4"
                 />
-                <p className="text-xl text-black font-bold mb-4">
+                <p className="text-xl text-black font-bold mb-2">
                   Bantu Warga Terdampak Erupsi Gunung
                 </p>
-                <p className="text-sm text-black mb-4">{articleData.date}</p>
-                <p className="text-sm text-gray-500 mb-10">
+                <p className="text-sm text-black mb-2">{articleData.date}</p>
+                <p className="text-sm text-gray-500 mb-6">
                   10.295 warga terdampak, ratusan rumah rusak. Ayo bantu segera!
                 </p>
                 <a
                   href="/donasi"
-                  className="text-xl text-blue-500 font-bold hover:underline"
+                  className="text-lg text-blue-500 font-bold hover:underline"
                 >
                   Detail Donasi &gt;
                 </a>
-                <div className="w-full bg-gray-300 rounded-full h-2.5 mt-10 mb-4">
+                <div className="w-full bg-gray-300 rounded-full h-2.5 mt-4 mb-4">
                   <div
                     className="bg-green-600 h-2.5 rounded-full"
                     style={{
@@ -116,7 +114,7 @@ const DetailArtikel = () => {
                     }}
                   ></div>
                 </div>
-                <p className="text-lg text-black mb-4">
+                <p className="text-lg text-black mb-2">
                   <b>Rp {articleData.donation.amount.toLocaleString()}</b>
                 </p>
                 <p className="text-gray-500 mb-4">
@@ -125,34 +123,34 @@ const DetailArtikel = () => {
                 </p>
                 <a
                   href="/donasi"
-                  className="text-xl text-blue-500 font-bold hover:underline"
+                  className="text-lg text-blue-500 font-bold hover:underline"
                 >
                   Detail Donasi &gt;
                 </a>
               </div>
 
               {/* Donasi 2 */}
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+              <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <img
                   src="../src/assets/images/photos/Donasi2.png"
                   alt="Donasi"
-                  className="w-full h-48 object-cover rounded-t-lg mb-6"
+                  className="w-full h-48 object-cover rounded-t-lg mb-4"
                 />
-                <p className="text-xl text-black font-bold mb-4">
+                <p className="text-xl text-black font-bold mb-2">
                   Solidaritas Bantu Korban Banjir & Longsor
                 </p>
-                <p className="text-sm text-black mb-4">{articleData.date}</p>
-                <p className="text-sm text-gray-500 mb-10">
+                <p className="text-sm text-black mb-2">{articleData.date}</p>
+                <p className="text-sm text-gray-500 mb-6">
                   5.842 warga terdampak, rumah hancur. Mari bersama bantu
                   mereka!
                 </p>
                 <a
                   href="/donasi"
-                  className="text-xl text-blue-500 font-bold hover:underline"
+                  className="text-lg text-blue-500 font-bold hover:underline"
                 >
                   Detail Donasi &gt;
                 </a>
-                <div className="w-full bg-gray-300 rounded-full h-2.5 mt-10 mb-4">
+                <div className="w-full bg-gray-300 rounded-full h-2.5 mt-4 mb-4">
                   <div
                     className="bg-green-600 h-2.5 rounded-full"
                     style={{
@@ -162,7 +160,7 @@ const DetailArtikel = () => {
                     }}
                   ></div>
                 </div>
-                <p className="text-lg text-black mb-4">
+                <p className="text-lg text-black mb-2">
                   <b>Rp {articleData.donation.amount.toLocaleString()}</b>
                 </p>
                 <p className="text-gray-500 mb-4">
@@ -171,7 +169,7 @@ const DetailArtikel = () => {
                 </p>
                 <a
                   href="/donasi"
-                  className="text-xl text-blue-500 font-bold hover:underline"
+                  className="text-lg text-blue-500 font-bold hover:underline"
                 >
                   Detail Donasi &gt;
                 </a>
