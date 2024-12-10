@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();

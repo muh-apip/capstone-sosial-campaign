@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -11,6 +11,7 @@ const NavbarDetail = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
+  const location = useLocation();
 
   const navLinks = [
     { href: "/home", label: "Beranda" },
@@ -67,7 +68,7 @@ const NavbarDetail = () => {
             <Link
               key={link.href}
               to={link.href}
-              className="px-6 py-2 text-gray-700 hover:bg-gray-100"
+              className={`px-6 py-2 ${location.pathname === link.href ? 'font-bold text-black' : 'text-gray-700'} hover:bg-gray-100`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.label}
@@ -82,7 +83,7 @@ const NavbarDetail = () => {
           <Link
             key={link.href}
             to={link.href}
-            className="text-gray-700 hover:text-blue-500 px-2 py-1"
+            className={`px-2 py-1 ${location.pathname === link.href ? 'font-bold text-black' : 'text-gray-700'} hover:text-blue-500`}
           >
             {link.label}
           </Link>

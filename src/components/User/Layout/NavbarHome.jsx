@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
@@ -13,6 +13,7 @@ const NavbarHome = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
+  const location = useLocation();
 
   const handleToggle = (setter) => () => setter((prev) => !prev);
 
@@ -89,7 +90,9 @@ const NavbarHome = ({ onSearch }) => {
             <Link
               key={link.href}
               to={link.href}
-              className="px-6 py-2 text-gray-700 hover:bg-gray-100"
+              className={`px-6 py-2 text-gray-700 hover:bg-gray-100 ${
+                location.pathname === link.href ? "font-bold text-black" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.label}
@@ -103,7 +106,9 @@ const NavbarHome = ({ onSearch }) => {
           <Link
             key={link.href}
             to={link.href}
-            className="text-gray-700 hover:text-blue-500 px-2 py-1"
+            className={`text-gray-700 hover:text-blue-500 px-2 py-1 ${
+              location.pathname === link.href ? "font-bold text-black" : ""
+            }`}
           >
             {link.label}
           </Link>
