@@ -111,7 +111,7 @@ const Kegiatanku = () => {
           style={{ width: "859px", height: "587px" }}
         >
           {/* Header Hijau */}
-          <div className="bg-green-500 p-4">
+          <div className="bg-custom-green p-4">
             <h3 className="text-white text-lg font-bold">
               {selectedActivity?.title || "Detail Kegiatan"}
             </h3>

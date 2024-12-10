@@ -19,6 +19,7 @@ import Profile from "../components/User/Profile/Profile";
 import Hero from "../components/User/TentangKami/Hero";
 import ChatBot from "../components/User/ChatBot/ChatBot";
 import DashboardAdmin from "../components/Admin/Dashboard/DashboardAdmin"
+import UserFAQ from "../components/User/FAQ/UserFAQ"
 
 const PrivateRoutes = () => {
   return (
@@ -41,6 +42,7 @@ const PrivateRoutes = () => {
       <Route path="/kegiatanku" element={<Kegiatanku />} />
       <Route path="/presensi-kegiatan" element={<PresensiKegiatan />} />
       <Route path="/tentang-kami" element={<Hero />} />
+      <Route path="/user-faq" element={<UserFAQ />} />
       <Route path="/chatbot" element={<ChatBot />} />
     </Routes>
   );
