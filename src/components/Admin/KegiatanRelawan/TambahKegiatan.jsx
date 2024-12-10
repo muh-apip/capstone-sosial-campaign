@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../Layout/Sidebar";
-import Navbar from "../Layout/navbaradmin";
+import Navbar from "../Layout/NavbarAdmin";
 
 const ActivityForm = () => {
   const [formData, setFormData] = useState({

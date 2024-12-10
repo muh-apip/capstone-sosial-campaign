@@ -1,81 +1,63 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import LoginImage from "../assets/images/logos/Login.png";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     if (!username || !password) {
       setErrorMessage("Please fill in both fields.");
-      setIsModalOpen(true); // Open modal when there's an error
+      setIsModalOpen(true);
       return;
     }
 
     try {
-      const response = await axios.post("https://relawanku.xyz/api/v1/login", {
+      const response = await axios.post("relawanku.xyz/api/v1/login", {
         username,
         password,
       });
-
-      console.log("Response from API:", response.data);
-
-      // Assuming the API returns a token on successful login
-      if (response.data && response.data.token) {
-        // Store the authentication token in localStorage (or cookies)
+      if (response.data?.token) {
         localStorage.setItem("token", response.data.token);
-
-        // Redirect to the home page or dashboard
         navigate("/home");
       } else {
         setErrorMessage("Invalid username or password.");
-        setIsModalOpen(true); // Open modal when login fails
+        setIsModalOpen(true);
       }
     } catch (error) {
-      console.error("Login error:", error);
       setErrorMessage(
         error.response?.data?.message || "Error logging in. Please try again."
       );
-      setIsModalOpen(true); // Open modal when there is an error
+      setIsModalOpen(true);
     }
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   return (
-    <>
-      <div className="min-h-screen flex bg-gray-100">
-        {/* Bagian Kiri */}
-        <div className="hidden md:flex items-center justify-center w-1/2 bg-green-900 text-white p-8">
-          <div className="max-w-md text-center">
-            <h2 className="text-2xl font-semibold mb-4 text-left break-words">
-              Langkah kecilmu hari ini bisa membawa perubahan besar di masa
-              depan
-            </h2>
-            <div className="mt-20">
-              <img
-                src={LoginImage}
-                alt="Illustration"
-                className="w-full rounded-lg"
-              />
-            </div>
-          </div>
+    <div className="min-h-screen flex">
+      {/* Left Section */}
+      <div className="hidden lg:flex items-center justify-center w-1/2 bg-green-900 text-white p-10">
+        <div className="max-w-md text-center">
+          <h2 className="text-2xl font-semibold mb-4">
+            Langkah kecilmu hari ini bisa membawa perubahan besar di masa depan
+          </h2>
+          <img
+            src={LoginImage}
+            alt="Illustration"
+            className="w-full mt-10 rounded-lg"
+          />
         </div>
       </div>
 
       {/* Right Section */}
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-white p-8 rounded-lg shadow-lg">
+      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-10">
         <div className="max-w-md w-full">
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-6">
             Login
@@ -95,7 +77,7 @@ export default function Login() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter your username"
-                className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
+                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
               />
             </div>
 
@@ -105,16 +87,15 @@ export default function Login() {
                 Password
               </label>
               <input
-                type={showPassword ? "text" : "password"} // Toggle password visibility
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="block w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none transition duration-300"
+                className="w-full px-4 py-3 text-gray-700 bg-gray-50 border rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
               />
-              {/* Show/Hide Password Icon */}
               <div
                 className="absolute right-3 top-2/3 transform -translate-y-1/2 cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)} // Toggle showPassword state
+                onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
                   <FaEyeSlash className="text-gray-600" />
@@ -142,13 +123,13 @@ export default function Login() {
             <div>
               <button
                 type="submit"
-                className="w-full py-3 px-6 text-white font-semibold rounded-lg bg-[#4caf50] text-white hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]"
+                className="w-full py-3 px-6 text-white font-semibold rounded-lg bg-[#4caf50] hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-green-400"
               >
                 Login
               </button>
             </div>
 
-            {/* Register Link */}
+            {/* Sign Up Link */}
             <p className="text-center text-sm text-gray-600">
               Pengguna baru?{" "}
               <a href="/signup" className="text-green-600 hover:underline">
@@ -159,20 +140,18 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Modal for Error */}
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-            <h3 className="text-xl font-semibold text-red-600">Login Failed</h3>
-            <p className="mt-2 text-gray-700">{errorMessage}</p>
-            <div className="mt-4 text-right">
-              <button
-                onClick={closeModal}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg"
-              >
-                Close
-              </button>
-            </div>
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <h3 className="text-lg font-semibold text-red-600">Login Failed</h3>
+            <p className="mt-4 text-gray-600">{errorMessage}</p>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="mt-6 px-6 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}

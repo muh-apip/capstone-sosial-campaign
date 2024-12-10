@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../Layout/Sidebar";
-import Navbar from "../Layout/navbaradmin"; // Pastikan path ini benar
+import Navbar from "../Layout/NavbarAdmin"; // Pastikan path ini benar
 
 const TabelKegiatan = () => {
   // State untuk menampung data kegiatan
