@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const activities = [
   {
@@ -62,65 +62,65 @@ const activities = [
 
 const Kegiatanku = () => {
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const navigate = useNavigate();
+
+  const handlePresensiClick = () => {
+    navigate("/presensi-kegiatan");
+  };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
       </div>
 
-      <div className="min-h-screen bg-gray-100 flex flex-col">
-        {/* Breadcrumb */}
-        <div className="bg-white shadow-md py-3 px-6 flex items-center">
-          <p className="text-black-500 text-sm">
-            Beranda &gt; <span className="text-black-900">Kegiatanku</span>
-          </p>
-        </div>
-
-        <div className="flex flex-1">
-          {/* Sidebar */}
-          <div className="w-1/3 bg-white shadow-md p-4 overflow-y-auto">
-            {activities.map((activity) => (
-              <div
-                key={activity.id}
-                className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer transition-transform transform hover:scale-105"
-                onClick={() => setSelectedActivity(activity)}
-              >
-                <img
-                  src={activity.image || "/img/default.png"}
-                  alt={activity.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-3">
-                  <h3 className="text-gray-800 font-bold">{activity.title}</h3>
-                  <p className="text-gray-500 text-sm">{activity.location}</p>
-                  <p className="text-gray-600 text-sm mt-2">
-                    {activity.description}
+      <div className="flex flex-1 p-6 space-x-6">
+        {/* Sidebar kiri */}
+        <div className="w-1/3 bg-white rounded-lg shadow-md p-4 overflow-y-auto">
+          {activities.map((activity) => (
+            <div
+              key={activity.id}
+              className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer transition-transform transform hover:scale-105"
+              onClick={() => setSelectedActivity(activity)}
+            >
+              <img
+                src={activity.image || "/img/default.png"}
+                alt={activity.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-3">
+                <h3 className="text-gray-800 font-bold">{activity.title}</h3>
+                <p className="text-gray-500 text-sm">{activity.location}</p>
+                <p className="text-gray-600 text-sm mt-2">
+                  {activity.description}
+                </p>
+                <div className="flex justify-end mt-3">
+                  <p className="text-red-500 text-sm font-semibold">
+                    Sisa hari {activity.daysLeft}
                   </p>
-                  <div className="flex justify-end mt-3">
-                    <p className="text-red-500 text-sm font-semibold">
-                      Sisa hari {activity.daysLeft}
-                    </p>
-                  </div>
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Kotak konten kanan */}
+        <div
+          className="relative bg-white rounded-lg shadow-md overflow-hidden"
+          style={{ width: "859px", height: "587px" }}
+        >
+          {/* Header Hijau */}
+          <div className="bg-green-500 p-4">
+            <h3 className="text-white text-lg font-bold">
+              {selectedActivity?.title || "Detail Kegiatan"}
+            </h3>
           </div>
 
-          {/* Content Area */}
-          <div className="w-2/3 bg-white shadow-md p-6">
+          {/* Konten Utama */}
+          <div className="p-6 bg-white rounded-b-lg h-full">
             {selectedActivity ? (
               <>
-                <div className="bg-green-100 border-l-4 border-custom-green p-4">
-                  <h3 className="text-green-700 text-lg font-bold">
-                    {selectedActivity.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Periode kegiatan: 1 - 4 Desember 2024
-                  </p>
-                </div>
-
                 <div className="mt-6">
                   <h4 className="text-gray-700 font-bold mb-2">PRESENSI</h4>
                   <p className="text-gray-500 text-sm mb-4">
@@ -133,6 +133,7 @@ const Kegiatanku = () => {
                       <div
                         key={day}
                         className="border rounded-lg p-4 flex justify-between items-center hover:bg-green-50 cursor-pointer"
+                        onClick={handlePresensiClick}
                       >
                         <p className="text-gray-700 font-semibold">
                           Hari Ke-{day}
@@ -145,18 +146,16 @@ const Kegiatanku = () => {
                         </span>
                       </div>
                     ))}
-                    <Link to="/presensi-kegiatan">
-                      <button className="w-full mt-6 bg-custom-green text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-all">
-                        Masuk untuk Presensi Kegiatan
-                      </button>
-                    </Link>
                   </div>
                 </div>
               </>
             ) : (
-              <p className="text-gray-500 text-center">
-                Silakan pilih aktivitas di sebelah kiri untuk melihat detailnya.
-              </p>
+              <div className="flex items-center justify-center h-full">
+                <p className="text-gray-500 text-center">
+                  Silakan pilih aktivitas di sebelah kiri untuk melihat
+                  detailnya.
+                </p>
+              </div>
             )}
           </div>
         </div>
