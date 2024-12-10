@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Assuming you are using React Router
+import LoginImage from "../assets/images/logos/Login.png";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -66,19 +67,22 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Section */}
-      <div className="hidden md:flex items-center justify-center w-1/2 bg-green-900 text-white p-4">
-        <div className="max-w-md text-center">
-          <h2 className="text-2xl font-semibold mb-4 text-left break-words">
-            Langkah kecilmu hari ini bisa membawa perubahan besar di masa depan
-          </h2>
-          <div className="mt-20">
-            <img
-              src="src/assets/images/logos/login.png"
-              alt="Illustration"
-              className="w-full rounded-lg"
-            />
+    <>
+      <div className="min-h-screen flex">
+        {/* Bagian Kiri */}
+        <div className="hidden md:flex items-center justify-center w-1/2 bg-green-900 text-white p-4">
+          <div className="max-w-md text-center">
+            <h2 className="text-2xl font-semibold mb-4 text-left break-words">
+              Langkah kecilmu hari ini bisa membawa perubahan besar di masa
+              depan
+            </h2>
+            <div className="mt-20">
+              <img
+                src={LoginImage}
+                alt="Illustration"
+                className="w-full rounded-lg"
+              />
+            </div>
           </div>
         </div>
       </div>

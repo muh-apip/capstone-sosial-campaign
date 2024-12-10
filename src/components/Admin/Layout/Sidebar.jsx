@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import {
   Home,
   Article,
-  AttachMoney,
   VolunteerActivism,
-  AssignmentInd,
-  SupportAgent,
-  Info,
   Person,
   ArrowBack,
 } from "@mui/icons-material";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,15 +20,33 @@ const Sidebar = () => {
     <div>
       {/* Tombol Hamburger */}
       <div
-        className={`md:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200 ${
-          isSidebarOpen ? "fixed inset-0 z-30" : ""
-        }`}
+        className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200"
       >
         <img
           src="/img/Logo.png" // Ganti dengan path logo
           alt="RelawanKu Logo"
           className="h-6"
         />
+        <button
+          onClick={toggleSidebar}
+          className="text-gray-700 focus:outline-none"
+        >
+          <span className="sr-only">Open Sidebar</span>
+          <svg
+            className="w-6 h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </button>
       </div>
 
       {/* Sidebar */}
@@ -40,12 +56,8 @@ const Sidebar = () => {
         } transition-transform duration-300 md:static md:translate-x-0 w-64 bg-white border-r border-gray-200 h-screen flex flex-col`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-center py-4 mb-4 border-gray-200">
-          <img
-            src="/img/Logo.png" 
-            alt="RelawanKu Logo"
-            className="h-6"
-          />
+        <div className="flex items-center justify-center py-12 border-gray-200">
+          <img src="/img/Logo.png" alt="RelawanKu Logo" className="h-6" />
         </div>
 
         {/* Menu Items */}
@@ -53,35 +65,27 @@ const Sidebar = () => {
           <ul className="mt-6 space-y-2">
             <li className="flex items-center px-4 py-2 bg-custom-green text-white rounded-md">
               <Home className="mr-3" />
-              <span>Beranda</span>
+              <span>Dashboard</span>
             </li>
             <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
               <Article className="mr-3" />
               <span>Artikel</span>
             </li>
             <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <AttachMoney className="mr-3" />
+              <VolunteerActivism className="mr-3" />
               <span>Donasi</span>
             </li>
             <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <VolunteerActivism className="mr-3" />
+              <AssignmentIndIcon className="mr-3" />
               <span>Relawan</span>
             </li>
             <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <AssignmentInd className="mr-3" />
-              <span>Kegiatanku</span>
-            </li>
-            <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <SupportAgent className="mr-3" />
-              <span>FAQ</span>
-            </li>
-            <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <Info className="mr-3" />
-              <span>Tentang Kami</span>
+              <CreditCardIcon className="mr-3" />
+              <span>Invoice</span>
             </li>
             <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
               <Person className="mr-3" />
-              <span>Profil</span>
+              <span>Clients</span>
             </li>
           </ul>
         </nav>

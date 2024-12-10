@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../Layout/NavbarDetail";
-import Footer from "../Layout/Footer";
+import Footer from "../Layout/FooterHome";
 import { CheckIcon } from "@heroicons/react/20/solid";
 
 const DetailRelawan = () => {
