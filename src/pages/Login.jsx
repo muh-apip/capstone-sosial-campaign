@@ -21,10 +21,11 @@ export default function Login() {
     }
 
     try {
-      const response = await axios.post("relawanku.xyz/api/v1/login", {
+      const response = await axios.post("https://relawanku.xyz/api/v1/login", {
         username,
         password,
       });
+      console.log("API Response:", response.data); // Debug respons API
       if (response.data?.token) {
         localStorage.setItem("token", response.data.token);
         navigate("/home");
@@ -33,6 +34,7 @@ export default function Login() {
         setIsModalOpen(true);
       }
     } catch (error) {
+      console.error("Login error:", error); // Debug error
       setErrorMessage(
         error.response?.data?.message || "Error logging in. Please try again."
       );
