@@ -68,7 +68,7 @@ const FAQ = () => {
       </div>
 
       <div className="text-sm text-gray-500 mb-5 mt-5 px-4 sm:px-6">
-        Beranda / <span className="text-gray-800 font-semibold">Relawan</span>
+        Beranda / <span className="text-gray-800 font-semibold">FAQ</span>
       </div>
 
       {/* Full-Width Image */}

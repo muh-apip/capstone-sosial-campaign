@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "../Layout/Sidebar";
-import Navbar from "../Layout/navbaradmin"; // Ensure this path is correct
+import Navbar from "../Layout/navbaradmin"; // Pastikan path ini benar
 
 const TabelKegiatan = () => {
-  // State to hold kegiatan data
+  // State untuk menampung data kegiatan
   const [kegiatan, setKegiatan] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // State for selected category
+  // State untuk kategori yang dipilih
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Fetch kegiatan data from API
+  // Mengambil data kegiatan dari API berdasarkan kategori yang dipilih
   useEffect(() => {
     const fetchKegiatan = async () => {
       try {
-        const response = await axios.get("/api/kegiatan"); // Replace with your actual API endpoint
-        setKegiatan(response.data); // Assuming the API returns data in 'data' field
+        const url =
+          selectedCategory === "all"
+            ? "https://relawanku.xyz/api/v1/admin/program" // Mengambil semua program
+            : `https://relawanku.xyz/api/v1/admin/program/${selectedCategory}`; // Mengambil program berdasarkan kategori
+
+        const response = await axios.get(url);
+        setKegiatan(response.data.data); // Menyimpan data kegiatan ke state
         setLoading(false);
       } catch (err) {
         setError("Error fetching data");
@@ -26,18 +31,18 @@ const TabelKegiatan = () => {
     };
 
     fetchKegiatan();
-  }, []);
+  }, [selectedCategory]); // Menjalankan useEffect saat kategori berubah
 
-  // Get unique categories from fetched data
+  // Mengambil kategori unik dari data yang diambil
   const categories = ["all", ...new Set(kegiatan.map((item) => item.category))];
 
-  // Filter kegiatan based on selected category
+  // Filter kegiatan berdasarkan kategori yang dipilih
   const filteredKegiatan =
     selectedCategory === "all"
       ? kegiatan
       : kegiatan.filter((item) => item.category === selectedCategory);
 
-  // Handle category change
+  // Fungsi untuk menangani perubahan kategori
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
@@ -67,7 +72,12 @@ const TabelKegiatan = () => {
 
         {/* Main Content */}
         <div className="flex-1 p-6 bg-gray-100 overflow-auto">
-          {/* Add Activity Button */}
+          {/* Button untuk menambah kegiatan */}
+          <div className="text-sm text-gray-500 mb-4">
+            Dashboard /{" "}
+            <span className="text-gray-800 font-semibold">Relawan</span>
+          </div>
+
           <button
             className="bg-green-500 text-white px-6 py-2 rounded-lg mb-6 shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50"
             onClick={() => (window.location.href = "/link_tambah")}
@@ -75,7 +85,7 @@ const TabelKegiatan = () => {
             Tambah Kegiatan
           </button>
 
-          {/* Category Filter */}
+          {/* Filter kategori */}
           <div className="flex flex-wrap space-x-4 mb-6">
             {categories.map((category) => (
               <button
@@ -92,7 +102,7 @@ const TabelKegiatan = () => {
             ))}
           </div>
 
-          {/* Table of Activities */}
+          {/* Tabel Kegiatan */}
           {loading ? (
             <div>Loading...</div>
           ) : error ? (
@@ -127,18 +137,18 @@ const TabelKegiatan = () => {
                   >
                     <td className="py-3 px-6 text-center">{index + 1}</td>
                     <td className="py-3 px-6">{item.judul}</td>
-                    <td className="py-3 px-6">{item.rentangWaktu}</td>
-                    <td className="py-3 px-6">{item.targetAnggota}</td>
+                    <td className="py-3 px-6">{item.rentang_waktu}</td>
+                    <td className="py-3 px-6">{item.target_anggota}</td>
                     <td className="py-3 px-6">{item.category}</td>
                     <td className="py-3 px-6 text-center">
-                      {/* Edit Button */}
+                      {/* Button Edit */}
                       <button
                         className="bg-teal-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50 mr-2 text-xs"
                         onClick={() => alert(`Edit kegiatan ${item.id}`)}
                       >
                         Edit
                       </button>
-                      {/* Delete Button */}
+                      {/* Button Hapus */}
                       <button
                         className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 text-xs"
                         onClick={() => alert(`Hapus kegiatan ${item.id}`)}

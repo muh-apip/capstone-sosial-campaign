@@ -111,12 +111,6 @@ const Relawan = () => {
       <div className="flex flex-1">
         {/* Konten Relawan */}
         <div className="flex-1 p-6 bg-gray-100">
-          {/* Breadcrumb */}
-          <div className="text-sm text-gray-500 mb-4">
-            Beranda /{" "}
-            <span className="text-gray-800 font-semibold">Relawan</span>
-          </div>
-
           {/* Judul Halaman */}
           <h1 className="text-3xl font-bold text-gray-900 mb-6">
             Relawan Kami
@@ -146,14 +140,16 @@ const Relawan = () => {
                 key={relawan.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
               >
-                <img
-                  src={relawan.image}
-                  alt={relawan.name}
-                  className="h-52 w-full object-cover"
-                />
+                <a href={`/relawan/${relawan.id}`} className="block">
+                  <img
+                    src={relawan.image}
+                    alt={relawan.name}
+                    className="h-52 w-full object-cover"
+                  />
+                </a>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-800">
-                    <Link to={`/relawan/${relawan.id}`}>{relawan.name}</Link>{" "}
+                    {relawan.name}
                   </h3>
                   <p className="text-sm text-gray-500 mb-5">{relawan.role}</p>
                   <div className="flex justify-between">
