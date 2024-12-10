@@ -18,13 +18,11 @@ import PresensiKegiatan from "../components/User/Kegiatanku/PresensiKegiatan";
 import Profile from "../components/User/Profile/Profile";
 import Hero from "../components/User/TentangKami/Hero";
 import ChatBot from "../components/User/ChatBot/ChatBot";
-import DashboardAdmin from "../components/Admin/Dashboard/DashboardAdmin"
 import UserFAQ from "../components/User/FAQ/UserFAQ"
 
 const PrivateRoutes = () => {
   return (
     <Routes>
-      <Route path="/dashboard" element={<DashboardAdmin />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/signup" element={<SignUp />} />
