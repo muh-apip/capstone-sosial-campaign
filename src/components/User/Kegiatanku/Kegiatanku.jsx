@@ -61,16 +61,17 @@ const activities = [
 ];
 
 const Kegiatanku = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
       </div>
 
       <div className="min-h-screen bg-gray-100 flex flex-col">
+        {/* Breadcrumb */}
         <div className="bg-white shadow-md py-3 px-6 flex items-center">
           <p className="text-black-500 text-sm">
             Beranda &gt; <span className="text-black-900">Kegiatanku</span>
@@ -78,11 +79,12 @@ const Kegiatanku = () => {
         </div>
 
         <div className="flex flex-1">
+          {/* Sidebar */}
           <div className="w-1/3 bg-white shadow-md p-4 overflow-y-auto">
             {activities.map((activity) => (
               <div
                 key={activity.id}
-                className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer"
+                className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer transition-transform transform hover:scale-105"
                 onClick={() => setSelectedActivity(activity)}
               >
                 <img
@@ -106,6 +108,7 @@ const Kegiatanku = () => {
             ))}
           </div>
 
+          {/* Content Area */}
           <div className="w-2/3 bg-white shadow-md p-6">
             {selectedActivity ? (
               <>
@@ -137,10 +140,11 @@ const Kegiatanku = () => {
                             {day} Desember 2024
                           </span>
                         </p>
-                        <span className="text-green-600 font-bold text-lg">›</span>
+                        <span className="text-green-600 font-bold text-lg">
+                          ›
+                        </span>
                       </div>
                     ))}
-                    {/* Add the Presensi button here */}
                     <Link to="/presensi-kegiatan">
                       <button className="w-full mt-6 bg-custom-green text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-all">
                         Masuk untuk Presensi Kegiatan
@@ -158,6 +162,7 @@ const Kegiatanku = () => {
         </div>
       </div>
 
+      {/* Footer */}
       <FooterHome />
     </div>
   );
