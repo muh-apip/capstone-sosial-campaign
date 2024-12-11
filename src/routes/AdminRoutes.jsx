@@ -1,12 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import KegiatanRelawan from "../components/Admin/KegiatanRelawan/kegiatanrelawan";
-import TambahKegiatan from "../components/Admin/KegiatanRelawan/TambahKegiatan";
+import KegiatanRelawanAdmin from "../components/Admin/KegiatanRelawan/KegiatanRelawanAdmin";
+import TambahKegiatanAdmin from "../components/Admin/KegiatanRelawan/TambahKegiatanAdmin";
+import EditKegiatanAdmin from "../components/Admin/KegiatanRelawan/EditKegiatanAdmin";
 const PrivateRoutes = () => {
   return (
     <Routes>
-      <Route path="/kegiatanrelawan" element={<KegiatanRelawan />} />
-      <Route path="/kegiatan/tambah" element={<TambahKegiatan />} />
+      <Route path="/kegiatan" element={<KegiatanRelawanAdmin />} />
+      <Route path="/kegiatan/tambah" element={<TambahKegiatanAdmin />} />
+      <Route path="/kegiatan/edit/:id" element={<EditKegiatanAdmin />} />
     </Routes>
   );
 };
