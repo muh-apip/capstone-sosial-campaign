@@ -15,8 +15,8 @@ const PrivateRoutes = () => {
   return (
     <Routes>
       <Route path="/dashboard" element={<DashboardAdmin />} />
-      <Route path="/kegiatanrelawan" element={<KegiatanRelawan />} />
-      <Route path="/kegiatan/tambah" element={<TambahKegiatan />} />
+      <Route path="/relawan-admin" element={<KegiatanRelawan />} />
+      <Route path="/relawan/tambah" element={<TambahKegiatan />} />
       <Route path="/donasi-admin" element={<DonasiAdmin />} />
       <Route path="/tambah-donasi" element={<TambahDonasi />} />
       <Route path="/edit-donasi/:id" element={<EditDonasi />} />
