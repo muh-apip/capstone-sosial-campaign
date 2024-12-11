@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import KegiatanRelawan from "../components/Admin/KegiatanRelawan/KegiatanrelawanAdmin";
-import TambahKegiatan from "../components/Admin/KegiatanRelawan/TambahKegiatanAdmin";
+import KegiatanrelawanAdmin from "../components/Admin/KegiatanRelawan/KegiatanrelawanAdmin";
+import TambahKegiatanAdmin from "../components/Admin/KegiatanRelawan/TambahKegiatanAdmin";
 import EditKegiatanAdmin from "../components/Admin/KegiatanRelawan/EditKegiatanAdmin";
 import DashboardAdmin from "../components/Admin/Dashboard/DashboardAdmin";
 import DonasiAdmin from "../components/Admin/Donasi/DonasiAdmin";
@@ -17,8 +17,8 @@ const PrivateRoutes = () => {
   return (
     <Routes>
       <Route path="/dashboard" element={<DashboardAdmin />} />
-      <Route path="/relawan-admin" element={<KegiatanRelawan />} />
-      <Route path="/relawan/tambah" element={<TambahKegiatan />} />
+      <Route path="/relawan-admin" element={<KegiatanrelawanAdmin />} />
+      <Route path="/relawan/tambah" element={<TambahKegiatanAdmin />} />
       <Route path="/relawan/edit/:id" element={<EditKegiatanAdmin />} />
       <Route path="/donasi-admin" element={<DonasiAdmin />} />
       <Route path="/tambah-donasi" element={<TambahDonasi />} />
