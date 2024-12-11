@@ -1,48 +1,70 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Sidebar from "../Layout/Sidebar";
-import Navbar from "../Layout/NavbarAdmin"; // Pastikan path ini benar
+import Navbar from "../Layout/NavbarAdmin";
 
 const TabelKegiatan = () => {
-  // State untuk menampung data kegiatan
   const [kegiatan, setKegiatan] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // State untuk kategori yang dipilih
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Mengambil data kegiatan dari API berdasarkan kategori yang dipilih
+  // Data statis untuk kegiatan
+  const kegiatanData = [
+    {
+      id: 1,
+      judul: "Kegiatan A",
+      rentang_waktu: "01 Jan - 10 Jan 2024",
+      target_anggota: 50,
+      category: "Lingkungan",
+    },
+    {
+      id: 2,
+      judul: "Kegiatan B",
+      rentang_waktu: "05 Feb - 15 Feb 2024",
+      target_anggota: 30,
+      category: "Sosial",
+    },
+    {
+      id: 3,
+      judul: "Kegiatan C",
+      rentang_waktu: "10 Mar - 20 Mar 2024",
+      target_anggota: 40,
+      category: "Edukasi",
+    },
+    {
+      id: 4,
+      judul: "Kegiatan D",
+      rentang_waktu: "15 Apr - 25 Apr 2024",
+      target_anggota: 60,
+      category: "Sosial",
+    },
+    {
+      id: 5,
+      judul: "Kegiatan E",
+      rentang_waktu: "01 Mei - 10 Mei 2024",
+      target_anggota: 70,
+      category: "Lingkungan",
+    },
+  ];
+
+  // Simulasi proses pengambilan data
   useEffect(() => {
-    const fetchKegiatan = async () => {
-      try {
-        const url =
-          selectedCategory === "all"
-            ? "https://relawanku.xyz/api/v1/admin/program" // Mengambil semua program
-            : `https://relawanku.xyz/api/v1/admin/program/${selectedCategory}`; // Mengambil program berdasarkan kategori
+    setLoading(true);
+    setTimeout(() => {
+      setKegiatan(kegiatanData); // Set data statis setelah delay
+      setLoading(false);
+    }, 500); // Simulasi delay
+  }, []);
 
-        const response = await axios.get(url);
-        setKegiatan(response.data.data); // Menyimpan data kegiatan ke state
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching data");
-        setLoading(false);
-      }
-    };
-
-    fetchKegiatan();
-  }, [selectedCategory]); // Menjalankan useEffect saat kategori berubah
-
-  // Mengambil kategori unik dari data yang diambil
   const categories = ["all", ...new Set(kegiatan.map((item) => item.category))];
 
-  // Filter kegiatan berdasarkan kategori yang dipilih
   const filteredKegiatan =
     selectedCategory === "all"
       ? kegiatan
       : kegiatan.filter((item) => item.category === selectedCategory);
 
-  // Fungsi untuk menangani perubahan kategori
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
@@ -53,37 +75,30 @@ const TabelKegiatan = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      {/* Navbar */}
-      <div className="sticky top-0 z-50">
-        <Navbar />
-      </div>
+  const navigate = useNavigate(); // Hook untuk navigasi
 
-      <div className="flex flex-1">
-        {/* Sidebar */}
-        <div
-          className={`${
-            isSidebarOpen ? "w-64" : "w-16"
-          } bg-gray-800 text-white sticky top-16 h-full transition-all duration-300`}
-        >
-          <Sidebar toggleSidebar={toggleSidebar} />
+  const handleEditClick = (id) => {
+    navigate(`/kegiatan/edit/${id}`); // Navigasi ke halaman edit dengan ID kegiatan
+  };
+
+  return (
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-100">
+      {/* Sidebar */}
+      <Sidebar className="w-full lg:w-1/4 xl:w-1/5" />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Navbar */}
+        <div className="sticky top-0 z-50">
+          <Navbar />
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-6 bg-gray-100 overflow-auto">
-          {/* Button untuk menambah kegiatan */}
-          <div className="text-sm text-gray-500 mb-4">
+        <div className="p-6 flex-1 overflow-auto">
+          {/* Breadcrumb */}
+          <div className="text-sm text-gray-500 mb-4 p-4">
             Dashboard /{" "}
             <span className="text-gray-800 font-semibold">Relawan</span>
           </div>
-
-          <button
-            className="bg-green-500 text-white px-6 py-2 rounded-lg mb-6 shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50"
-            onClick={() => (window.location.href = "/link_tambah")}
-          >
-            Tambah Kegiatan
-          </button>
 
           {/* Filter kategori */}
           <div className="flex flex-wrap space-x-4 mb-6">
@@ -141,14 +156,12 @@ const TabelKegiatan = () => {
                     <td className="py-3 px-6">{item.target_anggota}</td>
                     <td className="py-3 px-6">{item.category}</td>
                     <td className="py-3 px-6 text-center">
-                      {/* Button Edit */}
                       <button
                         className="bg-teal-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50 mr-2 text-xs"
-                        onClick={() => alert(`Edit kegiatan ${item.id}`)}
+                        onClick={() => handleEditClick(item.id)} // Mengarahkan ke halaman edit
                       >
                         Edit
                       </button>
-                      {/* Button Hapus */}
                       <button
                         className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 text-xs"
                         onClick={() => alert(`Hapus kegiatan ${item.id}`)}
