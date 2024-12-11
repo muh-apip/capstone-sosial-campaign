@@ -3,12 +3,11 @@ import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
 
 const ClientsAdmin = () => {
-  // Dummy data for table rows with 20 entries
   const allData = Array.from({ length: 20 }, (_, index) => ({
-    id: index + 1, // Generate IDs starting from 1
-    username: "fadhila12_", // Static username
-    email: "fadhila@gmail.com", // Static email
-    tanggalRegistrasi: "1-10-2024", // Static registration date
+    id: index + 1,
+    username: "fadhila12_",
+    email: "fadhila@gmail.com",
+    tanggalRegistrasi: "1-10-2024",
   }));
 
   // State for pagination and delete modal
