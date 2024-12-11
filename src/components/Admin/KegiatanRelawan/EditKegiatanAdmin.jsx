@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
 
-// Data Dummy untuk kegiatan
 const kegiatanData = [
   {
     id: 1,
@@ -45,8 +44,8 @@ const kegiatanData = [
 ];
 
 const EditKegiatanAdmin = () => {
-  const { id } = useParams(); // Mengambil ID kegiatan dari URL
-  const navigate = useNavigate(); // Untuk navigasi setelah edit
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     category: "",
@@ -59,7 +58,6 @@ const EditKegiatanAdmin = () => {
   });
 
   useEffect(() => {
-    // Mencari data kegiatan berdasarkan ID dari data dummy
     const kegiatan = kegiatanData.find((item) => item.id === parseInt(id));
     if (kegiatan) {
       setFormData({
