@@ -25,7 +25,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
   );
 };
 
-const FAQ = () => {
+const UserFAQ = () => {
   const [faqs, setFaqs] = useState([
     {
       question: "Siapa yang bisa bergabung sebagai relawan?",
@@ -111,4 +111,4 @@ const FAQ = () => {
   );
 };
 
-export default FAQ;
+export default UserFAQ;
