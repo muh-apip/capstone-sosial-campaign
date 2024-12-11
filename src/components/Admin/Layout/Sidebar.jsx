@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   Home,
   Article,
@@ -11,17 +12,19 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation(); // Mendapatkan lokasi saat ini
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Fungsi untuk memeriksa apakah link aktif
+  const isActive = (path) => location.pathname === path;
+
   return (
     <div>
       {/* Tombol Hamburger */}
-      <div
-        className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200"
-      >
+      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
         <img
           src="/img/Logo.png" // Ganti dengan path logo
           alt="RelawanKu Logo"
@@ -63,29 +66,83 @@ const Sidebar = () => {
         {/* Menu Items */}
         <nav className="flex-grow">
           <ul className="mt-6 space-y-2">
-            <li className="flex items-center px-4 py-2 bg-custom-green text-white rounded-md">
-              <Home className="mr-3" />
-              <span>Dashboard</span>
+            <li>
+              <Link
+                to="/dashboard"
+                className={`flex items-center px-4 py-2 border-xl ${
+                  isActive("/dashboard")
+                    ? "bg-custom-green text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Home className="mr-3" />
+                <span>Dashboard</span>
+              </Link>
             </li>
-            <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <Article className="mr-3" />
-              <span>Artikel</span>
+            <li>
+              <Link
+                to="/artikel-admin"
+                className={`flex items-center px-4 py-2 ${
+                  isActive("/artikel-admin")
+                    ? "bg-custom-green text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Article className="mr-3" />
+                <span>Artikel</span>
+              </Link>
             </li>
-            <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <VolunteerActivism className="mr-3" />
-              <span>Donasi</span>
+            <li>
+              <Link
+                to="/donasi-admin"
+                className={`flex items-center px-4 py-2 ${
+                  isActive("/donasi-admin")
+                    ? "bg-custom-green text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <VolunteerActivism className="mr-3" />
+                <span>Donasi</span>
+              </Link>
             </li>
-            <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <AssignmentIndIcon className="mr-3" />
-              <span>Relawan</span>
+            <li>
+              <Link
+                to="/relawan-admin"
+                className={`flex items-center px-4 py-2 ${
+                  isActive("/relawan-admin")
+                    ? "bg-custom-green text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <AssignmentIndIcon className="mr-3" />
+                <span>Relawan</span>
+              </Link>
             </li>
-            <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <CreditCardIcon className="mr-3" />
-              <span>Invoice</span>
+            <li>
+              <Link
+                to="/invoices-admin"
+                className={`flex items-center px-4 py-2 ${
+                  isActive("/invoices-admin")
+                    ? "bg-custom-green text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <CreditCardIcon className="mr-3" />
+                <span>Invoice</span>
+              </Link>
             </li>
-            <li className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <Person className="mr-3" />
-              <span>Clients</span>
+            <li>
+              <Link
+                to="/clients"
+                className={`flex items-center px-4 py-2 ${
+                  isActive("/clients")
+                    ? "bg-custom-green text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Person className="mr-3" />
+                <span>Clients</span>
+              </Link>
             </li>
           </ul>
         </nav>

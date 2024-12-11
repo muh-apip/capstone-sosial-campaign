@@ -54,7 +54,7 @@ const NavbarHome = ({ onSearch }) => {
     { href: "/donasi", label: "Donasi" },
     { href: "/relawan", label: "Relawan" },
     { href: "/kegiatanku", label: "Kegiatanku" },
-    { href: "/faq", label: "FAQ" },
+    { href: "/user-faq", label: "FAQ" },
     { href: "/tentang-kami", label: "Tentang Kami" },
   ];
 
