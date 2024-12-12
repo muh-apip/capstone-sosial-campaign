@@ -29,8 +29,8 @@ export default function Login() {
       console.log("API Response:", response.data); // Debug respons API
 
       if (response.data?.data) {
-        const token = response.data.data;
-        const userRole = response.data.role;
+        const token = response.data.data.token
+        const userRole = response.data.data.role;
         console.log("User Role:", userRole);
         localStorage.setItem("token", token);
         if (userRole === "admin") {

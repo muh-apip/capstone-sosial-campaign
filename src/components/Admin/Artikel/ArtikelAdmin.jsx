@@ -2,59 +2,46 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../Layout/Sidebar";
 import NavbarAdmin from "../Layout/NavbarAdmin";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 const ArtikelAdmin = () => {
   const [artikelData, setArtikelData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedArtikel, setSelectedArtikel] = useState(null);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTimeout(() => {
-      const mockData = [
-        {
-          id: 1,
-          title: "Judul Artikel",
-          category: "Kategori",
-          date: "Tanggal Publikasi",
-        },
-        {
-          id: 2,
-          title: "Judul Artikel",
-          category: "Kategori",
-          date: "Tanggal Publikasi",
-        },
-        {
-          id: 3,
-          title: "Judul Artikel",
-          category: "Kategori",
-          date: "Tanggal Publikasi",
-        },
-        {
-          id: 4,
-          title: "Judul Artikel",
-          category: "Kategori",
-          date: "Tanggal Publikasi",
-        },
-        {
-          id: 5,
-          title: "Judul Artikel",
-          category: "Kategori",
-          date: "Tanggal Publikasi",
-        },
-        {
-          id: 6,
-          title: "Judul Artikel",
-          category: "Kategori",
-          date: "Tanggal Publikasi",
-        },
-      ];
-      setArtikelData(mockData);
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+    const fetchArticles = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found");
+        }
+        const response = await axios.get("https://relawanku.xyz/api/v1/admin/articles", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const articles = Array.isArray(response.data) ? response.data : [];
+        setArtikelData(articles);
+      } catch (err) {
+        console.error("Error fetching articles", err);
+        setError(err.response?.data?.message || "Failed to fetch articles");
+        if (err.response?.status === 401) {
+          alert("Session expired. Please log in again.");
+          navigate("/login");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, [navigate]);
 
   const openDeleteModal = (id) => {
     setSelectedArtikel(id);
@@ -66,11 +53,22 @@ const ArtikelAdmin = () => {
     setSelectedArtikel(null);
   };
 
-  const handleDelete = () => {
-    setArtikelData((prevData) =>
-      prevData.filter((item) => item.id !== selectedArtikel)
-    );
-    closeDeleteModal();
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      await axios.delete(`https://relawanku.xyz/api/v1/admin/articles/${selectedArtikel}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setArtikelData((prevData) =>
+        prevData.filter((item) => item.id !== selectedArtikel)
+      );
+      closeDeleteModal();
+    } catch (err) {
+      console.error("Error deleting article", err);
+      alert("Gagal menghapus artikel.");
+    }
   };
 
   return (
@@ -79,7 +77,6 @@ const ArtikelAdmin = () => {
       <div className="flex-1 flex flex-col">
         <NavbarAdmin />
         <div className="p-6">
-          {/* Breadcrumb */}
           <div className="text-sm text-gray-500 mb-4">
             <Link to="/dashboard" className="hover:text-gray-800">
               Dashboard /
@@ -87,7 +84,6 @@ const ArtikelAdmin = () => {
             <span className="font-semibold text-gray-800"> Artikel</span>
           </div>
 
-          {/* Filter Buttons */}
           <div className="flex gap-3 mb-4">
             <button className="px-4 py-2 bg-primary-green text-white font-medium rounded-full hover:bg-green-600">
               Semua
@@ -106,13 +102,12 @@ const ArtikelAdmin = () => {
             </button>
           </div>
 
-          {/* Table */}
           <div className="overflow-x-auto bg-white shadow-md rounded-lg">
             {isLoading ? (
-              <div className="p-6 text-center text-gray-500">
-                Memuat data...
-              </div>
-            ) : (
+              <div className="p-6 text-center text-gray-500">Memuat data...</div>
+            ) : error ? (
+              <div className="p-6 text-center text-red-500">{error}</div>
+            ) : artikelData.length > 0 ? (
               <table className="min-w-full border-collapse">
                 <thead>
                   <tr className="bg-[#CAE8CB] text-gray-800 text-sm uppercase">
@@ -155,11 +150,14 @@ const ArtikelAdmin = () => {
                   ))}
                 </tbody>
               </table>
+            ) : (
+              <div className="p-6 text-center text-gray-500">
+                Tidak ada artikel yang ditemukan.
+              </div>
             )}
           </div>
         </div>
 
-        {/* Delete Confirmation Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
