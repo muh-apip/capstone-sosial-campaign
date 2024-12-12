@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
 
-// Data Dummy untuk kegiatan
 const kegiatanData = [
   {
     id: 1,
@@ -41,12 +40,11 @@ const kegiatanData = [
     start_date: "2024-03-10",
     end_date: "2024-03-20",
   },
-  // Tambahkan data lainnya jika diperlukan
 ];
 
 const EditKegiatanAdmin = () => {
-  const { id } = useParams(); // Mengambil ID kegiatan dari URL
-  const navigate = useNavigate(); // Untuk navigasi setelah edit
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     category: "",
@@ -59,7 +57,6 @@ const EditKegiatanAdmin = () => {
   });
 
   useEffect(() => {
-    // Mencari data kegiatan berdasarkan ID dari data dummy
     const kegiatan = kegiatanData.find((item) => item.id === parseInt(id));
     if (kegiatan) {
       setFormData({
@@ -103,6 +100,10 @@ const EditKegiatanAdmin = () => {
 
         {/* Form Content */}
         <main className="flex-1 p-8 overflow-y-auto">
+          <div className="text-sm text-gray-500 mb-4 p-4">
+            Dashboard / Relawan /{" "}
+            <span className="text-gray-800 font-semibold">Edit</span>
+          </div>
           <div className="p-8 bg-white shadow-md rounded-lg max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 text-gray-700">
               Edit Kegiatan

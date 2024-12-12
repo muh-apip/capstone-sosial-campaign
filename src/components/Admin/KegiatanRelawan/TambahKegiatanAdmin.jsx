@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
 
-const ActivityForm = () => {
+const TambahKegiatanAdmin = () => {
   const [formData, setFormData] = useState({
     category: "",
     title: "",
@@ -80,6 +80,10 @@ const ActivityForm = () => {
 
         {/* Form Content */}
         <main className="flex-1 p-8 overflow-y-auto">
+          <div className="text-sm text-gray-500 mb-4 p-4">
+            Dashboard / Relawan /{" "}
+            <span className="text-gray-800 font-semibold">Tambah Kegiatan</span>
+          </div>
           <div className="p-8 bg-white shadow-md rounded-lg max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 text-gray-700">
               Tambah Kegiatan
@@ -245,4 +249,4 @@ const ActivityForm = () => {
   );
 };
 
-export default ActivityForm;
+export default TambahKegiatanAdmin;
