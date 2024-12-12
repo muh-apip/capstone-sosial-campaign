@@ -101,16 +101,16 @@ const Relawan = () => {
       : relawan.filter((relawan) => relawan.category === selectedCategory);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
       </div>
 
       {/* Konten Utama */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 px-4 py-6 sm:px-6 lg:px-8">
         {/* Konten Relawan */}
-        <div className="flex-1 p-6 bg-gray-100">
+        <div className="flex-1">
           {/* Judul Halaman */}
           <h1 className="text-3xl font-bold text-gray-900 mb-6">
             Relawan Kami

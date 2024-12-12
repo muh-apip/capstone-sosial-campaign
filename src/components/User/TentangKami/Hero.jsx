@@ -1,9 +1,10 @@
 import React from "react";
-import Relawan from "./Relawan"; // Pastikan file Tentang.jsx berada di lokasi yang benar
+import Relawan from "./Relawan";
 import Panduan from "./Panduan";
 import Gallery from "./Galery";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
+import { Link } from "react-router-dom";
 
 const TentangKami = () => {
   return (
@@ -16,15 +17,15 @@ const TentangKami = () => {
       {/* Main Content */}
       <div className="bg-gray-100 flex-grow">
         {/* Breadcrumb */}
-        <div className="bg-gray-200 py-4 px-8">
-          <p className="text-gray-600 text-sm">
-            Beranda /{" "}
-            <span className="text-gray-800 font-semibold">Tentang Kami</span>
-          </p>
+        <div className="text-sm text-gray-500 mb-5 mt-5 px-4 sm:px-6">
+          <Link to="/dashboard" className="hover:text-gray-800">
+            Dashboard /
+          </Link>{" "}
+          <span className="text-gray-800 font-semibold">Tentang Kami</span>
         </div>
 
         {/* Hero Section */}
-        <div className="relative bg-gray-900 text-white h-[579px]">
+        <div className="relative bg-gray-900 text-white h-[300px] sm:h-[400px] lg:h-[579px]">
           {/* Background Image */}
           <div
             className="absolute inset-0 bg-cover bg-center opacity-60"
@@ -34,19 +35,19 @@ const TentangKami = () => {
           ></div>
 
           {/* Overlay Content */}
-          <div className="relative z-10 px-8 py-16 h-full flex items-center">
-            <div className="max-w-4xl text-left">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">
+          <div className="relative z-10 px-4 sm:px-8 py-8 sm:py-16 h-full flex items-center">
+            <div className="max-w-2xl sm:max-w-4xl text-left">
+              <h1 className="text-xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4">
                 Bersama, satu donasi
               </h1>
-              <p className="text-3xl md:text-4xl font-bold mb-4">
+              <p className="text-xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4">
                 dan aksi pada satu waktu
               </p>
-              <p className="text-sm md:text-base">
+              <p className="text-sm sm:text-base mb-1">
                 melalui donasi dan aksi sukarela, menekankan bahwa setiap
                 langkah kecil
               </p>
-              <p className="text-sm md:text-base">
+              <p className="text-sm sm:text-base">
                 bersama dapat membawa dampak besar bagi masyarakat.
               </p>
             </div>

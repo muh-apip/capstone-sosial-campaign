@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
+import { Link } from "react-router-dom";
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
@@ -9,7 +10,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
         className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 cursor-pointer"
         onClick={onClick}
       >
-        <h2 className="text-base sm:text-lg font-semibold text-gray-900 w-full">
+        <h2 className="text-sm sm:text-base font-semibold text-gray-900 w-full">
           {question}
         </h2>
         <i
@@ -61,22 +62,25 @@ const UserFAQ = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
       </div>
 
       <div className="text-sm text-gray-500 mb-5 mt-5 px-4 sm:px-6">
-        Beranda / <span className="text-gray-800 font-semibold">FAQ</span>
+      <Link to="/dashboard" className="hover:text-gray-800">
+              Dashboard /
+            </Link>{" "}
+        <span className="text-gray-800 font-semibold">FAQ</span>
       </div>
 
       {/* Full-Width Image */}
       <div className="w-full">
         <img
-          src="/img/background/Faq.png" // Replace with your image URL
+          src="/img/background/Faq.png"
           alt="FAQ Banner"
-          className="w-full h-auto object-cover rounded-b-lg"
+          className="w-full max-h-[579px] h-64 sm:h-auto object-cover"
         />
       </div>
 
@@ -84,8 +88,8 @@ const UserFAQ = () => {
       <div className="flex-1 bg-gray-100 py-10 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-0">
         <div className="max-w-3xl lg:max-w-4xl mx-auto relative z-10">
           {/* Header FAQ */}
-          <div className="text-center mt-20 sm:mb-12">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-800">
+          <div className="text-center mt-10 sm:mt-20 sm:mb-12">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-800">
               Pertanyaan yang Sering Diajukan
             </h1>
           </div>
