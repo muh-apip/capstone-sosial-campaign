@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link, useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -66,10 +66,12 @@ const DetailDonasi = () => {
       {/* Konten Detail */}
       <div className="flex-1 px-4 py-6 sm:px-6 lg:px-8 bg-gray-100">
         {/* Breadcrumb */}
-        <div className="text-sm text-gray-500 mb-6">
-          Donasi /{" "}
-          <span className="text-gray-800 font-semibold">Detail Donasi</span>
-        </div>
+        <div className="text-sm text-gray-500 mb-4">
+            <Link to="/donasi" className="hover:text-gray-800">
+              Donasi /
+            </Link>
+            <span className="font-semibold text-gray-800"> Detail Donasi</span>
+          </div>
 
         {/* Card Donasi */}
         <div className="flex flex-col md:flex-row gap-8 mb-8">

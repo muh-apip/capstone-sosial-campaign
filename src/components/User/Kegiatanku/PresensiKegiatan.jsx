@@ -1,5 +1,6 @@
 import React from "react";
-import NavbarHome from "../Layout/NavbarHome"; // Pastikan file NavbarHome tersedia
+import NavbarHome from "../Layout/NavbarHome"; 
+import { Link } from "react-router-dom";
 
 const PresensiKegiatan = () => {
   return (
@@ -10,12 +11,12 @@ const PresensiKegiatan = () => {
       </div>
 
       {/* Breadcrumb */}
-      <div className="bg-gray-100 py-4 px-8">
-        <p className="text-gray-600 text-sm">
-          Relawan / Detail Program /{" "}
-          <span className="font-semibold">Presensi</span>
-        </p>
-      </div>
+      <div className="text-sm text-gray-500 p-6 mb-6">
+            <Link to="/kegiatanku" className="hover:text-gray-800">
+              KegiatanKu /
+            </Link>
+            <span className="font-semibold text-gray-800"> Presensi</span>
+          </div>
 
       {/* Main Content */}
       <div className="flex flex-col items-center justify-center flex-grow">

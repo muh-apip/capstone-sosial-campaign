@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
 
@@ -70,7 +70,15 @@ const BayarDonasi = () => {
         <div className="relative w-full h-full px-4 py-6">
           {/* Breadcrumb */}
           <div className="absolute top-6 left-6 text-sm text-gray-300 z-10">
-            Donasi / Detail Donasi / Input Donasi /{" "}
+          <Link to="/donasi" className="hover:text-gray-200">
+            Donasi /{" "}
+          </Link>
+          <Link to="/donasi/1" className="hover:text-gray-200">
+            Detail Donasi /{" "}
+          </Link>
+          <Link to="/input-donasi/1" className="hover:text-gray-200">
+            Input Donasi /{" "}
+          </Link>
             <span className="text-white font-semibold">Bayar Donasi</span>
           </div>
 

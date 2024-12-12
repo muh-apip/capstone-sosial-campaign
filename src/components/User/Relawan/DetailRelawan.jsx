@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Navbar from "../Layout/NavbarDetail";
 import Footer from "../Layout/FooterHome";
 import { CheckIcon } from "@heroicons/react/20/solid";
@@ -97,9 +97,11 @@ const DetailRelawan = () => {
         {/* Konten Detail Relawan */}
         <div className="flex-1 p-4 bg-gray-100">
           {/* Breadcrumb */}
-          <div className="text-sm text-gray-500 mb-4">
-            Beranda / Relawan /{" "}
-            <span className="text-gray-800 font-semibold">Detail Program</span>
+          <div className="text-sm text-gray-500 mb-6">
+            <Link to="/relawan" className="hover:text-gray-800">
+              Relawan /
+            </Link>
+            <span className="font-semibold text-gray-800"> Detail Relawan</span>
           </div>
 
           {/* Konten Relawan */}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
 
@@ -41,8 +41,13 @@ const InputDonasi = () => {
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         {/* Breadcrumb */}
         <div className="absolute top-6 left-6 text-sm text-gray-300">
-          Donasi / Detail Donasi /{" "}
-          <span className="text-white font-semibold">Input Donasi</span>
+          <Link to="/donasi" className="hover:text-gray-200">
+            Donasi /{" "}
+          </Link>
+          <Link to="/donasi/1" className="hover:text-gray-200">
+            Detail Donasi /{" "}
+          </Link>
+          <span className="text-white font-semibold"> Input Donasi</span>
         </div>
 
         {/* Konten Utama */}
@@ -66,7 +71,9 @@ const InputDonasi = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <p className="text-white font-normal text-sm mt-4 mb-6 ">Mohon isi Rp 10.000 atau lebih </p>
+            <p className="text-white font-normal text-sm mt-4 mb-6 ">
+              Mohon isi Rp 10.000 atau lebih{" "}
+            </p>
           </div>
 
           {/* Pilihan Nominal Donasi */}

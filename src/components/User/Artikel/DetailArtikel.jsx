@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import NavbarHome from "../Layout/NavbarHome";
+import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
+import { Link } from "react-router-dom";
 
 const DetailArtikel = () => {
   const { id } = useParams(); // Mengambil id artikel dari URL
@@ -46,16 +47,18 @@ const DetailArtikel = () => {
     <div className="flex flex-col min-h-screen">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
-        <NavbarHome />
+        <NavbarDetail />
       </div>
 
       {/* Artikel Content */}
       <div className="flex-1 px-4 py-6 sm:px-6 lg:px-8 bg-gray-100">
         {/* Breadcrumb */}
         <div className="text-sm text-gray-500 mb-6">
-          Artikel /{" "}
-          <span className="text-gray-800 font-semibold">Detail Artikel</span>
-        </div>
+            <Link to="/artikel" className="hover:text-gray-800">
+              Artikel /
+            </Link>
+            <span className="font-semibold text-gray-800"> Artikel</span>
+          </div>
 
         {/* Konten Artikel */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
