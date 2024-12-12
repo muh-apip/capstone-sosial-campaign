@@ -74,7 +74,7 @@ const UserFAQ = () => {
       {/* Full-Width Image */}
       <div className="w-full">
         <img
-          src="/public/img/background/Faq.png" // Replace with your image URL
+          src="/img/background/Faq.png" // Replace with your image URL
           alt="FAQ Banner"
           className="w-full h-auto object-cover rounded-b-lg"
         />
