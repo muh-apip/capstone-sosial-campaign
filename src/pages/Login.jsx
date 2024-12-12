@@ -25,10 +25,19 @@ export default function Login() {
         username,
         password,
       });
+
       console.log("API Response:", response.data); // Debug respons API
-      if (response.data?.token) {
-        localStorage.setItem("token", response.data.token);
-        navigate("/home");
+
+      if (response.data?.data) {
+        const token = response.data.data;
+        const userRole = response.data.role;
+        console.log("User Role:", userRole);
+        localStorage.setItem("token", token);
+        if (userRole === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/home");
+        }
       } else {
         setErrorMessage("Invalid username or password.");
         setIsModalOpen(true);

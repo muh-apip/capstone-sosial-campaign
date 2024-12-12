@@ -18,6 +18,8 @@
     "@mui/icons-material": "^6.1.9",
     "@mui/material": "^6.1.8",
     "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "crypto-js": "^4.2.0",
     "preline": "^2.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
