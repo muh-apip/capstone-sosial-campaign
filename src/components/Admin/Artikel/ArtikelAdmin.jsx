@@ -29,8 +29,14 @@ const ArtikelAdmin = () => {
             },
           }
         );
-        const articles = Array.isArray(response.data) ? response.data : [];
-        setArtikelData(articles);
+
+        console.log("API Response:", response.data); // Debugging respons API
+
+        // Ambil data dari response.data.data
+        const articles = Array.isArray(response.data.data)
+          ? response.data.data
+          : [];
+        setArtikelData(articles); // Update state dengan data yang benar
       } catch (err) {
         console.error("Error fetching articles", err);
         setError(err.response?.data?.message || "Failed to fetch articles");
@@ -125,26 +131,34 @@ const ArtikelAdmin = () => {
                 <tbody>
                   {artikelData.map((item, index) => (
                     <tr
-                      key={item.id}
+                      key={item.ID || `artikel-${index}`} // Gunakan `item.ID` jika ada
                       className={`border-b border-gray-200 hover:bg-gray-50 ${
                         index % 2 === 0 ? "bg-gray-50" : "bg-white"
                       }`}
                     >
                       <td className="py-4 px-6 text-left">{index + 1}</td>
-                      <td className="py-4 px-6 text-left">{item.title}</td>
-                      <td className="py-4 px-6 text-left">{item.category}</td>
-                      <td className="py-4 px-6 text-left">{item.date}</td>
+                      <td className="py-4 px-6 text-left">
+                        {item.Title || "Tidak ada judul"}
+                      </td>
+                      <td className="py-4 px-6 text-left">
+                        {item.Category || "Tidak ada kategori"}
+                      </td>
+                      <td className="py-4 px-6 text-left">
+                        {item.CreatedAt
+                          ? new Date(item.CreatedAt).toLocaleDateString("id-ID")
+                          : "Tanggal tidak tersedia"}
+                      </td>
                       <td className="py-4 px-6 text-center">
                         <div className="flex items-center justify-center gap-4">
                           <button
                             className="w-4 transform hover:text-blue-500 hover:scale-110"
-                            onClick={() => navigate(`/edit-artikel/${item.id}`)}
+                            onClick={() => navigate(`/edit-artikel/${item.ID}`)}
                           >
                             <i className="fas fa-edit"></i>
                           </button>
                           <button
                             className="w-4 transform hover:text-red-500 hover:scale-110"
-                            onClick={() => openDeleteModal(item.id)}
+                            onClick={() => openDeleteModal(item.ID)}
                           >
                             <i className="fas fa-trash"></i>
                           </button>
