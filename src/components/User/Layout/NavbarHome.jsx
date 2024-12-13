@@ -80,14 +80,14 @@ const NavbarHome = ({ onSearch }) => {
           {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
 
-        <div className="hidden md:flex items-center ml-4">
-          <SearchIcon className="text-gray-400 mr-2" />
+        <div className="relative hidden md:flex items-center ml-4">
+          <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
             placeholder="Search"
-            className="w-[200px] md:w-[300px] pl-4 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-[200px] md:w-[300px] pl-10 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
           />
         </div>
       </div>
@@ -99,7 +99,9 @@ const NavbarHome = ({ onSearch }) => {
             <Link
               key={link.href}
               to={link.href}
-              className={`px-6 py-2 text-gray-700 hover:bg-gray-100 ${location.pathname === link.href ? "font-bold text-black" : ""}`}
+              className={`px-6 py-2 text-gray-700 hover:bg-gray-100 ${
+                location.pathname === link.href ? "font-bold text-black" : ""
+              }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.label}
@@ -113,7 +115,9 @@ const NavbarHome = ({ onSearch }) => {
           <Link
             key={link.href}
             to={link.href}
-            className={`text-gray-700 hover:text-blue-500 px-2 py-1 ${location.pathname === link.href ? "font-bold text-black" : ""}`}
+            className={`text-gray-700 hover:text-blue-500 px-2 py-1 ${
+              location.pathname === link.href ? "font-bold text-black" : ""
+            }`}
           >
             {link.label}
           </Link>
@@ -121,13 +125,13 @@ const NavbarHome = ({ onSearch }) => {
       </div>
 
       <div className="flex items-center space-x-4">
-      <a href="/notifikasi">
-        <button
-          className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Notifications"
-        >
-          <NotificationsOutlinedIcon className="h-6 w-6" />
-        </button>
+        <a href="/notifikasi">
+          <button
+            className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Notifications"
+          >
+            <NotificationsOutlinedIcon className="h-6 w-6" />
+          </button>
         </a>
         <a href="/chatbot">
           <button
@@ -138,12 +142,12 @@ const NavbarHome = ({ onSearch }) => {
           </button>
         </a>
         <a href="/laporan">
-        <button
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Email"
-        >
-          <EmailOutlinedIcon className="h-6 w-6" />
-        </button>
+          <button
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Email"
+          >
+            <EmailOutlinedIcon className="h-6 w-6" />
+          </button>
         </a>
 
         <div className="relative flex items-center" ref={profileMenuRef}>
@@ -156,7 +160,7 @@ const NavbarHome = ({ onSearch }) => {
             <img
               src="https://via.placeholder.com/32"
               alt="Profile"
-              className="h-8 w-8 rounded-full border border-gray-300"
+              className="h-8 w-8 rounded-full border border-gray-300 object-cover"
             />
           </button>
           {isProfileMenuOpen && (
