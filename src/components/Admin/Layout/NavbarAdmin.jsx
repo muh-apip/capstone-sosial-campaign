@@ -35,13 +35,15 @@ const NavbarAdmin = () => {
     <nav className="flex justify-between items-center bg-white shadow px-6 py-3 border-b border-gray-200">
       {/* Bagian Kiri */}
       <div className="flex items-center">
-        <div className="relative hidden lg:block">
+      <div className="relative hidden md:flex items-center ml-4">
+          <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
             placeholder="Search"
-            className="w-[300px] pl-4 pr-10 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-[200px] md:w-[300px] pl-10 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
           />
-          <SearchIcon className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500" />
         </div>
       </div>
 
