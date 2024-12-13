@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import axios from "axios"; // Import axios
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
 
@@ -7,94 +8,71 @@ const KegiatanRelawanAdmin = () => {
   const [kegiatan, setKegiatan] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [selectedCategory, setSelectedCategory] = useState("all");
-
-  // Data statis untuk kegiatan
-  const kegiatanData = [
-    {
-      id: 1,
-      judul: "Kegiatan A",
-      rentang_waktu: "01 Jan - 10 Jan 2024",
-      target_anggota: 50,
-      category: "Lingkungan",
-    },
-    {
-      id: 2,
-      judul: "Kegiatan B",
-      rentang_waktu: "05 Feb - 15 Feb 2024",
-      target_anggota: 30,
-      category: "Sosial",
-    },
-    {
-      id: 3,
-      judul: "Kegiatan C",
-      rentang_waktu: "10 Mar - 20 Mar 2024",
-      target_anggota: 40,
-      category: "Edukasi",
-    },
-    {
-      id: 4,
-      judul: "Kegiatan D",
-      rentang_waktu: "15 Apr - 25 Apr 2024",
-      target_anggota: 60,
-      category: "Sosial",
-    },
-    {
-      id: 5,
-      judul: "Kegiatan E",
-      rentang_waktu: "01 Mei - 10 Mei 2024",
-      target_anggota: 70,
-      category: "Lingkungan",
-    },
-  ];
-
-  // Simulasi proses pengambilan data
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setKegiatan(kegiatanData); // Set data statis setelah delay
-      setLoading(false);
-    }, 500); // Simulasi delay
-  }, []);
-
-  const categories = ["all", ...new Set(kegiatan.map((item) => item.category))];
-
-  const filteredKegiatan =
-    selectedCategory === "all"
-      ? kegiatan
-      : kegiatan.filter((item) => item.category === selectedCategory);
-
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-  };
 
   const navigate = useNavigate(); // Hook untuk navigasi
 
+  // Fungsi untuk fetch data kegiatan berdasarkan category atau id
+  useEffect(() => {
+    const fetchKegiatan = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token tidak ditemukan");
+        }
+
+        // Menentukan URL API berdasarkan kategori yang dipilih
+        let apiUrl = "https://relawanku.xyz/api/v1/admin/programs";
+        if (selectedCategory !== "all") {
+          apiUrl = `https://relawanku.xyz/api/v1/admin/program/${selectedCategory}`;
+        }
+
+        const response = await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Update state kegiatan dengan data yang diterima dari API
+        setKegiatan(response.data.data || []);
+      } catch (err) {
+        setError("Terjadi kesalahan saat mengambil data.");
+        console.error("Error fetching data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchKegiatan();
+  }, [selectedCategory]);
+
+  // Filter kategori berdasarkan data yang ada di API
+  const categories = ["all", "Lingkungan", "Sosial", "Edukasi"]; // Contoh kategori statis, bisa disesuaikan dari API
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category); // Update kategori yang dipilih
+  };
+
   const handleEditClick = (id) => {
-    navigate(`/kegiatan/edit/${id}`); // Navigasi ke halaman edit dengan ID kegiatan
+    navigate(`/relawan-edit/${id}`);
   };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-100">
-      {/* Sidebar */}
       <Sidebar className="w-full lg:w-1/4 xl:w-1/5" />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Navbar */}
         <div className="sticky top-0 z-50">
           <Navbar />
         </div>
 
         <div className="p-6 flex-1 overflow-auto">
-          {/* Breadcrumb */}
           <div className="text-sm text-gray-500 mb-4 p-4">
             Dashboard /{" "}
             <span className="text-gray-800 font-semibold">Relawan</span>
           </div>
 
-          {/* Filter kategori */}
           <div className="flex justify-between items-center mb-6">
             <div className="flex flex-wrap space-x-4">
               {categories.map((category) => (
@@ -112,14 +90,13 @@ const KegiatanRelawanAdmin = () => {
               ))}
             </div>
             <button
-              onClick={() => navigate("/relawan/tambah")}
+              onClick={() => navigate("/relawan-tambah")}
               className="px-6 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
             >
               Tambah Kegiatan
             </button>
           </div>
 
-          {/* Tabel Kegiatan */}
           {loading ? (
             <div>Loading...</div>
           ) : error ? (
@@ -150,7 +127,7 @@ const KegiatanRelawanAdmin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredKegiatan.map((item, index) => (
+                  {kegiatan.map((item, index) => (
                     <tr
                       key={item.id}
                       className="bg-white hover:bg-gray-100 transition-colors"

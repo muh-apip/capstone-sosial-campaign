@@ -21,27 +21,32 @@ const ArtikelAdmin = () => {
         if (!token) {
           throw new Error("Token not found");
         }
-        const response = await axios.get("https://relawanku.xyz/api/v1/admin/articles", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const articles = Array.isArray(response.data) ? response.data : [];
-        setArtikelData(articles);
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/admin/articles",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("API Response:", response.data); // Debugging respons API
+
+        // Ambil data dari response.data.data
+        const articles = Array.isArray(response.data.data)
+          ? response.data.data
+          : [];
+        setArtikelData(articles); // Update state dengan data yang benar
       } catch (err) {
         console.error("Error fetching articles", err);
         setError(err.response?.data?.message || "Failed to fetch articles");
-        if (err.response?.status === 401) {
-          alert("Session expired. Please log in again.");
-          navigate("/login");
-        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchArticles();
-  }, [navigate]);
+  }, []);
 
   const openDeleteModal = (id) => {
     setSelectedArtikel(id);
@@ -55,21 +60,47 @@ const ArtikelAdmin = () => {
 
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem("jwtToken");
-      await axios.delete(`https://relawanku.xyz/api/v1/admin/articles/${selectedArtikel}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setArtikelData((prevData) =>
-        prevData.filter((item) => item.id !== selectedArtikel)
+      // Ambil token dari localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login kembali.");
+      }
+  
+      // Kirim request DELETE ke API dengan menggunakan ID artikel yang dipilih
+      const response = await axios.delete(
+        `https://relawanku.xyz/api/v1/admin/article/${selectedArtikel}`, // Pastikan endpoint sudah benar
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+  
+      // Log untuk memastikan respon API
+      console.log("Delete Response:", response.data);
+  
+      // Perbarui artikelData setelah penghapusan berhasil
+      setArtikelData((prevData) =>
+        prevData.filter((item) => item.ID !== selectedArtikel) // Gunakan item.ID sesuai dengan struktur data Anda
+      );
+  
+      // Tutup modal
       closeDeleteModal();
+  
+      // Tampilkan notifikasi keberhasilan
+      alert("Artikel berhasil dihapus.");
     } catch (err) {
-      console.error("Error deleting article", err);
-      alert("Gagal menghapus artikel.");
+      console.error("Error deleting article:", err.response?.data || err.message);
+  
+      // Tampilkan pesan error kepada pengguna
+      alert(
+        "Gagal menghapus artikel: " +
+          (err.response?.data?.message || err.message)
+      );
     }
   };
+  
+  
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
@@ -104,7 +135,9 @@ const ArtikelAdmin = () => {
 
           <div className="overflow-x-auto bg-white shadow-md rounded-lg">
             {isLoading ? (
-              <div className="p-6 text-center text-gray-500">Memuat data...</div>
+              <div className="p-6 text-center text-gray-500">
+                Memuat data...
+              </div>
             ) : error ? (
               <div className="p-6 text-center text-red-500">{error}</div>
             ) : artikelData.length > 0 ? (
@@ -121,26 +154,34 @@ const ArtikelAdmin = () => {
                 <tbody>
                   {artikelData.map((item, index) => (
                     <tr
-                      key={item.id}
+                      key={item.ID || `artikel-${index}`} // Gunakan `item.ID` jika ada
                       className={`border-b border-gray-200 hover:bg-gray-50 ${
                         index % 2 === 0 ? "bg-gray-50" : "bg-white"
                       }`}
                     >
                       <td className="py-4 px-6 text-left">{index + 1}</td>
-                      <td className="py-4 px-6 text-left">{item.title}</td>
-                      <td className="py-4 px-6 text-left">{item.category}</td>
-                      <td className="py-4 px-6 text-left">{item.date}</td>
+                      <td className="py-4 px-6 text-left">
+                        {item.Title || "Tidak ada judul"}
+                      </td>
+                      <td className="py-4 px-6 text-left">
+                        {item.Category || "Tidak ada kategori"}
+                      </td>
+                      <td className="py-4 px-6 text-left">
+                        {item.CreatedAt
+                          ? new Date(item.CreatedAt).toLocaleDateString("id-ID")
+                          : "Tanggal tidak tersedia"}
+                      </td>
                       <td className="py-4 px-6 text-center">
                         <div className="flex items-center justify-center gap-4">
                           <button
                             className="w-4 transform hover:text-blue-500 hover:scale-110"
-                            onClick={() => navigate(`/edit-artikel/${item.id}`)}
+                            onClick={() => navigate(`/edit-artikel/${item.ID}`)}
                           >
                             <i className="fas fa-edit"></i>
                           </button>
                           <button
                             className="w-4 transform hover:text-red-500 hover:scale-110"
-                            onClick={() => openDeleteModal(item.id)}
+                            onClick={() => openDeleteModal(item.ID)}
                           >
                             <i className="fas fa-trash"></i>
                           </button>
