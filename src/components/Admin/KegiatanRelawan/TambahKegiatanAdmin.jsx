@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
+import axios from "axios";
 
 const TambahKegiatanAdmin = () => {
   const [formData, setFormData] = useState({
-    category: "",
     title: "",
     details: "",
     start_date: "",
@@ -13,6 +13,11 @@ const TambahKegiatanAdmin = () => {
     quota: 0,
     image_url: null,
   });
+  const [selectedCategory, setSelectedCategory] = useState(""); // Dropdown kategori
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const categories = ["Sosial", "Edukasi", "Lingkungan", "Kesehatan"]; // Pilihan kategori
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -26,29 +31,51 @@ const TambahKegiatanAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare form data for API
-    const data = new FormData();
-    data.append("category", formData.category);
-    data.append("title", formData.title);
-    data.append("details", formData.details);
-    data.append("start_date", formData.start_date);
-    data.append("end_date", formData.end_date);
-    data.append("location", formData.location);
-    data.append("quota", formData.quota);
-    if (formData.image_url) {
-      data.append("image_url", formData.image_url);
+    if (
+      !formData.title ||
+      !formData.details ||
+      !formData.start_date ||
+      !formData.end_date ||
+      !formData.location ||
+      !formData.quota ||
+      !formData.image_url // Pastikan gambar diunggah
+    ) {
+      alert("Semua field wajib diisi!");
+      return;
     }
 
     try {
-      const response = await fetch("relawanku.xyz/api/v1/admin/program", {
-        method: "POST",
-        body: data,
-      });
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login kembali.");
+      }
 
-      if (response.ok) {
+      // Siapkan FormData untuk mengirim file dan data lainnya
+      const data = new FormData();
+      data.append("title", formData.title);
+      data.append("details", formData.details);
+      data.append("start_date", formData.start_date);
+      data.append("end_date", formData.end_date);
+      data.append("location", formData.location);
+      data.append("quota", formData.quota);
+      data.append("image_url", formData.image_url); // Gambar
+
+      // Mengirim data ke API
+      const response = await axios.post(
+        "https://relawanku.xyz/api/v1/admin/program", // Ganti sesuai endpoint API Swagger
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Header untuk FormData
+          },
+        }
+      );
+
+      if (response.status === 201) {
         alert("Kegiatan berhasil ditambahkan!");
         setFormData({
-          category: "",
           title: "",
           details: "",
           start_date: "",
@@ -57,28 +84,27 @@ const TambahKegiatanAdmin = () => {
           quota: 0,
           image_url: null,
         });
-      } else {
-        alert("Gagal menambahkan kegiatan!");
+        setSelectedCategory(""); // Reset kategori
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Terjadi kesalahan saat mengirim data.");
+    } catch (err) {
+      console.error("Error submitting data:", err);
+      alert(
+        `Gagal menambahkan kegiatan: ${
+          err.response?.data?.message || "Kesalahan tidak diketahui"
+        }`
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
       <Sidebar />
-
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Navbar */}
         <div className="sticky top-0 z-50 bg-white shadow-md">
           <Navbar />
         </div>
-
-        {/* Form Content */}
         <main className="flex-1 p-8 overflow-y-auto">
           <div className="text-sm text-gray-500 mb-4 p-4">
             Dashboard / Relawan /{" "}
@@ -88,6 +114,7 @@ const TambahKegiatanAdmin = () => {
             <h2 className="text-2xl font-bold mb-6 text-gray-700">
               Tambah Kegiatan
             </h2>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
             <form onSubmit={handleSubmit}>
               {/* Kategori */}
               <div className="mb-6">
@@ -99,68 +126,70 @@ const TambahKegiatanAdmin = () => {
                 </label>
                 <select
                   id="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                 >
                   <option value="">Pilih Kategori</option>
-                  <option value="Seminar">Sosialisasi</option>
-                  <option value="Workshop">Dana Bantuan</option>
-                  <option value="Training">Gotong Royong</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {/* Judul Kegiatan */}
+              {/* Judul */}
               <div className="mb-6">
                 <label
                   htmlFor="title"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Judul Kegiatan
+                  Judul
                 </label>
                 <input
                   type="text"
                   id="title"
                   value={formData.title}
                   onChange={handleChange}
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                   placeholder="Masukkan judul kegiatan"
                 />
               </div>
 
-              {/* Detail Kegiatan */}
+              {/* Detail */}
               <div className="mb-6">
                 <label
                   htmlFor="details"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Detail Kegiatan
+                  Detail
                 </label>
                 <textarea
                   id="details"
                   rows="4"
                   value={formData.details}
                   onChange={handleChange}
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                   placeholder="Masukkan detail kegiatan"
                 ></textarea>
               </div>
 
-              {/* Tanggal Mulai dan Berakhir */}
+              {/* Tanggal Mulai dan Selesai */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label
                     htmlFor="start_date"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Tanggal Mulai Kegiatan
+                    Tanggal Mulai
                   </label>
                   <input
                     type="date"
                     id="start_date"
                     value={formData.start_date}
                     onChange={handleChange}
-                    className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                    className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                   />
                 </div>
                 <div>
@@ -168,14 +197,14 @@ const TambahKegiatanAdmin = () => {
                     htmlFor="end_date"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Tanggal Berakhir Kegiatan
+                    Tanggal Selesai
                   </label>
                   <input
                     type="date"
                     id="end_date"
                     value={formData.end_date}
                     onChange={handleChange}
-                    className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                    className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                   />
                 </div>
               </div>
@@ -193,7 +222,7 @@ const TambahKegiatanAdmin = () => {
                   id="location"
                   value={formData.location}
                   onChange={handleChange}
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                   placeholder="Masukkan lokasi kegiatan"
                 />
               </div>
@@ -211,7 +240,7 @@ const TambahKegiatanAdmin = () => {
                   id="quota"
                   value={formData.quota}
                   onChange={handleChange}
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                   placeholder="Masukkan kuota peserta"
                 />
               </div>
@@ -228,7 +257,7 @@ const TambahKegiatanAdmin = () => {
                   type="file"
                   id="image_url"
                   onChange={handleFileChange}
-                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2"
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                 />
               </div>
 
@@ -237,8 +266,9 @@ const TambahKegiatanAdmin = () => {
                 <button
                   type="submit"
                   className="px-6 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 focus:outline-none"
+                  disabled={loading}
                 >
-                  Simpan
+                  {loading ? "Menyimpan..." : "Simpan"}
                 </button>
               </div>
             </form>

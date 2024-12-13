@@ -19,8 +19,8 @@ const AdminRoutes = () => {
     <Routes>
       <Route path="/dashboard" element={<DashboardAdmin />} />
       <Route path="/relawan-admin" element={<KegiatanRelawanAdmin />} />
-      <Route path="/relawan/tambah" element={<TambahKegiatanAdmin />} />
-      <Route path="/relawan/edit/:id" element={<EditKegiatanAdmin />} />
+      <Route path="/relawan-tambah" element={<TambahKegiatanAdmin />} />
+      <Route path="/relawan-edit/:id" element={<EditKegiatanAdmin />} />
       <Route path="/donasi-admin" element={<DonasiAdmin />} />
       <Route path="/tambah-donasi" element={<TambahDonasi />} />
       <Route path="/edit-donasi/:id" element={<EditDonasi />} />
