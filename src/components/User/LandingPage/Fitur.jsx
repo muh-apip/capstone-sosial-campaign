@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 const Fitur = () => {
   return (
@@ -32,9 +33,11 @@ const Fitur = () => {
                 Bantu kami memberikan dukungan finansial untuk program sosial
                 dan lingkungan yang membutuhkan.
               </p>
+              <Link to="/login">
               <button className="font-semibold bg-[#4caf50] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
                 Lihat selengkapnya
               </button>
+              </Link>
             </div>
           </div>
 
@@ -53,9 +56,11 @@ const Fitur = () => {
                 Ayo ambil bagian dalam kegiatan relawan untuk menjaga dan
                 memperbaiki kondisi lingkungan sekitar.
               </p>
+              <Link to="/login">
               <button className="font-semibold bg-[#4caf50] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
                 Lihat selengkapnya
               </button>
+              </Link>
             </div>
           </div>
 
@@ -74,9 +79,11 @@ const Fitur = () => {
                 Temukan artikel terbaru yang membahas isu sosial dan lingkungan
                 serta cara-cara untuk mengatasi masalah tersebut.
               </p>
+              <Link to="/login">
               <button className="font-semibold bg-[#4caf50] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
                 Lihat selengkapnya
               </button>
+              </Link>
             </div>
           </div>
         </div>

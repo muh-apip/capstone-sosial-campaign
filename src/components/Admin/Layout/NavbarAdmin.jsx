@@ -65,7 +65,10 @@ const NavbarAdmin = () => {
         </button>
 
         {/* Menu Profil */}
-        <div className="relative flex items-center space-x-3" ref={profileMenuRef}>
+        <div
+          className="relative flex items-center space-x-3"
+          ref={profileMenuRef}
+        >
           <button
             className="focus:outline-none flex items-center"
             onClick={handleToggleProfileMenu}
@@ -81,16 +84,6 @@ const NavbarAdmin = () => {
               {userName}
             </span>
           </button>
-          {isProfileMenuOpen && (
-            <div className="absolute right-0 mt-12 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-              <div className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                Profile
-              </div>
-              <div className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                Logout
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </nav>

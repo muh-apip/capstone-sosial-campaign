@@ -4,6 +4,7 @@ import DanationBox from "../../../assets/images/photos/danationbox.png";
 import BackgroundImage from "../../../assets/images/photos/backgroundimage.png";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import "../../../index.css";
+import { Link } from 'react-router-dom';
 
 export default function HeroSection() {
   return (
@@ -31,10 +32,12 @@ export default function HeroSection() {
 
             {/* Button Section */}
             <div className="mt-6 flex flex-col sm:flex-row sm:justify-center md:justify-start gap-3">
+            <Link to="/login">
               <button className="w-full sm:w-auto py-2 px-4 text-sm font-semibold rounded-lg bg-[#4caf50] text-white hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
                 Buat Perubahan
                 <ArrowForwardIosIcon className="ml-1 sm:ml-2" fontSize="small" />
               </button>
+              </Link>
             </div>
           </div>
 
