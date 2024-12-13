@@ -60,24 +60,47 @@ const ArtikelAdmin = () => {
 
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem("jwtToken");
-      await axios.delete(
-        `https://relawanku.xyz/api/v1/admin/articles/${selectedArtikel}`,
+      // Ambil token dari localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login kembali.");
+      }
+  
+      // Kirim request DELETE ke API dengan menggunakan ID artikel yang dipilih
+      const response = await axios.delete(
+        `https://relawanku.xyz/api/v1/admin/article/${selectedArtikel}`, // Pastikan endpoint sudah benar
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+  
+      // Log untuk memastikan respon API
+      console.log("Delete Response:", response.data);
+  
+      // Perbarui artikelData setelah penghapusan berhasil
       setArtikelData((prevData) =>
-        prevData.filter((item) => item.id !== selectedArtikel)
+        prevData.filter((item) => item.ID !== selectedArtikel) // Gunakan item.ID sesuai dengan struktur data Anda
       );
+  
+      // Tutup modal
       closeDeleteModal();
+  
+      // Tampilkan notifikasi keberhasilan
+      alert("Artikel berhasil dihapus.");
     } catch (err) {
-      console.error("Error deleting article", err);
-      alert("Gagal menghapus artikel.");
+      console.error("Error deleting article:", err.response?.data || err.message);
+  
+      // Tampilkan pesan error kepada pengguna
+      alert(
+        "Gagal menghapus artikel: " +
+          (err.response?.data?.message || err.message)
+      );
     }
   };
+  
+  
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
