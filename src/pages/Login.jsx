@@ -19,17 +19,17 @@ export default function Login() {
       setIsModalOpen(true);
       return;
     }
-
+  
     try {
       const response = await axios.post("https://relawanku.xyz/api/v1/login", {
         username,
         password,
       });
-
+  
       console.log("API Response:", response.data); // Debug respons API
-
+  
       if (response.data?.data) {
-        const token = response.data.data.token
+        const token = response.data.data.token;
         const userRole = response.data.data.role;
         console.log("User Role:", userRole);
         localStorage.setItem("token", token);
@@ -38,6 +38,10 @@ export default function Login() {
         } else {
           navigate("/home");
         }
+  
+        // Kosongkan input setelah login sukses
+        setUsername("");
+        setPassword("");
       } else {
         setErrorMessage("Invalid username or password.");
         setIsModalOpen(true);
@@ -50,6 +54,7 @@ export default function Login() {
       setIsModalOpen(true);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex">

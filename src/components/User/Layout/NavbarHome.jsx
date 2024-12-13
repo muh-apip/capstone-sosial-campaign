@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
@@ -14,6 +14,7 @@ const NavbarHome = ({ onSearch }) => {
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate(); // Hook untuk navigasi
 
   const handleToggle = (setter) => () => setter((prev) => !prev);
 
@@ -46,6 +47,14 @@ const NavbarHome = ({ onSearch }) => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
     onSearch(e.target.value); // Kirim kata kunci pencarian ke parent
+  };
+
+  const handleLogout = () => {
+    // Menghapus token dari localStorage
+    localStorage.removeItem("token");
+
+    // Arahkan pengguna ke halaman login setelah logout
+    navigate("/login");
   };
 
   const navLinks = [
@@ -90,9 +99,7 @@ const NavbarHome = ({ onSearch }) => {
             <Link
               key={link.href}
               to={link.href}
-              className={`px-6 py-2 text-gray-700 hover:bg-gray-100 ${
-                location.pathname === link.href ? "font-bold text-black" : ""
-              }`}
+              className={`px-6 py-2 text-gray-700 hover:bg-gray-100 ${location.pathname === link.href ? "font-bold text-black" : ""}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.label}
@@ -106,9 +113,7 @@ const NavbarHome = ({ onSearch }) => {
           <Link
             key={link.href}
             to={link.href}
-            className={`text-gray-700 hover:text-blue-500 px-2 py-1 ${
-              location.pathname === link.href ? "font-bold text-black" : ""
-            }`}
+            className={`text-gray-700 hover:text-blue-500 px-2 py-1 ${location.pathname === link.href ? "font-bold text-black" : ""}`}
           >
             {link.label}
           </Link>
@@ -159,12 +164,12 @@ const NavbarHome = ({ onSearch }) => {
               >
                 Profile
               </Link>
-              <Link
-                to="/logout"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              <button
+                onClick={handleLogout}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
               >
                 Logout
-              </Link>
+              </button>
             </div>
           )}
         </div>

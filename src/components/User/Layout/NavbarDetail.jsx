@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -12,6 +12,7 @@ const NavbarDetail = () => {
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
     { href: "/home", label: "Beranda" },
@@ -46,6 +47,15 @@ const NavbarDetail = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Logout function
+  const handleLogout = () => {
+    // Remove the token from localStorage (or sessionStorage)
+    localStorage.removeItem("authToken");
+
+    // Redirect to login page or home page
+    navigate("/login"); // Adjust the path according to your app's structure
+  };
 
   return (
     <nav className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 shadow-sm md:px-6 md:py-4">
@@ -133,12 +143,12 @@ const NavbarDetail = () => {
               >
                 Profile
               </Link>
-              <Link
-                to="/logout"
+              <button
+                onClick={handleLogout}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Logout
-              </Link>
+              </button>
             </div>
           )}
         </div>

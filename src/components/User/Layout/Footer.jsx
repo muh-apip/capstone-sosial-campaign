@@ -2,6 +2,7 @@ import React from "react";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -13,9 +14,11 @@ const Footer = () => {
           <p className="text-gray-600 mb-4 text-center">
             Hubungi kami untuk bantuan atau <br></br> informasi lebih lanjut.
           </p>
+          <Link to="/login">
           <button className="bg-[#4caf50] font-semibold text-white px-4 py-2 rounded hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
             Contact Support
           </button>
+          </Link>
         </div>
 
         {/* Vertical Line */}
@@ -61,9 +64,11 @@ const Footer = () => {
           <p className="text-gray-600 mb-4 text-center">
             "Bergabunglah bersama kami sekarang <br></br>juga!"
           </p>
+          <Link to="/login">
           <button className="bg-[#4caf50] font-semibold text-white px-4 py-2 rounded hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
             Get Started
           </button>
+          </Link>
         </div>
       </div>
     </footer>
