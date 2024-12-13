@@ -18,6 +18,8 @@ import Profile from "../components/User/Profile/Profile";
 import Hero from "../components/User/TentangKami/Hero";
 import ChatBot from "../components/User/ChatBot/ChatBot";
 import UserFAQ from "../components/User/FAQ/UserFAQ";
+import Notification from "../components/User/ChatBot/Notification";
+import Report from "../components/User/ChatBot/Report";
 import PrivateRoute from './PrivateRoute'; // Import komponen PrivateRoute
 
 const PrivateRoutes = () => {
@@ -45,6 +47,8 @@ const PrivateRoutes = () => {
       <Route path="/tentang-kami" element={<PrivateRoute element={<Hero />} />} />
       <Route path="/user-faq" element={<PrivateRoute element={<UserFAQ />} />} />
       <Route path="/chatbot" element={<PrivateRoute element={<ChatBot />} />} />
+      <Route path="/notifikasi" element={<PrivateRoute element={<Notification />} />} />
+      <Route path="/laporan" element={<PrivateRoute element={<Report />} />} />
     </Routes>
   );
 };
