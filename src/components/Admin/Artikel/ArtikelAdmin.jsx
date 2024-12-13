@@ -21,27 +21,26 @@ const ArtikelAdmin = () => {
         if (!token) {
           throw new Error("Token not found");
         }
-        const response = await axios.get("https://relawanku.xyz/api/v1/admin/articles", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/admin/articles",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const articles = Array.isArray(response.data) ? response.data : [];
         setArtikelData(articles);
       } catch (err) {
         console.error("Error fetching articles", err);
         setError(err.response?.data?.message || "Failed to fetch articles");
-        if (err.response?.status === 401) {
-          alert("Session expired. Please log in again.");
-          navigate("/login");
-        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchArticles();
-  }, [navigate]);
+  }, []);
 
   const openDeleteModal = (id) => {
     setSelectedArtikel(id);
@@ -56,11 +55,14 @@ const ArtikelAdmin = () => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
-      await axios.delete(`https://relawanku.xyz/api/v1/admin/articles/${selectedArtikel}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `https://relawanku.xyz/api/v1/admin/articles/${selectedArtikel}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setArtikelData((prevData) =>
         prevData.filter((item) => item.id !== selectedArtikel)
       );
@@ -104,7 +106,9 @@ const ArtikelAdmin = () => {
 
           <div className="overflow-x-auto bg-white shadow-md rounded-lg">
             {isLoading ? (
-              <div className="p-6 text-center text-gray-500">Memuat data...</div>
+              <div className="p-6 text-center text-gray-500">
+                Memuat data...
+              </div>
             ) : error ? (
               <div className="p-6 text-center text-red-500">{error}</div>
             ) : artikelData.length > 0 ? (
