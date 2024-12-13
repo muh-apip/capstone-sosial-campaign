@@ -102,24 +102,30 @@ const NavbarDetail = () => {
 
       {/* Icons and Profile Menu */}
       <div className="flex items-center space-x-4">
+      <a href="/notifikasi">
         <button
           className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
           aria-label="Notifications"
         >
           <NotificationsOutlinedIcon className="h-6 w-6" />
         </button>
-        <button
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Help"
-        >
-          <SupportAgentIcon className="h-6 w-6" />
-        </button>
+        </a>
+        <a href="/chatbot">
+          <button
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Help"
+          >
+            <SupportAgentIcon className="h-6 w-6" />
+          </button>
+        </a>
+        <a href="/laporan">
         <button
           className="text-gray-500 hover:text-gray-700 focus:outline-none"
           aria-label="Email"
         >
           <EmailOutlinedIcon className="h-6 w-6" />
         </button>
+        </a>
 
         {/* Profile Menu */}
         <div className="relative flex items-center" ref={profileMenuRef}>
