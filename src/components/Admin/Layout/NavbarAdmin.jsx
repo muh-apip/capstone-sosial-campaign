@@ -6,6 +6,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
 const NavbarAdmin = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");  // Define the searchTerm state
   const profileMenuRef = useRef(null);
 
   // Nama pengguna (bisa diganti sesuai dengan data dinamis jika ada)
@@ -13,6 +14,10 @@ const NavbarAdmin = () => {
 
   const handleToggleProfileMenu = () => {
     setIsProfileMenuOpen((prev) => !prev);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // Update searchTerm when the input changes
   };
 
   useEffect(() => {
@@ -35,12 +40,12 @@ const NavbarAdmin = () => {
     <nav className="flex justify-between items-center bg-white shadow px-6 py-3 border-b border-gray-200">
       {/* Bagian Kiri */}
       <div className="flex items-center">
-      <div className="relative hidden md:flex items-center ml-4">
+        <div className="relative hidden md:flex items-center ml-4">
           <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             value={searchTerm}
-            onChange={handleSearchChange}
+            onChange={handleSearchChange}  // Handle change for search input
             placeholder="Search"
             className="w-[200px] md:w-[300px] pl-10 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
           />
