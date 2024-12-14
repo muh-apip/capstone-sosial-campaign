@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 const AboutUs = () => {
   return (
@@ -27,14 +28,18 @@ const AboutUs = () => {
             Bersama, Kita Bisa Mengubah Dunia!
           </h3>
           <p className="mb-6 text-base sm:text-lg text-gray-800 leading-relaxed">
-            Relawanku menghubungkanmu dengan <br className="hidden md:block" /> 
-            peluang untuk berdonasi untuk membangun <br className="hidden md:block" />
-            sekolah, menyediakan air bersih, atau menjadi <br className="hidden md:block" />
+            Relawanku menghubungkanmu dengan <br className="hidden md:block" />
+            peluang untuk berdonasi untuk membangun{" "}
+            <br className="hidden md:block" />
+            sekolah, menyediakan air bersih, atau menjadi{" "}
+            <br className="hidden md:block" />
             relawan di program penghijauan.
           </p>
-          <button className="font-semibold bg-[#4caf50] text-white px-6 py-3 rounded hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
-            Lihat selengkapnya
-          </button>
+          <Link to="/login">
+            <button className="font-semibold bg-[#4caf50] text-white px-6 py-3 rounded hover:bg-[#45a049] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#45a049]">
+              Lihat selengkapnya
+            </button>
+          </Link>
         </div>
       </div>
 

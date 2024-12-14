@@ -3,6 +3,7 @@ import NavbarDetail from "../Layout/NavbarDetail";
 import axios from "axios";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom";  // Import useNavigate for redirect
 
 const Profile = () => {
   const [profileData, setProfileData] = useState({
@@ -16,6 +17,8 @@ const Profile = () => {
   const [editingField, setEditingField] = useState(null);
   const [tempValue, setTempValue] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const navigate = useNavigate();  // Initialize navigate hook
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -86,6 +89,14 @@ const Profile = () => {
   const handleCancel = () => {
     setEditingField(null);
     setTempValue("");
+  };
+
+  // Logout function
+  const handleLogout = () => {
+    // Clear any stored authentication data (e.g., token)
+    localStorage.removeItem("authToken"); // Example for token removal
+    sessionStorage.removeItem("authToken"); // Example for session-based token removal
+    navigate("/login");  // Redirect to login page
   };
 
   return (
@@ -182,7 +193,10 @@ const Profile = () => {
             </div>
 
             <div className="mt-10 flex justify-end">
-              <button className="text-green-500 border border-green-500 px-6 py-2 rounded-lg hover:bg-custom-green hover:text-white transition-all text-lg font-semibold">
+              <button
+                className="text-green-500 border border-green-500 px-6 py-2 rounded-lg hover:bg-custom-green hover:text-white transition-all text-lg font-semibold"
+                onClick={handleLogout}  // Attach logout function
+              >
                 Logout
               </button>
             </div>

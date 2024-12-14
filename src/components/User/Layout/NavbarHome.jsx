@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
@@ -14,6 +14,7 @@ const NavbarHome = ({ onSearch }) => {
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate(); // Hook untuk navigasi
 
   const handleToggle = (setter) => () => setter((prev) => !prev);
 
@@ -48,6 +49,14 @@ const NavbarHome = ({ onSearch }) => {
     onSearch(e.target.value); // Kirim kata kunci pencarian ke parent
   };
 
+  const handleLogout = () => {
+    // Menghapus token dari localStorage
+    localStorage.removeItem("token");
+
+    // Arahkan pengguna ke halaman login setelah logout
+    navigate("/login");
+  };
+
   const navLinks = [
     { href: "/home", label: "Beranda" },
     { href: "/artikel", label: "Artikel" },
@@ -71,14 +80,14 @@ const NavbarHome = ({ onSearch }) => {
           {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
 
-        <div className="hidden md:flex items-center ml-4">
-          <SearchIcon className="text-gray-400 mr-2" />
+        <div className="relative hidden md:flex items-center ml-4">
+          <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
             placeholder="Search"
-            className="w-[200px] md:w-[300px] pl-4 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-[200px] md:w-[300px] pl-10 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
           />
         </div>
       </div>
@@ -116,12 +125,14 @@ const NavbarHome = ({ onSearch }) => {
       </div>
 
       <div className="flex items-center space-x-4">
-        <button
-          className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Notifications"
-        >
-          <NotificationsOutlinedIcon className="h-6 w-6" />
-        </button>
+        <a href="/notifikasi">
+          <button
+            className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Notifications"
+          >
+            <NotificationsOutlinedIcon className="h-6 w-6" />
+          </button>
+        </a>
         <a href="/chatbot">
           <button
             className="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -130,13 +141,14 @@ const NavbarHome = ({ onSearch }) => {
             <SupportAgentIcon className="h-6 w-6" />
           </button>
         </a>
-
-        <button
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Email"
-        >
-          <EmailOutlinedIcon className="h-6 w-6" />
-        </button>
+        <a href="/laporan">
+          <button
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Email"
+          >
+            <EmailOutlinedIcon className="h-6 w-6" />
+          </button>
+        </a>
 
         <div className="relative flex items-center" ref={profileMenuRef}>
           <button
@@ -148,7 +160,7 @@ const NavbarHome = ({ onSearch }) => {
             <img
               src="https://via.placeholder.com/32"
               alt="Profile"
-              className="h-8 w-8 rounded-full border border-gray-300"
+              className="h-8 w-8 rounded-full border border-gray-300 object-cover"
             />
           </button>
           {isProfileMenuOpen && (
@@ -159,12 +171,12 @@ const NavbarHome = ({ onSearch }) => {
               >
                 Profile
               </Link>
-              <Link
-                to="/logout"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              <button
+                onClick={handleLogout}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
               >
                 Logout
-              </Link>
+              </button>
             </div>
           )}
         </div>

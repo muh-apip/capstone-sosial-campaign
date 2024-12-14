@@ -6,6 +6,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
 const NavbarAdmin = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");  // Define the searchTerm state
   const profileMenuRef = useRef(null);
 
   // Nama pengguna (bisa diganti sesuai dengan data dinamis jika ada)
@@ -13,6 +14,10 @@ const NavbarAdmin = () => {
 
   const handleToggleProfileMenu = () => {
     setIsProfileMenuOpen((prev) => !prev);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // Update searchTerm when the input changes
   };
 
   useEffect(() => {
@@ -35,13 +40,15 @@ const NavbarAdmin = () => {
     <nav className="flex justify-between items-center bg-white shadow px-6 py-3 border-b border-gray-200">
       {/* Bagian Kiri */}
       <div className="flex items-center">
-        <div className="relative hidden lg:block">
+        <div className="relative hidden md:flex items-center ml-4">
+          <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}  // Handle change for search input
             placeholder="Search"
-            className="w-[300px] pl-4 pr-10 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-[200px] md:w-[300px] pl-10 pr-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
           />
-          <SearchIcon className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500" />
         </div>
       </div>
 
@@ -65,7 +72,10 @@ const NavbarAdmin = () => {
         </button>
 
         {/* Menu Profil */}
-        <div className="relative flex items-center space-x-3" ref={profileMenuRef}>
+        <div
+          className="relative flex items-center space-x-3"
+          ref={profileMenuRef}
+        >
           <button
             className="focus:outline-none flex items-center"
             onClick={handleToggleProfileMenu}
@@ -81,16 +91,6 @@ const NavbarAdmin = () => {
               {userName}
             </span>
           </button>
-          {isProfileMenuOpen && (
-            <div className="absolute right-0 mt-12 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-              <div className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                Profile
-              </div>
-              <div className="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100">
-                Logout
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </nav>
