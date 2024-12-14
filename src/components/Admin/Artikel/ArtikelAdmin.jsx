@@ -13,32 +13,23 @@ const ArtikelAdmin = () => {
 
   const navigate = useNavigate();
 
+  // Fetch articles
   useEffect(() => {
     const fetchArticles = async () => {
       setIsLoading(true);
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Token not found");
-        }
+        if (!token) throw new Error("Token not found");
+
         const response = await axios.get(
           "https://relawanku.xyz/api/v1/admin/articles",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        console.log("API Response:", response.data); // Debugging respons API
-
-        // Ambil data dari response.data.data
-        const articles = Array.isArray(response.data.data)
-          ? response.data.data
-          : [];
-        setArtikelData(articles); // Update state dengan data yang benar
+        setArtikelData(response.data.data || []);
       } catch (err) {
-        console.error("Error fetching articles", err);
         setError(err.response?.data?.message || "Failed to fetch articles");
       } finally {
         setIsLoading(false);
@@ -48,59 +39,76 @@ const ArtikelAdmin = () => {
     fetchArticles();
   }, []);
 
+  // Open delete modal
   const openDeleteModal = (id) => {
     setSelectedArtikel(id);
     setIsModalOpen(true);
   };
 
+  // Close delete modal
   const closeDeleteModal = () => {
     setIsModalOpen(false);
     setSelectedArtikel(null);
   };
 
+  // Handle delete article
   const handleDelete = async () => {
     try {
-      // Ambil token dari localStorage
       const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token tidak ditemukan. Silakan login kembali.");
-      }
-  
-      // Kirim request DELETE ke API dengan menggunakan ID artikel yang dipilih
-      const response = await axios.delete(
-        `https://relawanku.xyz/api/v1/admin/article/${selectedArtikel}`, // Pastikan endpoint sudah benar
+      if (!token) throw new Error("Token not found");
+
+      await axios.delete(
+        `https://relawanku.xyz/api/v1/admin/article/${selectedArtikel}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
-      // Log untuk memastikan respon API
-      console.log("Delete Response:", response.data);
-  
-      // Perbarui artikelData setelah penghapusan berhasil
+
       setArtikelData((prevData) =>
-        prevData.filter((item) => item.ID !== selectedArtikel) // Gunakan item.ID sesuai dengan struktur data Anda
+        prevData.filter((item) => item.ID !== selectedArtikel)
       );
-  
-      // Tutup modal
       closeDeleteModal();
-  
-      // Tampilkan notifikasi keberhasilan
       alert("Artikel berhasil dihapus.");
     } catch (err) {
-      console.error("Error deleting article:", err.response?.data || err.message);
-  
-      // Tampilkan pesan error kepada pengguna
       alert(
         "Gagal menghapus artikel: " +
           (err.response?.data?.message || err.message)
       );
     }
   };
-  
-  
+
+  // Handle add article
+  const handleAddArticle = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token not found");
+
+      const newArticle = {
+        title: "Judul Artikel Baru",
+        category: "Kategori Baru",
+        content: "Isi artikel baru", // Sesuaikan dengan kebutuhan API
+      };
+
+      const response = await axios.post(
+        "https://relawanku.xyz/api/v1/admin/article",
+        newArticle,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setArtikelData((prevData) => [...prevData, response.data]);
+      alert("Artikel berhasil ditambahkan.");
+    } catch (err) {
+      alert(
+        "Gagal menambahkan artikel: " +
+          (err.response?.data?.message || err.message)
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
@@ -127,7 +135,7 @@ const ArtikelAdmin = () => {
             </button>
             <button
               className="ml-auto px-4 py-2 bg-custom-green text-white font-medium rounded-lg hover:bg-green-600"
-              onClick={() => navigate("/tambah-artikel")}
+              onClick={handleAddArticle}
             >
               Tambah
             </button>
@@ -154,7 +162,7 @@ const ArtikelAdmin = () => {
                 <tbody>
                   {artikelData.map((item, index) => (
                     <tr
-                      key={item.ID || `artikel-${index}`} // Gunakan `item.ID` jika ada
+                      key={item.ID || `artikel-${index}`}
                       className={`border-b border-gray-200 hover:bg-gray-50 ${
                         index % 2 === 0 ? "bg-gray-50" : "bg-white"
                       }`}
