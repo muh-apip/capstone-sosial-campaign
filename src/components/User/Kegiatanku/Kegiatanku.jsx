@@ -75,9 +75,9 @@ const Kegiatanku = () => {
         <NavbarHome />
       </div>
 
-      <div className="flex flex-1 p-6 space-x-6">
+      <div className="flex flex-wrap lg:flex-nowrap flex-1 p-6 gap-6">
         {/* Sidebar kiri */}
-        <div className="w-1/3 bg-white rounded-lg shadow-md p-4 overflow-y-auto">
+        <div className="w-full lg:w-1/3 bg-white rounded-lg shadow-md p-4 overflow-y-auto">
           {activities.map((activity) => (
             <div
               key={activity.id}
@@ -106,10 +106,7 @@ const Kegiatanku = () => {
         </div>
 
         {/* Kotak konten kanan */}
-        <div
-          className="relative bg-white rounded-lg shadow-md overflow-hidden"
-          style={{ width: "859px", height: "587px" }}
-        >
+        <div className="relative bg-white rounded-lg shadow-md overflow-hidden w-full lg:w-2/3">
           {/* Header Hijau */}
           <div className="bg-custom-green p-4">
             <h3 className="text-white text-lg font-bold">
