@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios for API calls
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -10,59 +11,54 @@ import FooterHome from "../Layout/FooterHome";
 const Home = () => {
   const navigate = useNavigate();
 
-  // Data artikel
-  const articles = [
-    {
-      id: 1,
-      title: "Bank Sampah Jadi Berkah",
-      category: "LINGKUNGAN",
-      description: "Bank sampah sebagai solusi lingkungan dan ekonomi.",
-      date: "27 Desember 2024",
-      image: "/img/artikel1.png",
-    },
-    {
-      id: 2,
-      title: "Komunitas untuk Kemanusiaan",
-      category: "SOSIAL",
-      description: "Kisah solidaritas dalam membantu korban bencana.",
-      date: "24 Desember 2024",
-      image: "/img/artikel2.jpeg",
-    },
-    {
-      id: 3,
-      title: "Energi Surya untuk Desa",
-      category: "LINGKUNGAN",
-      description:
-        "Pemanfaatan tenaga surya untuk mendukung kebutuhan warga desa.",
-      date: "26 Desember 2024",
-      image: "/img/artikel3.png",
-    },
-    {
-      id: 4,
-      title: "Teknologi Hijau Masa Depan",
-      category: "TEKNOLOGI",
-      description: "Inovasi teknologi ramah lingkungan.",
-      date: "23 Desember 2024",
-      image: "/img/artikel3.png",
-    },
-    {
-      id: 5,
-      title: "Aksi Bersama: Gerakan Zero Waste",
-      category: "LINGKUNGAN",
-      description: "Gerakan untuk mengurangi sampah dan menjaga bumi.",
-      date: "22 Desember 2024",
-      image: "/img/artikel1.png",
-    },
-    {
-      id: 6,
-      title: "Sampah Plastik Menjadi Energi",
-      category: "LINGKUNGAN",
-      description: "Pemanfaatan sampah plastik untuk energi alternatif.",
-      date: "21 Desember 2024",
-      image: "/img/artikel1.png",
-    },
-    // Tambahkan lebih banyak artikel
-  ];
+  const [artikelData, setArtikelData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found");
+        }
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/user/articles",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("API Response:", response.data); // Pastikan format data benar
+        setArtikelData(response.data.data || []); // Pastikan format sesuai API
+      } catch (err) {
+        console.error("Error fetching articles", err);
+        setError(err.response?.data?.message || "Failed to fetch articles");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 4;
+
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = artikelData.slice(
+    indexOfFirstArticle,
+    indexOfLastArticle
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPages = Math.ceil(artikelData.length / articlesPerPage);
 
   const popularArticles = [
     { title: "Teknologi dan Empati", date: "1 Desember 2024" },
@@ -73,31 +69,6 @@ const Home = () => {
     { title: "Hutan Kota: Paru-Paru di Tengah Beton", date: "26 Oktober 2024" },
     { title: "Mengubah Sampah Menjadi Emas", date: "30 Agustus 2024" },
   ];
-
-  // State untuk pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const articlesPerPage = 4; // Jumlah artikel per halaman
-
-  // Hitung index artikel saat ini
-  const indexOfLastArticle = currentPage * articlesPerPage;
-  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = articles.slice(
-    indexOfFirstArticle,
-    indexOfLastArticle
-  );
-
-  // Fungsi untuk mengganti halaman
-  const goToNextPage = () => {
-    if (currentPage < Math.ceil(articles.length / articlesPerPage)) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -174,7 +145,6 @@ const Home = () => {
         </Swiper>
 
         {/* Article Section */}
-        {/* Artikel yang Kamu Suka dan Artikel Populer */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Artikel yang Kamu Suka */}
           <div className="md:col-span-2 bg-white rounded-lg shadow-lg p-4">
@@ -182,65 +152,59 @@ const Home = () => {
               Artikel yang Mungkin Kamu Suka
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {currentArticles.map((article) => (
-                <div
-                  key={article.id}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer"
-                  onClick={() => navigate(`/artikel/${article.id}`)}
+              {currentArticles.length === 0 ? (
+                <p>No articles available</p>
+              ) : (
+                currentArticles.map(
+                  ({ ID, Title, ImageUrl, Category, Content, CreatedAt }) => (
+                    <div
+                      key={ID} // Gunakan `ID` sebagai key
+                      className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer"
+                      onClick={() => navigate(`/artikel/${ID}`)} // Sesuaikan dengan ID
+                    >
+                      <img
+                        src={ImageUrl || "/path/to/default-image.png"} // Sesuaikan nama properti
+                        alt={`Gambar artikel ${Title}`}
+                        className="h-48 w-full object-cover"
+                      />
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                          {Title || "Article Title"}
+                        </h3>
+                        <p className="text-sm font-light text-gray-600 tracking-wider uppercase">
+                          {Category || "No Category"}
+                        </p>
+                        <p className="text-base text-gray-600 mt-2 line-clamp-2">
+                          {Content || "No content available"}
+                        </p>
+                        <hr className="my-2 border-t-2 border-gray-100" />
+                        <span className="text-xs text-gray-500">
+                          {new Date(CreatedAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                )
+              )}
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center mt-6 space-x-2">
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`px-4 py-2 rounded-lg shadow ${
+                    currentPage === index + 1
+                      ? "bg-custom-green text-white"
+                      : "bg-gray-300 text-gray-600"
+                  }`}
                 >
-                  <img
-                    src={article.image}
-                    alt={`Gambar artikel ${article.title}`}
-                    className="h-48 w-full object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                      {article.title}
-                    </h3>
-                    <p className="text-sm font-light text-gray-600 tracking-wider uppercase">
-                      {article.category}
-                    </p>
-                    <p className="text-base text-gray-600 mt-2 line-clamp-2">
-                      {article.description}
-                    </p>
-                    <hr className="my-2 border-t-2 border-gray-100" />
-                    <span className="text-xs text-gray-500">
-                      {article.date}
-                    </span>
-                  </div>
-                </div>
+                  {index + 1}
+                </button>
               ))}
             </div>
-
-            {/* Pagination Controls */}
-            <div className="flex justify-between mt-6">
-              <button
-                onClick={goToPreviousPage}
-                disabled={currentPage === 1}
-                className={`px-4 py-2 rounded-lg shadow ${
-                  currentPage === 1
-                    ? "bg-gray-300"
-                    : "bg-custom-green text-white"
-                }`}
-              >
-                Previous
-              </button>
-              <button
-                onClick={goToNextPage}
-                disabled={
-                  currentPage === Math.ceil(articles.length / articlesPerPage)
-                }
-                className={`px-4 py-2 rounded-lg shadow ${
-                  currentPage === Math.ceil(articles.length / articlesPerPage)
-                    ? "bg-gray-300"
-                    : "bg-custom-green text-white"
-                }`}
-              >
-                Next
-              </button>
-            </div>
           </div>
-
           {/* Artikel Populer */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-6 border-b pb-2">
@@ -268,8 +232,6 @@ const Home = () => {
 
       {/* Footer */}
       <div className="mt-8">
-        {" "}
-        {/* Tambahkan margin atas pada footer jika diperlukan */}
         <FooterHome />
       </div>
     </div>
