@@ -123,7 +123,7 @@ const ArtikelAdmin = () => {
             <span className="font-semibold text-gray-800"> Artikel</span>
           </div>
 
-          <div className="flex gap-3 mb-4">
+          <div className="flex flex-wrap gap-3 mb-4">
             <button className="px-4 py-2 bg-primary-green text-white font-medium rounded-full hover:bg-green-600">
               Semua
             </button>
@@ -209,7 +209,7 @@ const ArtikelAdmin = () => {
 
         {isModalOpen && (
           <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md">
               <p className="text-center text-gray-800 mb-4">
                 Apakah kamu yakin ingin menghapusnya?
               </p>
