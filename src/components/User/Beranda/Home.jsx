@@ -31,13 +31,8 @@ const Home = () => {
             },
           }
         );
-
-        console.log("API Response:", response.data); // Debugging the API response
-
-        const articles = Array.isArray(response.data.data)
-          ? response.data.data
-          : [];
-        setArtikelData(articles);
+        console.log("API Response:", response.data); // Pastikan format data benar
+        setArtikelData(response.data.data || []); // Pastikan format sesuai API
       } catch (err) {
         console.error("Error fetching articles", err);
         setError(err.response?.data?.message || "Failed to fetch articles");
@@ -47,7 +42,7 @@ const Home = () => {
     };
 
     fetchArticles();
-  }, []); // Empty dependency array to run once when component mounts
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 4;
@@ -161,30 +156,30 @@ const Home = () => {
                 <p>No articles available</p>
               ) : (
                 currentArticles.map(
-                  ({ id, title, image_url, category, content, createdAt }) => (
+                  ({ ID, Title, ImageUrl, Category, Content, CreatedAt }) => (
                     <div
-                      key={id} // Pastikan `id` adalah nilai unik
+                      key={ID} // Gunakan `ID` sebagai key
                       className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer"
-                      onClick={() => navigate(`/artikel/${id}`)}
+                      onClick={() => navigate(`/artikel/${ID}`)} // Sesuaikan dengan ID
                     >
                       <img
-                        src={image_url || "/path/to/default-image.png"} // Menggunakan image_url
-                        alt={`Gambar artikel ${title}`}
+                        src={ImageUrl || "/path/to/default-image.png"} // Sesuaikan nama properti
+                        alt={`Gambar artikel ${Title}`}
                         className="h-48 w-full object-cover"
                       />
                       <div className="p-4">
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                          {title || "Article Tittle"}
+                          {Title || "Article Title"}
                         </h3>
                         <p className="text-sm font-light text-gray-600 tracking-wider uppercase">
-                          {category || "No Category"}
+                          {Category || "No Category"}
                         </p>
                         <p className="text-base text-gray-600 mt-2 line-clamp-2">
-                          {content || "No content available"}
+                          {Content || "No content available"}
                         </p>
                         <hr className="my-2 border-t-2 border-gray-100" />
                         <span className="text-xs text-gray-500">
-                          {new Date(createdAt).toLocaleDateString()}
+                          {new Date(CreatedAt).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
