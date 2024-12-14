@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
@@ -10,7 +10,7 @@ const KegiatanRelawanAdmin = () => {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const navigate = useNavigate(); // Hook untuk navigasi
+  const navigate = useNavigate();
 
   // Fungsi untuk fetch data kegiatan berdasarkan category atau id
   useEffect(() => {
@@ -34,8 +34,14 @@ const KegiatanRelawanAdmin = () => {
           },
         });
 
+        // Pastikan setiap item memiliki properti id unik
+        const dataWithUniqueId = response.data.data.map((item, index) => ({
+          ...item,
+          id: item.id || `kegiatan-${index}`, // Fallback ke index jika id tidak tersedia
+        }));
+
         // Update state kegiatan dengan data yang diterima dari API
-        setKegiatan(response.data.data || []);
+        setKegiatan(dataWithUniqueId);
       } catch (err) {
         setError("Terjadi kesalahan saat mengambil data.");
         console.error("Error fetching data", err);
