@@ -1,25 +1,19 @@
 import React, { useState } from "react";
 import NavbarHome from "../Layout/NavbarHome";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { marked } from "marked";
 
-// API Key langsung dalam file
-const apiKey = "AIzaSyC36rN9xTqXajI052P7TDMEF0NuqH9Nid4"; // Ganti dengan API key Anda
+// API Key configuration
+const apiKey = import.meta.env.VITE_GOOGLE_GEN_AI_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const generateContent = async (prompt) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
-
-    // Convert markdown ke plain text dan hapus tag HTML
-    const plainTextResponse = marked(result.response.text());
-    const textOnlyResponse = plainTextResponse.replace(/<[^>]*>/g, "");
-
-    return textOnlyResponse; // Pastikan format respons benar
+    return result.response.text();
   } catch (error) {
     console.error("Error calling Google Generative AI API:", error);
-    return "Maaf, saya mengalami kesalahan dalam merespons.";
+    return "Sorry, I encountered an error.";
   }
 };
 
@@ -27,11 +21,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Selamat datang! Saya chatbot yang siap membantu Anda.",
-    },
-    {
-      sender: "bot",
-      text: "Bagaimana saya dapat membantu Anda hari ini?",
+      text: "This AI chatbot has been developed to optimize communication and simplify work processes, ultimately leading to smoother operations.",
     },
   ]);
   const [userInput, setUserInput] = useState("");
@@ -78,6 +68,7 @@ const ChatBot = () => {
                   msg.sender === "user" ? "justify-end" : "justify-start"
                 }`}
               >
+                {/* Avatar */}
                 {msg.sender === "bot" && (
                   <img
                     src="/img/Chatbot1.jpeg" // Ganti dengan URL gambar bot
@@ -86,6 +77,7 @@ const ChatBot = () => {
                   />
                 )}
 
+                {/* Bubble Chat */}
                 <div
                   className={`relative rounded-lg p-4 max-w-lg text-sm bg-white ${
                     msg.sender === "user"
@@ -101,6 +93,7 @@ const ChatBot = () => {
                   {msg.text}
                 </div>
 
+                {/* Avatar untuk User */}
                 {msg.sender === "user" && (
                   <img
                     src="/img/chatbot2.png" // Ganti dengan URL gambar user
@@ -112,6 +105,7 @@ const ChatBot = () => {
             ))}
           </div>
 
+          {/* Input dan Tombol Kirim */}
           <div className="flex items-center gap-2">
             <input
               type="text"
