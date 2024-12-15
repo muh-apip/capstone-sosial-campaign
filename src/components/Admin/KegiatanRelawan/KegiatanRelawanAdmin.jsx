@@ -56,9 +56,9 @@ const KegiatanRelawanAdmin = () => {
     setSelectedCategory(category);
   };
 
-  const handleEditClick = (id) => {
-    console.log(`Navigating to /relawan-edit/${id}`);
-    navigate(`/relawan-edit/${id}`);
+  const handleEditClick = (ID) => {
+    console.log(`Navigating to /relawan-edit/${ID}`);
+    navigate(`/relawan-edit/${ID}`);
   };
 
   // Fungsi untuk menghapus kegiatan
@@ -75,7 +75,7 @@ const KegiatanRelawanAdmin = () => {
       }
 
       const response = await axios.delete(
-        `https://relawanku.xyz/api/v1/admin/program/${id}`,
+        `https://relawanku.xyz/api/v1/admin/program/${ID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ const KegiatanRelawanAdmin = () => {
       if (response.status === 200) {
         alert("Kegiatan berhasil dihapus!");
         setKegiatan((prevKegiatan) =>
-          prevKegiatan.filter((item) => item.id !== id)
+          prevKegiatan.filter((item) => item.ID !== ID)
         );
       } else {
         alert("Terjadi kesalahan saat menghapus kegiatan.");
@@ -180,14 +180,14 @@ const KegiatanRelawanAdmin = () => {
                         key={item.id}
                         className="bg-white hover:bg-gray-100 transition-colors"
                       >
-                        <td className="px-6 py-4 text-center">{index + 1}</td>
+                        <td className="px-6 py-4 text-center">{item.ID}</td>
                         <td className="px-6 py-4">{item.title}</td>
                         <td className="px-6 py-4">{item.end_date}</td>
                         <td className="px-6 py-4">{item.quota}</td>
                         <td className="px-6 py-4">{item.category}</td>
                         <td className="px-6 py-4 text-center flex justify-center space-x-2">
                           <button
-                            onClick={() => handleEditClick(item.id)}
+                            onClick={() => handleEditClick(item.ID)}
                             className="text-gray-500 hover:text-gray-700"
                             title="Edit"
                           >
@@ -207,7 +207,7 @@ const KegiatanRelawanAdmin = () => {
                             </svg>
                           </button>
                           <button
-                            onClick={() => handleDeleteClick(item.id)}
+                            onClick={() => handleDeleteClick(item.ID)}
                             className="text-gray-500 hover:text-gray-700"
                             title="Hapus"
                           >

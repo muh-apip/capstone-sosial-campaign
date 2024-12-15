@@ -1,200 +1,199 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../Layout/Sidebar";
 import Navbar from "../Layout/NavbarAdmin";
 import axios from "axios";
 
 const EditKegiatanAdmin = () => {
-  const { id } = useParams(); // Mengambil id dari URL
+  const { id } = useParams(); // Ambil ID dari URL
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token"); // Token auth
 
   const [formData, setFormData] = useState({
     category: "",
     title: "",
+    subtitle: "",
     details: "",
     start_date: "",
     end_date: "",
     location: "",
-    quota: 0,
+    target: "",
+    image: null,
   });
-  const [error, setError] = useState(null);
 
-  // Mendapatkan data kegiatan dari API
-  useEffect(() => {
-    const fetchKegiatan = async () => {
-      console.log("ID yang dikirim ke API:", id); // Debugging ID
-
-      if (!token) {
-        console.error("Token tidak ditemukan.");
-        alert("Silakan login kembali.");
-        return;
-      }
-      try {
-        const response = await axios.get(
-          `https://relawanku.xyz/api/v1/admin/program/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const kegiatan = response.data;
-
-        if (kegiatan) {
-          setFormData({
-            category: kegiatan.category,
-            title: kegiatan.judul,
-            details: kegiatan.details,
-            start_date: kegiatan.start_date,
-            end_date: kegiatan.end_date,
-            location: kegiatan.location,
-            quota: kegiatan.quota,
-          });
-        } else {
-          alert("Kegiatan tidak ditemukan.");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-
-        // Cek apakah error.response tersedia
-        if (error.response) {
-          const status = error.response.status;
-
-          if (status === 404) {
-            alert("Data tidak ditemukan. Periksa ID kegiatan.");
-          } else {
-            alert(`Terjadi kesalahan: ${error.response.statusText}`);
-          }
-        } else {
-          // Jika error.response undefined (masalah jaringan atau server)
-          alert("Terjadi kesalahan saat menghubungi server. Coba lagi nanti.");
-        }
-      }
-    };
-
-    fetchKegiatan();
-  }, [id]);
-
-  // Mengatur nilai state ketika input berubah
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
+    const { id, value, files } = e.target;
+    setFormData({
+      ...formData,
+      [id]: files ? files[0] : value, // Untuk upload file
+    });
   };
 
-  // Mengirimkan data yang telah diubah ke server
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verifikasi form data
-    if (
-      !formData.title ||
-      !formData.category ||
-      !formData.start_date ||
-      !formData.end_date
-    ) {
-      alert("Pastikan semua field yang wajib diisi telah diisi.");
-      return;
-    }
-
-    setError(null); // Reset error state
-
     try {
-      const response = await axios.put(
+      const formDataToSend = new FormData(); // Untuk handle data + file
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("subtitle", formData.subtitle);
+      formDataToSend.append("details", formData.details);
+      formDataToSend.append("start_date", formData.start_date);
+      formDataToSend.append("end_date", formData.end_date);
+      formDataToSend.append("location", formData.location);
+      formDataToSend.append("target", formData.target);
+      if (formData.image_url)
+        formDataToSend.append("image", formData.image_url);
+
+      await axios.put(
         `https://relawanku.xyz/api/v1/admin/program/${id}`,
-        formData,
+        formDataToSend,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Penting untuk file upload
           },
         }
       );
 
-      if (response.status === 200) {
-        alert("Kegiatan berhasil diperbarui!");
-        navigate(`/admin/program/${id}`); // Arahkan setelah berhasil
-      }
+      alert("Data berhasil diperbarui!");
+      navigate("/kegiatan-relawan-admin"); // Redirect setelah update
     } catch (error) {
       console.error("Error updating data:", error);
-      setError("Terjadi kesalahan saat memperbarui kegiatan.");
+      alert(
+        error.response?.data?.message ||
+          "Terjadi kesalahan saat menyimpan data."
+      );
     }
   };
 
   return (
-    <div>
+    <div className="flex">
       <Sidebar />
-      <Navbar />
-      <div className="content">
-        <h2>Edit Kegiatan</h2>
+      <div className="flex-1">
+        <Navbar />
+        <div className="p-6 bg-white rounded-md shadow-md">
+          <h2 className="text-xl font-bold mb-4">Edit Kegiatan</h2>
 
-        {error && <div className="error-message">{error}</div>}
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
+            {/* Kategori */}
+            <div className="mb-4">
+              <label className="block text-gray-700">Kategori</label>
+              <select
+                id="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">Pilih Kategori</option>
+                <option value="Bencana Alam">Bencana Alam</option>
+                <option value="Sosial">Sosial</option>
+                <option value="Edukasi">Edukasi</option>
+              </select>
+            </div>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Judul</label>
-            <input
-              type="text"
-              id="title"
-              value={formData.title}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Kategori</label>
-            <input
-              type="text"
-              id="category"
-              value={formData.category}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Detail</label>
-            <textarea
-              id="details"
-              value={formData.details}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Start Date</label>
-            <input
-              type="date"
-              id="start_date"
-              value={formData.start_date}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>End Date</label>
-            <input
-              type="date"
-              id="end_date"
-              value={formData.end_date}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Location</label>
-            <input
-              type="text"
-              id="location"
-              value={formData.location}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Quota</label>
-            <input
-              type="number"
-              id="quota"
-              value={formData.quota}
-              onChange={handleChange}
-            />
-          </div>
-          <button type="submit">Simpan</button>
-        </form>
+            {/* Judul */}
+            <div className="mb-4">
+              <label className="block text-gray-700">Judul Kegiatan</label>
+              <input
+                type="text"
+                id="title"
+                value={formData.title}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            {/* Subjudul */}
+            <div className="mb-4">
+              <label className="block text-gray-700">Subjudul</label>
+              <input
+                type="text"
+                id="subtitle"
+                value={formData.subtitle}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            {/* Detail */}
+            <div className="mb-4">
+              <label className="block text-gray-700">Detail Kegiatan</label>
+              <textarea
+                id="details"
+                value={formData.details}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                rows="4"
+              ></textarea>
+            </div>
+
+            {/* Tanggal Mulai dan Berakhir */}
+            <div className="flex space-x-4 mb-4">
+              <div className="w-1/3">
+                <label className="block text-gray-700">Tanggal Mulai</label>
+                <input
+                  type="date"
+                  id="start_date"
+                  value={formData.start_date}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div className="w-1/3">
+                <label className="block text-gray-700">Tanggal Berakhir</label>
+                <input
+                  type="date"
+                  id="end_date"
+                  value={formData.end_date}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div className="w-1/3">
+                <label className="block text-gray-700">Lokasi</label>
+                <input
+                  type="text"
+                  id="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+            </div>
+
+            {/* Target Peserta */}
+            <div className="mb-4">
+              <label className="block text-gray-700">Target Peserta</label>
+              <input
+                type="text"
+                id="target"
+                value={formData.target}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            {/* Upload Gambar */}
+            <div className="mb-4">
+              <label className="block text-gray-700">Upload Gambar</label>
+              <input
+                type="file"
+                id="image"
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+
+            {/* Tombol Simpan */}
+            <button
+              type="submit"
+              className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+            >
+              Simpan
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
