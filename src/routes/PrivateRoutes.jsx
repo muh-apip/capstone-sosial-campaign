@@ -32,7 +32,7 @@ const PrivateRoutes = () => {
       <Route path="/home" element={<PrivateRoute element={<Home />} />} />
 
       {/* Contoh protected route lainnya */}
-      <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+      <Route path="/profile/:id" element={<PrivateRoute element={<Profile />} />} />
       <Route path="/artikel" element={<PrivateRoute element={<Artikel />} />} />
       <Route path="/artikel/:id" element={<PrivateRoute element={<DetailArticle />} />} />
       <Route path="/donasi" element={<PrivateRoute element={<Donasi />} />} />

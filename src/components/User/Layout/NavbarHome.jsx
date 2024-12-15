@@ -166,7 +166,7 @@ const NavbarHome = ({ onSearch }) => {
           {isProfileMenuOpen && (
             <div className="absolute right-0 mt-24 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
               <Link
-                to="/profile"
+                to="/profile/:id"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Profile
