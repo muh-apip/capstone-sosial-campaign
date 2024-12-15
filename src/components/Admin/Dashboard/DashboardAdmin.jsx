@@ -17,7 +17,6 @@ const DashboardAdmin = () => {
 
         {/* Content */}
         <div className="p-4 lg:p-6">
-
           {/* Cards Section */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <CardStats title="Artikel" count="200" />
@@ -30,7 +29,13 @@ const DashboardAdmin = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <TableSection
               title="Transaksi Terbaru"
-              headers={["No", "Tanggal Transaksi", "Username", "Jumlah", "Status"]}
+              headers={[
+                "No",
+                "Tanggal Transaksi",
+                "Username",
+                "Jumlah",
+                "Status",
+              ]}
               data={[
                 ["IN-00178", "19/10/2024", "fashih12_", "50,000", "PAID"],
                 // Tambahkan data lainnya

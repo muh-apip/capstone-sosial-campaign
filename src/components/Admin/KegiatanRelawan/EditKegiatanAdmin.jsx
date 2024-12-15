@@ -7,6 +7,7 @@ import axios from "axios";
 const EditKegiatanAdmin = () => {
   const { id } = useParams(); // Mengambil id dari URL
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const [formData, setFormData] = useState({
     category: "",
@@ -17,15 +18,30 @@ const EditKegiatanAdmin = () => {
     location: "",
     quota: 0,
   });
+  const [error, setError] = useState(null);
 
   // Mendapatkan data kegiatan dari API
   useEffect(() => {
     const fetchKegiatan = async () => {
+      console.log("ID yang dikirim ke API:", id); // Debugging ID
+
+      if (!token) {
+        console.error("Token tidak ditemukan.");
+        alert("Silakan login kembali.");
+        return;
+      }
+
       try {
         const response = await axios.get(
-          `https://relawanku.xyz/api/v1/admin/program/${id}`
+          `https://relawanku.xyz/api/v1/admin/program/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        const kegiatan = response.data; // Mengambil data kegiatan dari API
+
+        const kegiatan = response.data;
 
         if (kegiatan) {
           setFormData({
@@ -38,17 +54,29 @@ const EditKegiatanAdmin = () => {
             quota: kegiatan.quota,
           });
         } else {
-          alert("Kegiatan tidak ditemukan!");
+          alert("Kegiatan tidak ditemukan.");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        alert("Terjadi kesalahan saat mengambil data kegiatan.");
+
+        // Cek apakah error.response tersedia
+        if (error.response) {
+          const status = error.response.status;
+
+          if (status === 404) {
+            alert("Data tidak ditemukan. Periksa ID kegiatan.");
+          } else {
+            alert(`Terjadi kesalahan: ${error.response.statusText}`);
+          }
+        } else {
+          // Jika error.response undefined (masalah jaringan atau server)
+          alert("Terjadi kesalahan saat menghubungi server. Coba lagi nanti.");
+        }
       }
     };
 
     fetchKegiatan();
-  }, [id]); // Menjalankan useEffect saat id berubah
-
+  }, [id]);
   // Mengatur nilai state ketika input berubah
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -59,10 +87,28 @@ const EditKegiatanAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Verifikasi form data
+    if (
+      !formData.title ||
+      !formData.category ||
+      !formData.start_date ||
+      !formData.end_date
+    ) {
+      alert("Pastikan semua field yang wajib diisi telah diisi.");
+      return;
+    }
+
+    setError(null); // Reset error state
+
     try {
       const response = await axios.put(
         `https://relawanku.xyz/api/v1/admin/program/${id}`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       if (response.status === 200) {
         alert("Kegiatan berhasil diperbarui!");
@@ -70,7 +116,7 @@ const EditKegiatanAdmin = () => {
       }
     } catch (error) {
       console.error("Error updating data:", error);
-      alert("Terjadi kesalahan saat memperbarui kegiatan.");
+      setError("Terjadi kesalahan saat memperbarui kegiatan.");
     }
   };
 
@@ -80,6 +126,7 @@ const EditKegiatanAdmin = () => {
       <Navbar />
       <div className="content">
         <h2>Edit Kegiatan</h2>
+        {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div>
             <label>Judul</label>
