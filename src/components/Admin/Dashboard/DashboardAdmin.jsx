@@ -60,6 +60,20 @@ const DashboardAdmin = () => {
           {/* Tables Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <TableSection
+              title="Transaksi Terbaru"
+              headers={[
+                "No",
+                "Tanggal Transaksi",
+                "Username",
+                "Jumlah",
+                "Status",
+              ]}
+              data={[
+                ["IN-00178", "19/10/2024", "fashih12_", "50,000", "PAID"],
+                // Tambahkan data lainnya
+              ]}
+            />
+            <TableSection
               title="Artikel"
               headers={["Judul Artikel", "Kategori", "Tanggal Publikasi"]}
               data={artikelData.map((item) => [

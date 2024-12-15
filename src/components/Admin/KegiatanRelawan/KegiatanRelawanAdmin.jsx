@@ -22,26 +22,23 @@ const KegiatanRelawanAdmin = () => {
           throw new Error("Token tidak ditemukan");
         }
 
-        // Menentukan URL API berdasarkan kategori yang dipilih
-        let apiUrl = "https://relawanku.xyz/api/v1/admin/programs";
-        if (selectedCategory !== "all") {
-          apiUrl = `https://relawanku.xyz/api/v1/admin/program/${selectedCategory}`;
-        }
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/admin/programs",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        const response = await axios.get(apiUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        console.log("Data dari API:", response.data);
 
-        // Pastikan setiap item memiliki properti id unik
         const dataWithUniqueId = response.data.data.map((item, index) => ({
           ...item,
-          id: item.id || `kegiatan-${index}`, // Fallback ke index jika id tidak tersedia
+          id: item.id || `${index}`, // Tambahkan id jika tidak tersedia
         }));
 
-        // Update state kegiatan dengan data yang diterima dari API
-        setKegiatan(dataWithUniqueId);
+        setKegiatan(dataWithUniqueId); // Set data ke state
       } catch (err) {
         setError("Terjadi kesalahan saat mengambil data.");
         console.error("Error fetching data", err);
@@ -51,17 +48,53 @@ const KegiatanRelawanAdmin = () => {
     };
 
     fetchKegiatan();
-  }, [selectedCategory]);
+  }, []);
 
-  // Filter kategori berdasarkan data yang ada di API
-  const categories = ["all", "Lingkungan", "Sosial", "Edukasi"]; // Contoh kategori statis, bisa disesuaikan dari API
+  const categories = ["all", "Lingkungan", "Sosial", "Edukasi"];
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category); // Update kategori yang dipilih
+    setSelectedCategory(category);
   };
 
   const handleEditClick = (id) => {
+    console.log(`Navigating to /relawan-edit/${id}`);
     navigate(`/relawan-edit/${id}`);
+  };
+
+  // Fungsi untuk menghapus kegiatan
+  const handleDeleteClick = async (id) => {
+    const confirmDelete = window.confirm(
+      "Apakah Anda yakin ingin menghapus kegiatan ini?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan");
+      }
+
+      const response = await axios.delete(
+        `https://relawanku.xyz/api/v1/admin/program/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Kegiatan berhasil dihapus!");
+        setKegiatan((prevKegiatan) =>
+          prevKegiatan.filter((item) => item.id !== id)
+        );
+      } else {
+        alert("Terjadi kesalahan saat menghapus kegiatan.");
+      }
+    } catch (error) {
+      console.error("Error deleting data", error);
+      alert("Terjadi kesalahan saat menghapus kegiatan.");
+    }
   };
 
   return (
@@ -84,7 +117,7 @@ const KegiatanRelawanAdmin = () => {
               {categories.map((category) => (
                 <button
                   key={category}
-                  onClick={() => handleCategoryChange(category)}
+                  onClick={() => setSelectedCategory(category)} // Ubah kategori yang dipilih
                   className={`px-4 py-2 rounded-full text-sm transition-all duration-300 shadow-md ${
                     selectedCategory === category
                       ? "bg-green-500 text-white"
@@ -107,6 +140,8 @@ const KegiatanRelawanAdmin = () => {
             <div>Loading...</div>
           ) : error ? (
             <div>{error}</div>
+          ) : kegiatan.length === 0 ? (
+            <div>Tidak ada data kegiatan untuk ditampilkan.</div>
           ) : (
             <div className="bg-white shadow-md rounded-lg p-4 overflow-x-auto">
               <table className="min-w-full border-collapse">
@@ -133,60 +168,67 @@ const KegiatanRelawanAdmin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {kegiatan.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      className="bg-white hover:bg-gray-100 transition-colors"
-                    >
-                      <td className="px-6 py-4 text-center">{index + 1}</td>
-                      <td className="px-6 py-4">{item.judul}</td>
-                      <td className="px-6 py-4">{item.rentang_waktu}</td>
-                      <td className="px-6 py-4">{item.target_anggota}</td>
-                      <td className="px-6 py-4">{item.category}</td>
-                      <td className="px-6 py-4 text-center flex justify-center space-x-2">
-                        <button
-                          onClick={() => handleEditClick(item.id)}
-                          className="text-gray-500 hover:text-gray-700"
-                          title="Edit"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
+                  {kegiatan
+                    .filter((item) => {
+                      // Jika kategori "all", tampilkan semua data
+                      if (selectedCategory === "all") return true;
+                      // Jika tidak, filter berdasarkan kategori
+                      return item.category === selectedCategory;
+                    })
+                    .map((item, index) => (
+                      <tr
+                        key={item.id}
+                        className="bg-white hover:bg-gray-100 transition-colors"
+                      >
+                        <td className="px-6 py-4 text-center">{index + 1}</td>
+                        <td className="px-6 py-4">{item.title}</td>
+                        <td className="px-6 py-4">{item.end_date}</td>
+                        <td className="px-6 py-4">{item.quota}</td>
+                        <td className="px-6 py-4">{item.category}</td>
+                        <td className="px-6 py-4 text-center flex justify-center space-x-2">
+                          <button
+                            onClick={() => handleEditClick(item.id)}
+                            className="text-gray-500 hover:text-gray-700"
+                            title="Edit"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15.232 5.232l3.536 3.536M9 11l4.768 4.768M16.536 7.464l-9 9"
-                            />
-                          </svg>
-                        </button>
-                        <button
-                          onClick={() => alert(`Hapus kegiatan ${item.id}`)}
-                          className="text-gray-500 hover:text-gray-700"
-                          title="Hapus"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.232 5.232l3.536 3.536M9 11l4.768 4.768M16.536 7.464l-9 9"
+                              />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(item.id)}
+                            className="text-gray-500 hover:text-gray-700"
+                            title="Hapus"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M19 7l-.867 12.142A2 2 0 0116.136 21H7.864a2 2 0 01-1.997-1.858L5 7m5-4h4m-4 0a2 2 0 00-2 2m6-2a2 2 0 012 2m-8 0h8"
-                            />
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M19 7l-.867 12.142A2 2 0 0116.136 21H7.864a2 2 0 01-1.997-1.858L5 7m5-4h4m-4 0a2 2 0 00-2 2m6-2a2 2 0 012 2m-8 0h8"
+                              />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
