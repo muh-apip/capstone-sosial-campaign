@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../Layout/Sidebar";
-import Navbar from "../Layout/NavbarAdmin";
+import NavbarAdmin from "../Layout/NavbarAdmin";
 
 const KegiatanRelawanAdmin = () => {
   const [kegiatan, setKegiatan] = useState([]);
@@ -103,7 +103,7 @@ const KegiatanRelawanAdmin = () => {
 
       <div className="flex-1 flex flex-col">
         <div className="sticky top-0 z-50">
-          <Navbar />
+          <NavbarAdmin />
         </div>
 
         <div className="p-6 flex-1 overflow-auto">

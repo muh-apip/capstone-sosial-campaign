@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../Layout/Sidebar";
-import Navbar from "../Layout/NavbarAdmin";
+import NavbarAdmin from "../Layout/NavbarAdmin";
 
 const ClientsAdmin = () => {
   const allData = Array.from({ length: 20 }, (_, index) => ({
@@ -47,7 +47,7 @@ const ClientsAdmin = () => {
       <div className="flex-1 flex flex-col">
         {/* Navbar component */}
         <div className="sticky top-0 z-50">
-          <Navbar />
+          <NavbarAdmin />
         </div>
 
         {/* Table Content */}
