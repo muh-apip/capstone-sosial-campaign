@@ -54,22 +54,6 @@ const NavbarAdmin = () => {
 
       {/* Bagian Kanan */}
       <div className="flex items-center space-x-4">
-        {/* Ikon Notifikasi */}
-        <button className="relative text-gray-600 hover:text-blue-600 focus:outline-none">
-          <NotificationsOutlinedIcon />
-          <span className="absolute top-0 right-0 inline-flex items-center justify-center w-2 h-2 bg-red-500 rounded-full text-white text-xs"></span>
-        </button>
-
-        {/* Ikon Email */}
-        <button className="relative text-gray-600 hover:text-blue-600 focus:outline-none">
-          <EmailOutlinedIcon />
-          <span className="absolute top-0 right-0 inline-flex items-center justify-center w-2 h-2 bg-red-500 rounded-full text-white text-xs"></span>
-        </button>
-
-        {/* Ikon Support */}
-        <button className="text-gray-600 hover:text-blue-600 focus:outline-none">
-          <SupportAgentIcon />
-        </button>
 
         {/* Menu Profil */}
         <div
@@ -83,7 +67,7 @@ const NavbarAdmin = () => {
             aria-label="Profile menu"
           >
             <img
-              src="https://via.placeholder.com/32"
+              src="/img/navbar/admin.png"
               alt="Profile"
               className="h-8 w-8 rounded-full border border-gray-300"
             />
