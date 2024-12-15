@@ -58,11 +58,11 @@ const ClientsAdmin = () => {
             <span className="text-gray-800 font-semibold">Clients</span>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-4 overflow-x-auto">
+          <div className="overflow-x-auto bg-white shadow-md rounded-md">
             {/* Table structure */}
-            <table className="min-w-full border-collapse">
-              <thead className="bg-green-200">
-                <tr>
+            <table className="min-w-full table-auto">
+              <thead >
+                <tr className="bg-[#CAE8CB] text-gray-800 uppercase text-sm leading-normal">
                   {/* Table headers with rounded corners */}
                   <th className="px-6 py-4 text-left font-semibold rounded-tl-lg">
                     No

@@ -23,7 +23,6 @@ const EditKegiatanAdmin = () => {
   // Mendapatkan data kegiatan dari API
   useEffect(() => {
     const fetchKegiatan = async () => {
-
       console.log("ID yang dikirim ke API:", id); // Debugging ID
 
       if (!token) {
@@ -42,11 +41,6 @@ const EditKegiatanAdmin = () => {
         );
 
         const kegiatan = response.data;
-      try {
-        const response = await axios.get(
-          `https://relawanku.xyz/api/v1/admin/program/${id}`
-        );
-        const kegiatan = response.data; // Mengambil data kegiatan dari API
 
         if (kegiatan) {
           setFormData({
@@ -82,6 +76,7 @@ const EditKegiatanAdmin = () => {
 
     fetchKegiatan();
   }, [id]);
+
   // Mengatur nilai state ketika input berubah
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -114,11 +109,8 @@ const EditKegiatanAdmin = () => {
             Authorization: `Bearer ${token}`,
           },
         }
-    try {
-      const response = await axios.put(
-        `https://relawanku.xyz/api/v1/admin/program/${id}`,
-        formData
       );
+
       if (response.status === 200) {
         alert("Kegiatan berhasil diperbarui!");
         navigate(`/admin/program/${id}`); // Arahkan setelah berhasil
@@ -126,7 +118,6 @@ const EditKegiatanAdmin = () => {
     } catch (error) {
       console.error("Error updating data:", error);
       setError("Terjadi kesalahan saat memperbarui kegiatan.");
-
     }
   };
 

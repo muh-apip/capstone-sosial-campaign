@@ -120,7 +120,7 @@ const KegiatanRelawanAdmin = () => {
                   onClick={() => setSelectedCategory(category)} // Ubah kategori yang dipilih
                   className={`px-4 py-2 rounded-full text-sm transition-all duration-300 shadow-md ${
                     selectedCategory === category
-                      ? "bg-green-500 text-white"
+                      ? "bg-primary-green text-white font-medium text-sm rounded-lg hover:bg-green-600"
                       : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                   }`}
                 >
@@ -130,7 +130,7 @@ const KegiatanRelawanAdmin = () => {
             </div>
             <button
               onClick={() => navigate("/relawan-tambah")}
-              className="px-6 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+              className="px-6 py-2 bg-primary-green text-white rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
             >
               Tambah Kegiatan
             </button>
@@ -143,10 +143,10 @@ const KegiatanRelawanAdmin = () => {
           ) : kegiatan.length === 0 ? (
             <div>Tidak ada data kegiatan untuk ditampilkan.</div>
           ) : (
-            <div className="bg-white shadow-md rounded-lg p-4 overflow-x-auto">
-              <table className="min-w-full border-collapse">
-                <thead className="bg-green-200">
-                  <tr>
+            <div className="overflow-x-auto bg-white shadow-md rounded-md">
+              <table className="min-w-full table-auto">
+                <thead>
+                  <tr className="bg-[#CAE8CB] text-gray-800 uppercase text-sm leading-normal">
                     <th className="px-6 py-4 text-center font-semibold rounded-tl-lg">
                       No
                     </th>
