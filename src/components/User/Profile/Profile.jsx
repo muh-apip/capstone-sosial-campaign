@@ -71,16 +71,16 @@ const Profile = () => {
       setError(`Please provide a value for ${field}`);
       return;
     }
-
+  
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         throw new Error("Token not found");
       }
-
+  
       const formData = new FormData();
-
+  
       // Handle updating profile image
       if (field === "profileImage" && imageFile) {
         formData.append("profileImage", imageFile); // Attach the image to the form data
@@ -90,12 +90,12 @@ const Profile = () => {
         setError("No changes to save");
         return;
       }
-
+  
       // Ensure the form data is correctly appended for other fields
       if (field !== "profileImage" && tempValue) {
         formData.append(field, tempValue);
       }
-
+  
       const response = await axios.put(
         `https://relawanku.xyz/api/v1/user/profile/${userId}`,
         formData,
@@ -106,7 +106,7 @@ const Profile = () => {
           },
         }
       );
-
+  
       if (response.data.status) {
         setProfileData((prev) => ({
           ...prev,
@@ -125,6 +125,7 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
