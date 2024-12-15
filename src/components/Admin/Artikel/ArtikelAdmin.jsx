@@ -6,12 +6,16 @@ import axios from "axios";
 
 const ArtikelAdmin = () => {
   const [artikelData, setArtikelData] = useState([]);
+  const [filteredArtikel, setFilteredArtikel] = useState([]); // Data artikel yang sudah difilter
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedArtikel, setSelectedArtikel] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("all"); // Kategori yang dipilih
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  const categories = ["all", "Lingkungan", "Sosial"];
 
   // Fetch articles
   useEffect(() => {
@@ -28,7 +32,9 @@ const ArtikelAdmin = () => {
           }
         );
 
-        setArtikelData(response.data.data || []);
+        const data = response.data.data || [];
+        setArtikelData(data);
+        setFilteredArtikel(data); // Inisialisasi data yang sudah difilter
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch articles");
       } finally {
@@ -38,6 +44,17 @@ const ArtikelAdmin = () => {
 
     fetchArticles();
   }, []);
+
+  // Filter articles by category
+  useEffect(() => {
+    if (selectedCategory === "all") {
+      setFilteredArtikel(artikelData);
+    } else {
+      setFilteredArtikel(
+        artikelData.filter((artikel) => artikel.Category === selectedCategory)
+      );
+    }
+  }, [selectedCategory, artikelData]);
 
   // Open delete modal
   const openDeleteModal = (id) => {
@@ -94,16 +111,23 @@ const ArtikelAdmin = () => {
             <span className="font-semibold text-gray-800"> Artikel</span>
           </div>
 
-          <div className="flex flex-wrap gap-3 mb-4">
-            <button className="px-4 py-2 bg-primary-green text-white font-medium rounded-full hover:bg-green-600">
-              Semua
-            </button>
-            <button className="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-full hover:bg-gray-300">
-              Sosial
-            </button>
-            <button className="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-full hover:bg-gray-300">
-              Lingkungan
-            </button>
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-wrap space-x-4">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)} // Ubah kategori yang dipilih
+                  className={`px-4 py-2 rounded-full text-sm transition-all duration-300 shadow-md ${
+                    selectedCategory === category
+                      ? "bg-custom-green text-white font-medium hover:bg-green-600"
+                      : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  }`}
+                >
+                  {category === "all" ? "Semua" : category}
+                </button>
+              ))}
+            </div>
+
             <button
               className="ml-auto px-4 py-2 bg-custom-green text-white font-medium rounded-lg hover:bg-green-600"
               onClick={handleClick}
@@ -119,7 +143,7 @@ const ArtikelAdmin = () => {
               </div>
             ) : error ? (
               <div className="p-6 text-center text-red-500">{error}</div>
-            ) : artikelData.length > 0 ? (
+            ) : filteredArtikel.length > 0 ? (
               <table className="min-w-full border-collapse">
                 <thead>
                   <tr className="bg-[#CAE8CB] text-gray-800 text-sm uppercase">
@@ -131,7 +155,7 @@ const ArtikelAdmin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {artikelData.map((item, index) => (
+                  {filteredArtikel.map((item, index) => (
                     <tr
                       key={item.ID || `artikel-${index}`}
                       className={`border-b border-gray-200 hover:bg-gray-50 ${
