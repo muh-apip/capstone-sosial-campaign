@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -12,6 +12,7 @@ const NavbarDetail = () => {
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navLinks = [
     { href: "/home", label: "Beranda" },
@@ -46,6 +47,15 @@ const NavbarDetail = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Logout function
+  const handleLogout = () => {
+    // Remove the token from localStorage (or sessionStorage)
+    localStorage.removeItem("authToken");
+
+    // Redirect to login page or home page
+    navigate("/login"); // Adjust the path according to your app's structure
+  };
 
   return (
     <nav className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 shadow-sm md:px-6 md:py-4">
@@ -92,24 +102,30 @@ const NavbarDetail = () => {
 
       {/* Icons and Profile Menu */}
       <div className="flex items-center space-x-4">
+      <a href="/notifikasi">
         <button
           className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
           aria-label="Notifications"
         >
           <NotificationsOutlinedIcon className="h-6 w-6" />
         </button>
-        <button
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Help"
-        >
-          <SupportAgentIcon className="h-6 w-6" />
-        </button>
+        </a>
+        <a href="/chatbot">
+          <button
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Help"
+          >
+            <SupportAgentIcon className="h-6 w-6" />
+          </button>
+        </a>
+        <a href="/laporan">
         <button
           className="text-gray-500 hover:text-gray-700 focus:outline-none"
           aria-label="Email"
         >
           <EmailOutlinedIcon className="h-6 w-6" />
         </button>
+        </a>
 
         {/* Profile Menu */}
         <div className="relative flex items-center" ref={profileMenuRef}>
@@ -133,12 +149,12 @@ const NavbarDetail = () => {
               >
                 Profile
               </Link>
-              <Link
-                to="/logout"
+              <button
+                onClick={handleLogout}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Logout
-              </Link>
+              </button>
             </div>
           )}
         </div>

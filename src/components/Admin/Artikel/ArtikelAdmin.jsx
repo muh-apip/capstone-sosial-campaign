@@ -13,26 +13,23 @@ const ArtikelAdmin = () => {
 
   const navigate = useNavigate();
 
+  // Fetch articles
   useEffect(() => {
     const fetchArticles = async () => {
       setIsLoading(true);
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Token not found");
-        }
+        if (!token) throw new Error("Token not found");
+
         const response = await axios.get(
           "https://relawanku.xyz/api/v1/admin/articles",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-        const articles = Array.isArray(response.data) ? response.data : [];
-        setArtikelData(articles);
+
+        setArtikelData(response.data.data || []);
       } catch (err) {
-        console.error("Error fetching articles", err);
         setError(err.response?.data?.message || "Failed to fetch articles");
       } finally {
         setIsLoading(false);
@@ -42,34 +39,74 @@ const ArtikelAdmin = () => {
     fetchArticles();
   }, []);
 
+  // Open delete modal
   const openDeleteModal = (id) => {
     setSelectedArtikel(id);
     setIsModalOpen(true);
   };
 
+  // Close delete modal
   const closeDeleteModal = () => {
     setIsModalOpen(false);
     setSelectedArtikel(null);
   };
 
+  // Handle delete article
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem("jwtToken");
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token not found");
+
       await axios.delete(
-        `https://relawanku.xyz/api/v1/admin/articles/${selectedArtikel}`,
+        `https://relawanku.xyz/api/v1/admin/article/${selectedArtikel}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setArtikelData((prevData) =>
+        prevData.filter((item) => item.ID !== selectedArtikel)
+      );
+      closeDeleteModal();
+      alert("Artikel berhasil dihapus.");
+    } catch (err) {
+      alert(
+        "Gagal menghapus artikel: " +
+          (err.response?.data?.message || err.message)
+      );
+    }
+  };
+
+  // Handle add article
+  const handleAddArticle = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token not found");
+
+      const newArticle = {
+        title: "Judul Artikel Baru",
+        category: "Kategori Baru",
+        content: "Isi artikel baru", // Sesuaikan dengan kebutuhan API
+      };
+
+      const response = await axios.post(
+        "https://relawanku.xyz/api/v1/admin/article",
+        newArticle,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-      setArtikelData((prevData) =>
-        prevData.filter((item) => item.id !== selectedArtikel)
-      );
-      closeDeleteModal();
+
+      setArtikelData((prevData) => [...prevData, response.data]);
+      alert("Artikel berhasil ditambahkan.");
     } catch (err) {
-      console.error("Error deleting article", err);
-      alert("Gagal menghapus artikel.");
+      alert(
+        "Gagal menambahkan artikel: " +
+          (err.response?.data?.message || err.message)
+      );
     }
   };
 
@@ -86,7 +123,7 @@ const ArtikelAdmin = () => {
             <span className="font-semibold text-gray-800"> Artikel</span>
           </div>
 
-          <div className="flex gap-3 mb-4">
+          <div className="flex flex-wrap gap-3 mb-4">
             <button className="px-4 py-2 bg-primary-green text-white font-medium rounded-full hover:bg-green-600">
               Semua
             </button>
@@ -98,7 +135,7 @@ const ArtikelAdmin = () => {
             </button>
             <button
               className="ml-auto px-4 py-2 bg-custom-green text-white font-medium rounded-lg hover:bg-green-600"
-              onClick={() => navigate("/tambah-artikel")}
+              onClick={handleAddArticle}
             >
               Tambah
             </button>
@@ -125,26 +162,34 @@ const ArtikelAdmin = () => {
                 <tbody>
                   {artikelData.map((item, index) => (
                     <tr
-                      key={item.id}
+                      key={item.ID || `artikel-${index}`}
                       className={`border-b border-gray-200 hover:bg-gray-50 ${
                         index % 2 === 0 ? "bg-gray-50" : "bg-white"
                       }`}
                     >
                       <td className="py-4 px-6 text-left">{index + 1}</td>
-                      <td className="py-4 px-6 text-left">{item.title}</td>
-                      <td className="py-4 px-6 text-left">{item.category}</td>
-                      <td className="py-4 px-6 text-left">{item.date}</td>
+                      <td className="py-4 px-6 text-left">
+                        {item.Title || "Tidak ada judul"}
+                      </td>
+                      <td className="py-4 px-6 text-left">
+                        {item.Category || "Tidak ada kategori"}
+                      </td>
+                      <td className="py-4 px-6 text-left">
+                        {item.CreatedAt
+                          ? new Date(item.CreatedAt).toLocaleDateString("id-ID")
+                          : "Tanggal tidak tersedia"}
+                      </td>
                       <td className="py-4 px-6 text-center">
                         <div className="flex items-center justify-center gap-4">
                           <button
                             className="w-4 transform hover:text-blue-500 hover:scale-110"
-                            onClick={() => navigate(`/edit-artikel/${item.id}`)}
+                            onClick={() => navigate(`/edit-artikel/${item.ID}`)}
                           >
                             <i className="fas fa-edit"></i>
                           </button>
                           <button
                             className="w-4 transform hover:text-red-500 hover:scale-110"
-                            onClick={() => openDeleteModal(item.id)}
+                            onClick={() => openDeleteModal(item.ID)}
                           >
                             <i className="fas fa-trash"></i>
                           </button>
@@ -164,7 +209,7 @@ const ArtikelAdmin = () => {
 
         {isModalOpen && (
           <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md">
               <p className="text-center text-gray-800 mb-4">
                 Apakah kamu yakin ingin menghapusnya?
               </p>

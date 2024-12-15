@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
   Article,
@@ -13,6 +13,7 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation(); // Mendapatkan lokasi saat ini
+  const navigate = useNavigate(); // Untuk mengarahkan ke halaman login setelah logout
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -20,6 +21,14 @@ const Sidebar = () => {
 
   // Fungsi untuk memeriksa apakah link aktif
   const isActive = (path) => location.pathname === path;
+
+  // Fungsi untuk logout
+  const handleLogout = () => {
+    // Hapus data autentikasi (token atau sesi pengguna) dari storage
+    localStorage.removeItem("authToken"); // atau sessionStorage, tergantung implementasi Anda
+    // Redirect ke halaman login
+    navigate("/login");
+  };
 
   return (
     <div>
@@ -147,7 +156,11 @@ const Sidebar = () => {
           </ul>
         </nav>
 
-        <div className="flex items-center px-4 py-4 border-t border-gray-200 text-gray-700 hover:bg-gray-100">
+        {/* Tombol Logout */}
+        <div
+          className="flex items-center px-4 py-4 border-t border-gray-200 text-gray-700 hover:bg-gray-100 cursor-pointer"
+          onClick={handleLogout} // Menambahkan fungsi logout
+        >
           <ArrowBack className="mr-3" />
           <span>Logout</span>
         </div>
