@@ -77,6 +77,43 @@ const ArtikelAdmin = () => {
     }
   };
 
+  // Handle edit article
+  const handleEdit = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token not found");
+
+      const updatedArticle = {
+        title: "Judul Artikel Diperbarui",
+        category: "Kategori Diperbarui",
+        content: "Isi artikel diperbarui", // Sesuaikan dengan kebutuhan API
+      };
+
+      await axios.put(
+        `https://relawanku.xyz/api/v1/admin/article/${id}`,
+        updatedArticle,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setArtikelData((prevData) =>
+        prevData.map((item) =>
+          item.ID === id ? { ...item, ...updatedArticle } : item
+        )
+      );
+      alert("Artikel berhasil diperbarui.");
+    } catch (err) {
+      alert(
+        "Gagal memperbarui artikel: " +
+          (err.response?.data?.message || err.message)
+      );
+    }
+  };
+
   // Handle add article
   const handleAddArticle = async () => {
     try {
@@ -183,12 +220,12 @@ const ArtikelAdmin = () => {
                         <div className="flex items-center justify-center gap-4">
                           <button
                             className="w-4 transform hover:text-blue-500 hover:scale-110"
-                            onClick={() => navigate(`/edit-artikel/${item.ID}`)}
+                            onClick={() => handleEdit(item.ID)}
                           >
                             <i className="fas fa-edit"></i>
                           </button>
                           <button
-                            className="w-4 transform hover:text-red-500 hover:scale-110"
+                            className="w-4 transform hover:text-yellow-500 hover:scale-110"
                             onClick={() => openDeleteModal(item.ID)}
                           >
                             <i className="fas fa-trash"></i>

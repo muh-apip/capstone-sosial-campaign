@@ -46,6 +46,11 @@ export default function SignUp() {
     }
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMessage(""); // Clear the message when closing the modal
+  };
+
   return (
     <div className="min-h-screen flex">
       {/* Left Section */}
@@ -148,7 +153,7 @@ export default function SignUp() {
             </h3>
             <p className="mt-4 text-gray-600">{modalMessage}</p>
             <button
-              onClick={() => setIsModalOpen(false)}
+              onClick={closeModal}
               className="mt-6 px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               Close

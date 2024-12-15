@@ -23,6 +23,7 @@ const EditKegiatanAdmin = () => {
   // Mendapatkan data kegiatan dari API
   useEffect(() => {
     const fetchKegiatan = async () => {
+
       console.log("ID yang dikirim ke API:", id); // Debugging ID
 
       if (!token) {
@@ -30,7 +31,6 @@ const EditKegiatanAdmin = () => {
         alert("Silakan login kembali.");
         return;
       }
-
       try {
         const response = await axios.get(
           `https://relawanku.xyz/api/v1/admin/program/${id}`,
@@ -42,6 +42,11 @@ const EditKegiatanAdmin = () => {
         );
 
         const kegiatan = response.data;
+      try {
+        const response = await axios.get(
+          `https://relawanku.xyz/api/v1/admin/program/${id}`
+        );
+        const kegiatan = response.data; // Mengambil data kegiatan dari API
 
         if (kegiatan) {
           setFormData({
@@ -109,6 +114,10 @@ const EditKegiatanAdmin = () => {
             Authorization: `Bearer ${token}`,
           },
         }
+    try {
+      const response = await axios.put(
+        `https://relawanku.xyz/api/v1/admin/program/${id}`,
+        formData
       );
       if (response.status === 200) {
         alert("Kegiatan berhasil diperbarui!");
@@ -117,6 +126,7 @@ const EditKegiatanAdmin = () => {
     } catch (error) {
       console.error("Error updating data:", error);
       setError("Terjadi kesalahan saat memperbarui kegiatan.");
+
     }
   };
 
@@ -126,7 +136,9 @@ const EditKegiatanAdmin = () => {
       <Navbar />
       <div className="content">
         <h2>Edit Kegiatan</h2>
+
         {error && <div className="error-message">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div>
             <label>Judul</label>
