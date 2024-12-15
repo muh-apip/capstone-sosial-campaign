@@ -158,7 +158,7 @@ const Home = () => {
                 currentArticles.map(
                   ({ ID, Title, ImageUrl, Category, Content, CreatedAt }) => (
                     <div
-                      key={ID} // Gunakan `ID` sebagai key
+                      key={ID} // Gunakan ID sebagai key
                       className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer"
                       onClick={() => navigate(`/artikel/${ID}`)} // Sesuaikan dengan ID
                     >
