@@ -77,74 +77,8 @@ const ArtikelAdmin = () => {
     }
   };
 
-  // Handle edit article
-  const handleEdit = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token not found");
-
-      const updatedArticle = {
-        title: "Judul Artikel Diperbarui",
-        category: "Kategori Diperbarui",
-        content: "Isi artikel diperbarui", // Sesuaikan dengan kebutuhan API
-      };
-
-      await axios.put(
-        `https://relawanku.xyz/api/v1/admin/article/${id}`,
-        updatedArticle,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      setArtikelData((prevData) =>
-        prevData.map((item) =>
-          item.ID === id ? { ...item, ...updatedArticle } : item
-        )
-      );
-      alert("Artikel berhasil diperbarui.");
-    } catch (err) {
-      alert(
-        "Gagal memperbarui artikel: " +
-          (err.response?.data?.message || err.message)
-      );
-    }
-  };
-
-  // Handle add article
-  const handleAddArticle = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token not found");
-
-      const newArticle = {
-        title: "Judul Artikel Baru",
-        category: "Kategori Baru",
-        content: "Isi artikel baru", // Sesuaikan dengan kebutuhan API
-      };
-
-      const response = await axios.post(
-        "https://relawanku.xyz/api/v1/admin/article",
-        newArticle,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      setArtikelData((prevData) => [...prevData, response.data]);
-      alert("Artikel berhasil ditambahkan.");
-    } catch (err) {
-      alert(
-        "Gagal menambahkan artikel: " +
-          (err.response?.data?.message || err.message)
-      );
-    }
+  const handleClick = () => {
+    navigate("/tambah-artikel");
   };
 
   return (
@@ -172,7 +106,7 @@ const ArtikelAdmin = () => {
             </button>
             <button
               className="ml-auto px-4 py-2 bg-custom-green text-white font-medium rounded-lg hover:bg-green-600"
-              onClick={handleAddArticle}
+              onClick={handleClick}
             >
               Tambah
             </button>
@@ -220,7 +154,7 @@ const ArtikelAdmin = () => {
                         <div className="flex items-center justify-center gap-4">
                           <button
                             className="w-4 transform hover:text-blue-500 hover:scale-110"
-                            onClick={() => handleEdit(item.ID)}
+                            onClick={() => navigate(`/edit-artikel/${item.ID}`)}
                           >
                             <i className="fas fa-edit"></i>
                           </button>
