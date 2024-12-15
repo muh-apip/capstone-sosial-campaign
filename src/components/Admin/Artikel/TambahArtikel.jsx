@@ -1,222 +1,198 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../Layout/Sidebar";
-import NavbarAdmin from "../Layout/NavbarAdmin";
-import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../Layout/NavbarAdmin";
 import axios from "axios";
 
 const TambahArtikel = () => {
-  const [kategori, setKategori] = useState("");
-  const [title, setTitle] = useState("");
-  const [subjudul, setSubjudul] = useState("");
-  const [deskripsi, setDeskripsi] = useState("");
-  const [gambar, setGambar] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    category: "",
+    image_url: null,
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const categories = ["Lingkungan", "Sosial"]; // Pilihan kategori
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, image_url: e.target.files[0] });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const formData = new FormData();
-    formData.append("category", kategori);  // Change from 'kategori' to 'category'
-    formData.append("title", title);
-    formData.append("content", deskripsi); // Change from 'deskripsi' to 'content'
-  
-    if (gambar) {
-      formData.append("gambar", gambar); // Append the image file correctly
-      console.log("FormData: ", formData); // Log FormData contents
+
+    if (
+      !formData.title ||
+      !formData.content ||
+      !formData.category ||
+      !formData.image_url
+    ) {
+      alert("Semua field wajib diisi!");
+      return;
     }
-  
+
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
-  
       if (!token) {
-        alert("Token tidak ditemukan. Silakan login kembali.");
-        return;
+        throw new Error("Token tidak ditemukan. Silakan login kembali.");
       }
-  
+
+      // Siapkan FormData untuk mengirim file dan data lainnya
+      const data = new FormData();
+      data.append("title", formData.title);
+      data.append("content", formData.content);
+      data.append("category", formData.category);
+      data.append("image_url", formData.image_url); // Gambar
+
+      // Mengirim data ke API
       const response = await axios.post(
-        "https://relawanku.xyz/api/v1/admin/article",
-        formData,
+        "https://relawanku.xyz/api/v1/admin/article", // Ganti sesuai endpoint API Swagger
+        data,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Header untuk FormData
           },
         }
       );
-  
-      console.log(response.data); // Log response data
-  
-      if (response.status === 200) {
-        navigate("/artikel-admin");
+
+      if (response.status === 201) {
+        alert("Artikel berhasil ditambahkan!");
+        setFormData({
+          title: "",
+          content: "",
+          category: "",
+          image_url: null,
+        });
+        navigate("/artikel-admin"); // Navigasi ke tabel artikel
       }
     } catch (err) {
-      console.error("Error submitting article", err.response ? err.response.data : err.message);
-      setErrorMessage("Gagal mengirim artikel. Periksa log untuk detail kesalahan.");
-    }
-  };
-  
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-
-    // File validation
-    if (file) {
-      const validTypes = ["image/jpeg", "image/png", "image/gif"];
-      if (!validTypes.includes(file.type)) {
-        setErrorMessage("File type not supported. Please upload an image.");
-        return;
-      }
-      if (file.size > 5000000) {
-        // 5MB size limit
-        setErrorMessage("File size exceeds 5MB.");
-        return;
-      }
-      setGambar(file); // Store the selected file
-      setErrorMessage(""); // Clear any error message
+      console.error("Error submitting data:", err);
+      alert(
+        `Gagal menambahkan artikel: ${
+          err.response?.data?.message || "Kesalahan tidak diketahui"
+        }`
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
-      <Sidebar className="w-full lg:w-1/4 xl:w-1/5" />
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
       <div className="flex-1 flex flex-col">
-        <NavbarAdmin />
-        <div className="p-6 lg:p-8">
-          <div className="text-sm text-gray-500 mb-6">
-            <Link to="/dashboard" className="hover:text-green-600">
-              Dashboard
-            </Link>{" "}
-            /{" "}
-            <Link to="/artikel-admin" className="hover:text-green-600">
-              Artikel
-            </Link>{" "}
-            /{" "}
+        <div className="sticky top-0 z-50 bg-white shadow-md">
+          <Navbar />
+        </div>
+        <main className="flex-1 p-8 overflow-y-auto">
+          <div className="text-sm text-gray-500 mb-4 p-4">
+            Dashboard / Artikel /{" "}
             <span className="text-gray-800 font-semibold">Tambah Artikel</span>
           </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="p-8 bg-white shadow-md rounded-lg max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold mb-6 text-gray-700">
+              Tambah Artikel
+            </h2>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
             <form onSubmit={handleSubmit}>
               {/* Kategori */}
-              <div className="mb-4">
+              <div className="mb-6">
                 <label
-                  htmlFor="kategori"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  htmlFor="category"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Kategori
                 </label>
                 <select
-                  id="kategori"
-                  className="w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
-                  value={kategori}
-                  onChange={(e) => setKategori(e.target.value)}
+                  id="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                 >
-                  <option>Pilih Kategori</option>
-                  <option value="Sosial">Sosial</option>
-                  <option value="Lingkungan">Lingkungan</option>
-                  <option value="Teknologi">Teknologi</option>
+                  <option value="">Pilih Kategori</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {/* Title */}
-              <div className="mb-4">
+              {/* Judul */}
+              <div className="mb-6">
                 <label
                   htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Title
+                  Judul
                 </label>
                 <input
                   type="text"
                   id="title"
-                  className="w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                   placeholder="Masukkan judul artikel"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
 
-              {/* Subjudul */}
-              <div className="mb-4">
+              {/* Konten */}
+              <div className="mb-6">
                 <label
-                  htmlFor="subjudul"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  htmlFor="content"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Subjudul
-                </label>
-                <input
-                  type="text"
-                  id="subjudul"
-                  className="w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
-                  placeholder="Masukkan subjudul"
-                  value={subjudul}
-                  onChange={(e) => setSubjudul(e.target.value)}
-                />
-              </div>
-
-              {/* Deskripsi */}
-              <div className="mb-4">
-                <label
-                  htmlFor="deskripsi"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Deskripsi
+                  Konten
                 </label>
                 <textarea
-                  id="deskripsi"
+                  id="content"
                   rows="4"
-                  className="w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
-                  placeholder="Masukkan deskripsi artikel"
-                  value={deskripsi}
-                  onChange={(e) => setDeskripsi(e.target.value)}
+                  value={formData.content}
+                  onChange={handleChange}
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
+                  placeholder="Masukkan konten artikel"
                 ></textarea>
               </div>
 
               {/* Upload Gambar */}
-              <div className="mb-4">
+              <div className="mb-6">
                 <label
-                  htmlFor="uploadGambar"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  htmlFor="image_url"
+                  className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   Upload Gambar
                 </label>
                 <input
                   type="file"
-                  id="uploadGambar"
-                  className="w-full px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                  id="image_url"
                   onChange={handleFileChange}
+                  className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                 />
-
-                {gambar && (
-                  <div className="mt-2">
-                    <p>File Selected: {gambar.name}</p>
-                    <img
-                      src={URL.createObjectURL(gambar)}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover mt-2"
-                    />
-                  </div>
-                )}
               </div>
 
-              {/* Error Message */}
-              {errorMessage && (
-                <div className="text-red-600 mb-4">{errorMessage}</div>
-              )}
-
-              {/* Submit Button */}
+              {/* Tombol Simpan */}
               <div className="text-right">
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-green-500 text-white font-medium rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="px-6 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 focus:outline-none"
                   disabled={loading}
                 >
-                  {loading ? "Mengirim..." : "Simpan"}
+                  {loading ? "Menyimpan..." : "Simpan"}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
