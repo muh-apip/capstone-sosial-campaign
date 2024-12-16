@@ -12,12 +12,19 @@ const TambahKegiatanAdmin = () => {
     location: "",
     quota: 0,
     image_url: null,
+    category: "", // Tambahkan category di sini
   });
   const [selectedCategory, setSelectedCategory] = useState(""); // Dropdown kategori
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const categories = ["Sosial", "Edukasi", "Lingkungan", "Kesehatan"]; // Pilihan kategori
+  const categories = [
+    "Sosial",
+    "Edukasi",
+    "Lingkungan",
+    "Kesehatan",
+    "Bencana",
+  ]; // Pilihan kategori
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -60,6 +67,7 @@ const TambahKegiatanAdmin = () => {
       data.append("location", formData.location);
       data.append("quota", formData.quota);
       data.append("image_url", formData.image_url); // Gambar
+      data.append("category", selectedCategory); // Tambahkan kategori
 
       // Mengirim data ke API
       const response = await axios.post(
@@ -127,7 +135,7 @@ const TambahKegiatanAdmin = () => {
                 <select
                   id="category"
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  onChange={(e) => setSelectedCategory(e.target.value)} // Mengubah selectedCategory
                   className="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 px-4 py-2"
                 >
                   <option value="">Pilih Kategori</option>

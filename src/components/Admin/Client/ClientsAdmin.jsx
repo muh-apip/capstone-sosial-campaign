@@ -7,8 +7,8 @@ import axios from "axios";
 const ClientsAdmin = () => {
   const [allData, setAllData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedKegiatan, setSelectedKegiatan] = useState(null);
   const itemsPerPage = 10;
 
   // Fetch data from API
@@ -50,35 +50,65 @@ const ClientsAdmin = () => {
     fetchData();
   }, []);
 
+  // Handle perubahan halaman
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Fungsi untuk membuka modal dan mengatur selectedKegiatan
+  const openDeleteModal = (id) => {
+    setSelectedKegiatan(id); // Mengatur ID yang dipilih untuk dihapus
+    setShowDeleteModal(true); // Menampilkan modal konfirmasi
+  };
+
+  // Fungsi untuk mengonfirmasi penghapusan
+  const confirmDelete = async () => {
+    if (!selectedKegiatan) {
+      console.log("selectedKegiatan tidak ditemukan");
+      return;
+    }
+
+    console.log("ID yang akan dihapus:", selectedKegiatan); // Debug log untuk ID yang akan dihapus
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `https://relawanku.xyz/api/v1/admin/clients/${selectedKegiatan}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Data berhasil dihapus!");
+        setAllData((prevData) =>
+          prevData.filter((item) => item.id !== selectedKegiatan)
+        );
+        setShowDeleteModal(false); // Menutup modal
+      } else {
+        console.error("Gagal menghapus data", response);
+        alert("Terjadi kesalahan saat menghapus data.");
+      }
+    } catch (error) {
+      console.error(
+        "Error deleting data",
+        error.response ? error.response.data : error
+      );
+      alert("Terjadi kesalahan saat menghapus data.");
+    }
+  };
+
+
   // Hitung data yang ditampilkan untuk pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = Array.isArray(allData)
     ? allData.slice(indexOfFirstItem, indexOfLastItem)
     : [];
-
-  // Handle perubahan halaman
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  // Handle aksi hapus
-  const handleDelete = (item) => {
-    setSelectedItem(item);
-    setShowModal(true);
-  };
-
-  const confirmDelete = () => {
-    console.log("Deleting item:", selectedItem);
-    // Logic untuk menghapus item bisa ditambahkan di sini
-    setShowModal(false);
-  };
-
-  const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "long", year: "numeric" };
-    return new Date(dateString).toLocaleDateString("id-ID", options);
-  };
-  
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-100">
@@ -107,7 +137,6 @@ const ClientsAdmin = () => {
             <table className="min-w-full table-auto">
               <thead>
                 <tr className="bg-[#CAE8CB] text-gray-800 uppercase text-sm leading-normal">
-                  {/* Table headers with rounded corners */}
                   <th className="px-6 py-4 text-left font-semibold rounded-tl-lg">
                     No
                   </th>
@@ -136,7 +165,7 @@ const ClientsAdmin = () => {
 
                     <td className="px-6 py-4 text-center">
                       <button
-                        onClick={() => handleDelete(item)}
+                        onClick={() => openDeleteModal(item.id)} // Mengatur ID yang dipilih
                         className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
                         title="Hapus"
                       >
@@ -190,7 +219,7 @@ const ClientsAdmin = () => {
       </div>
 
       {/* Delete Confirmation Modal */}
-      {showModal && (
+      {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center shadow-md justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-md w-96">
             <p className="text-center text-gray-800 font-medium mb-6">
@@ -198,7 +227,7 @@ const ClientsAdmin = () => {
             </p>
             <div className="flex justify-center gap-4">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowDeleteModal(false)}
                 className="w-32 px-4 py-2 border border-green-500 text-green-500 rounded-lg hover:bg-green-600 hover:text-white"
               >
                 Kembali
