@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavbarDetail from "../Layout/NavbarDetail";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState({
@@ -15,118 +16,121 @@ const Profile = () => {
   const [error, setError] = useState("");
   const [editingField, setEditingField] = useState(null);
   const [tempValue, setTempValue] = useState("");
-  const [imageFile, setImageFile] = useState(null); // State for the selected image file
+  const [imageFile, setImageFile] = useState(null);
 
   const navigate = useNavigate();
-  const userId = localStorage.getItem("userId"); // Get userId from localStorage
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchProfileData = async () => {
       if (!userId) {
-        navigate("/login"); // Redirect to login if no userId found
+        navigate("/login");
         return;
       }
-
+  
       setIsLoading(true);
       try {
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("Token not found");
         }
-
-        const response = await fetch(
+  
+        const response = await axios.get(
           `https://relawanku.xyz/api/v1/user/profile/${userId}`,
           {
-            method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
-        if (data.status) {
+  
+        console.log("Profile data fetched:", response.data); // Tambahkan console.log di sini
+  
+        if (response.data.status) {
           setProfileData({
-            username: data.data.username || "Belum diatur",
-            email: data.data.email || "Belum diatur",
-            password: "********", // Don't display actual password
-            gender: data.data.gender || "Belum diatur",
-            address: data.data.address || "Belum diatur",
-            profileImage:
-              data.data.image_url || "https://via.placeholder.com/200",
+            username: response.data.data.username || "Belum diatur",
+            email: response.data.data.email || "Belum diatur",
+            password: "********",
+            gender: response.data.data.gender || "Belum diatur",
+            address: response.data.data.address || "Belum diatur",
+            profileImage: response.data.data.image_url || "https://via.placeholder.com/200",
           });
         } else {
-          setError(data.message || "Failed to fetch profile data");
+          setError(response.data.message || "Failed to fetch profile data");
         }
       } catch (err) {
+        console.log("Error fetching profile data:", err.message || err); // Tambahkan log untuk error
         setError(err.message || "Failed to fetch profile data");
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchProfileData();
-  }, [userId]);
+  }, [userId, navigate]);
+  
 
-  // Handle saving the edited fields (e.g. username, gender, address)
   const handleSave = async (field) => {
-    if (!tempValue) {
+    if (!tempValue && !imageFile) {
       setError(`Please provide a value for ${field}`);
       return;
     }
-
+  
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token not found");
+      if (!token) throw new Error("Token not found");
+  
+      const formData = new FormData();
+      if (field === "profileImage" && imageFile) {
+        formData.append("image_url", imageFile);
+      } else if (tempValue) {
+        formData.append(field, tempValue);
+      } else {
+        setError("No changes to save");
+        return;
       }
-
-      let updatedData = { [field]: tempValue };
-
-      console.log(updatedData); // Debug log for data being sent
-
-      const response = await fetch(
+  
+      const response = await axios.put(
         `https://relawanku.xyz/api/v1/user/profile/${userId}`,
+        formData,
         {
-          method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
-          body: JSON.stringify(updatedData),
         }
       );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error response:", errorData); // Check error from API
-        throw new Error(errorData.message || "Failed to update profile");
-      }
-
-      const data = await response.json();
-      if (data.status) {
+  
+      console.log("Update response:", response.data);
+      if (response.data.status) {
+        // Update profileData state with the latest data from the server
         setProfileData((prev) => ({
           ...prev,
-          [field]: tempValue, // Update field if successful
+          [field]:
+            field === "profileImage"
+              ? response.data.data.image_url
+              : field === "password"
+              ? "********"
+              : tempValue,
         }));
-        setTempValue(""); // Clear temp value
+        setTempValue("");
+        setImageFile(null);
         setEditingField(null);
       } else {
-        setError(data.message || "Failed to update profile");
+        setError(response.data.message || "Failed to update profile");
       }
     } catch (err) {
+      console.log(err.response || err.message);
       setError(err.message || "Error saving profile data");
     } finally {
       setIsLoading(false);
     }
   };
+  
 
-  // Handle image upload
+  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -142,61 +146,10 @@ const Profile = () => {
     }
   };
 
-  const handleSaveImage = async () => {
-    if (!imageFile) {
-      setError("Please select an image");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("image", imageFile);
-
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token not found");
-      }
-
-      const response = await fetch(
-        `https://relawanku.xyz/api/v1/user/profile/image/${userId}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error response:", errorData); // Check error from API
-        throw new Error(errorData.message || "Failed to update profile image");
-      }
-
-      const data = await response.json();
-      if (data.status) {
-        setProfileData((prev) => ({
-          ...prev,
-          profileImage: data.data.image_url, // Update profile image if successful
-        }));
-        setImageFile(null); // Clear image file
-      } else {
-        setError(data.message || "Failed to update profile image");
-      }
-    } catch (err) {
-      setError(err.message || "Error saving profile image");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove token
-    localStorage.removeItem("userId"); // Remove userId
-    navigate("/login"); // Redirect to login page
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    navigate("/login");
   };
 
   return (
@@ -205,7 +158,7 @@ const Profile = () => {
         <NavbarDetail />
       </div>
 
-      <div className="flex-grow bg-[#EAF8E6] flex justify-center items-center py-10">
+      <div className="flex-grow bg-[#EAF8E6] flex justify-center items-center py-10 px-4">
         <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-6 md:p-10">
           <div className="relative h-56 w-full rounded-t-lg overflow-visible bg-green-200">
             <img
@@ -220,7 +173,6 @@ const Profile = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            {/* Image upload button */}
             <div className="absolute top-0 right-8 mt-4">
               <label
                 htmlFor="profileImage"
@@ -236,6 +188,17 @@ const Profile = () => {
                 onChange={handleImageChange}
               />
             </div>
+            {/* Add the Save button for updating profile image */}
+            {imageFile && (
+              <div className="absolute top-1/2 right-8 mt-4">
+                <button
+                  onClick={() => handleSave("profileImage")}
+                  className="text-white bg-blue-500 px-4 py-2 rounded-full"
+                >
+                  Save Image
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="mt-20 space-y-6 px-6 py-6 rounded-lg">
@@ -259,14 +222,24 @@ const Profile = () => {
                 <ProfileField
                   label="Email"
                   value={profileData.email}
-                  editable={false} // Email can't be edited
-                  isEditing={false}
+                  editable={false}  // Change to true to allow editing
+                  isEditing={editingField === "email"}
+                  tempValue={tempValue}
+                  setTempValue={setTempValue}
+                  onEdit={() => setEditingField("email")}
+                  onSave={() => handleSave("email")}
+                  onCancel={() => setEditingField(null)}
                 />
                 <ProfileField
                   label="Password"
                   value={profileData.password}
-                  editable={false} // Password can't be edited directly
-                  isEditing={false}
+                  editable={true}  // Change to true to allow editing
+                  isEditing={editingField === "password"}
+                  tempValue={tempValue}
+                  setTempValue={setTempValue}
+                  onEdit={() => setEditingField("password")}
+                  onSave={() => handleSave("password")}
+                  onCancel={() => setEditingField(null)}
                 />
                 <ProfileField
                   label="Gender"
@@ -291,23 +264,10 @@ const Profile = () => {
                   onCancel={() => setEditingField(null)}
                 />
 
-                {/* Save Image Button */}
-                {imageFile && (
-                  <div className="mt-4">
-                    <button
-                      className="text-blue-500 px-4 py-2 rounded-lg"
-                      onClick={handleSaveImage}
-                    >
-                      Save Image
-                    </button>
-                  </div>
-                )}
-
-                {/* Logout Button */}
                 <div className="mt-10 flex justify-end">
                   <button
                     className="text-green-500 border border-green-500 px-6 py-2 rounded-lg hover:bg-custom-green hover:text-white transition-all text-lg font-semibold"
-                    onClick={handleLogout} // Attach logout function
+                    onClick={handleLogout}
                   >
                     Logout
                   </button>
@@ -321,7 +281,6 @@ const Profile = () => {
   );
 };
 
-// ProfileField Component (unchanged)
 const ProfileField = ({
   label,
   value,
@@ -337,14 +296,25 @@ const ProfileField = ({
     <div className="flex gap-4 md:gap-24 items-center">
       <p className="text-sm text-gray-500 w-32">{label}</p>
       {isEditing ? (
-        <input
-          type="text"
-          className="text-base font-semibold text-gray-700 border-b border-gray-300 focus:outline-none"
-          value={tempValue}
-          onChange={(e) => setTempValue(e.target.value)}
-        />
+        label === "Password" ? (
+          <input
+            type="password" // Gunakan type password untuk menampilkan asterisks
+            className="text-base font-semibold text-gray-700 border-b border-gray-300 focus:outline-none"
+            value={tempValue}
+            onChange={(e) => setTempValue(e.target.value)}
+          />
+        ) : (
+          <input
+            type="text"
+            className="text-base font-semibold text-gray-700 border-b border-gray-300 focus:outline-none"
+            value={tempValue}
+            onChange={(e) => setTempValue(e.target.value)}
+          />
+        )
       ) : (
-        <p className="text-base font-semibold text-gray-700">{value}</p>
+        <p className="text-base font-semibold text-gray-700">
+          {label === "Password" ? "********" : value}
+        </p> // Tampilkan asterisks saat tidak mengedit password
       )}
     </div>
     {editable &&
@@ -373,5 +343,6 @@ const ProfileField = ({
       ))}
   </div>
 );
+
 
 export default Profile;

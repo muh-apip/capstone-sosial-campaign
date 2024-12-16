@@ -1,27 +1,6 @@
 import React, { useState } from "react";
 import NavbarHome from "../Layout/NavbarHome";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { marked } from "marked";
-
-// API Key langsung dalam file
-const apiKey = "AIzaSyC36rN9xTqXajI052P7TDMEF0NuqH9Nid4"; // Ganti dengan API key Anda
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const generateContent = async (prompt) => {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent(prompt);
-
-    // Convert markdown ke plain text dan hapus tag HTML
-    const plainTextResponse = marked(result.response.text());
-    const textOnlyResponse = plainTextResponse.replace(/<[^>]*>/g, "");
-
-    return textOnlyResponse; // Pastikan format respons benar
-  } catch (error) {
-    console.error("Error calling Google Generative AI API:", error);
-    return "Maaf, saya mengalami kesalahan dalam merespons.";
-  }
-};
+import { generateContent } from "../../../services/generativeAIService";
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
@@ -54,9 +33,8 @@ const ChatBot = () => {
       </div>
       <div className="flex flex-col min-h-screen bg-green-100 p-6">
         <div
-          className="bg-white rounded-lg shadow-lg p-4 mx-auto flex flex-col"
+          className="bg-white rounded-lg shadow-lg p-4 mx-auto flex flex-col sm:w-full md:w-[1101px] lg:w-[1101px]"
           style={{
-            width: "1101px",
             height: "700px",
             top: "96px",
             left: "206px",
