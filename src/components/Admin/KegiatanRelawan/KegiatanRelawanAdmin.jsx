@@ -9,10 +9,12 @@ const KegiatanRelawanAdmin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedKegiatan, setSelectedKegiatan] = useState(null);
 
   const navigate = useNavigate();
 
-  // Fungsi untuk fetch data kegiatan berdasarkan category atau id
+  // Fetch data kegiatan
   useEffect(() => {
     const fetchKegiatan = async () => {
       setLoading(true);
@@ -31,14 +33,12 @@ const KegiatanRelawanAdmin = () => {
           }
         );
 
-        console.log("Data dari API:", response.data);
-
         const dataWithUniqueId = response.data.data.map((item, index) => ({
           ...item,
-          id: item.id || `${index}`, // Tambahkan id jika tidak tersedia
+          id: item.id || `${index}`,
         }));
 
-        setKegiatan(dataWithUniqueId); // Set data ke state
+        setKegiatan(dataWithUniqueId);
       } catch (err) {
         setError("Terjadi kesalahan saat mengambil data.");
         console.error("Error fetching data", err);
@@ -50,19 +50,36 @@ const KegiatanRelawanAdmin = () => {
     fetchKegiatan();
   }, []);
 
-  const categories = ["all", "Lingkungan", "Sosial", "Edukasi"];
+  const categories = [
+    "all",
+    "Sosial",
+    "Edukasi",
+    "Lingkungan",
+    "Kesehatan",
+    "Bencana",
+  ];
 
+  // Handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
-  const handleEditClick = (ID) => {
-    console.log(`Navigating to /relawan-edit/${ID}`);
-    navigate(`/relawan-edit/${ID}`);
+  // Open delete modal
+  const openDeleteModal = (id) => {
+    setSelectedKegiatan(id);
+    setIsModalOpen(true);
   };
 
-  // Fungsi untuk menghapus kegiatan
-  const handleDeleteClick = async (id) => {
+  // Close delete modal
+  const closeDeleteModal = () => {
+    setIsModalOpen(false);
+    setSelectedKegiatan(null);
+  };
+
+  // Handle delete
+  const handleDeleteClick = async () => {
+    if (!selectedKegiatan) return;
+
     const confirmDelete = window.confirm(
       "Apakah Anda yakin ingin menghapus kegiatan ini?"
     );
@@ -75,7 +92,7 @@ const KegiatanRelawanAdmin = () => {
       }
 
       const response = await axios.delete(
-        `https://relawanku.xyz/api/v1/admin/program/${ID}`,
+        `https://relawanku.xyz/api/v1/admin/program/${selectedKegiatan}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,9 +102,11 @@ const KegiatanRelawanAdmin = () => {
 
       if (response.status === 200) {
         alert("Kegiatan berhasil dihapus!");
+        // Remove the deleted kegiatan from the state without refetching from API
         setKegiatan((prevKegiatan) =>
-          prevKegiatan.filter((item) => item.ID !== ID)
+          prevKegiatan.filter((item) => item.id !== selectedKegiatan)
         );
+        closeDeleteModal();
       } else {
         alert("Terjadi kesalahan saat menghapus kegiatan.");
       }
@@ -197,50 +216,46 @@ const KegiatanRelawanAdmin = () => {
                         <td className="px-6 py-4">{item.category}</td>
                         <td className="px-6 py-4 text-center flex justify-center space-x-2">
                           <button
-                            onClick={() => handleEditClick(item.ID)}
-                            className="text-gray-500 hover:text-gray-700"
-                            title="Edit"
+                            className="w-4 transform hover:text-blue-500 hover:scale-110"
+                            onClick={() => navigate(`/relawan-edit/${item.ID}`)}
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.232 5.232l3.536 3.536M9 11l4.768 4.768M16.536 7.464l-9 9"
-                              />
-                            </svg>
+                            <i className="fas fa-edit"></i>
                           </button>
                           <button
-                            onClick={() => handleDeleteClick(item.ID)}
-                            className="text-gray-500 hover:text-gray-700"
-                            title="Hapus"
+                            className="w-4 transform hover:text-yellow-500 hover:scale-110"
+                            onClick={() => openDeleteModal(item.ID)}
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M19 7l-.867 12.142A2 2 0 0116.136 21H7.864a2 2 0 01-1.997-1.858L5 7m5-4h4m-4 0a2 2 0 00-2 2m6-2a2 2 0 012 2m-8 0h8"
-                              />
-                            </svg>
+                            <i className="fas fa-trash"></i>
                           </button>
                         </td>
                       </tr>
                     ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {/* Delete Modal */}
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg w-1/3">
+                <h3 className="text-lg font-semibold mb-4">Konfirmasi Hapus</h3>
+                <p>Apakah Anda yakin ingin menghapus kegiatan ini?</p>
+                <div className="flex justify-end mt-4">
+                  <button
+                    onClick={closeDeleteModal}
+                    className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md mr-2"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    onClick={handleDeleteClick}
+                    className="px-4 py-2 bg-red-500 text-white rounded-md"
+                  >
+                    Hapus
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>

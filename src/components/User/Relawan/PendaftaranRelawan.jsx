@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../Layout/NavbarDetail";
+import { useNavigate } from "react-router-dom"; // Import navigate
 
 const Relawan = () => {
   const [formData, setFormData] = useState({
@@ -54,6 +55,8 @@ const Relawan = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const navigate = useNavigate(); // Initialize navigate function
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -92,6 +95,11 @@ const Relawan = () => {
         nama_program: "",
         motivation: "",
       });
+
+      // Setelah berhasil daftar, arahkan ke /kegiatanku
+      setTimeout(() => {
+        navigate("/relawan");
+      }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error.response?.data || error);
       setErrorMessage(

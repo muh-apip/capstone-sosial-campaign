@@ -129,8 +129,18 @@ const Relawan = () => {
                       <p className="text-sm text-gray-500 mb-5">
                         {relawan.location || "Location"}
                       </p>
-                      <p className="text-sm text-gray-500 mb-5">
-                        {relawan.end_date || "Location"}
+                      <p className="text-sm text-red-800 mb-5 font-bold">
+                        {relawan.start_date && relawan.end_date
+                          ? (() => {
+                              const startedAtDate = new Date(
+                                relawan.start_date
+                              );
+                              const finishedAtDate = new Date(relawan.end_date);
+                              const timeDiff = finishedAtDate - startedAtDate; // Selisih dalam milidetik
+                              const dayDiff = timeDiff / (1000 * 3600 * 24); // Menghitung jumlah hari
+                              return `${Math.floor(dayDiff)} hari`; // Menampilkan selisih dalam hari
+                            })()
+                          : relawan.dayDiff || "Location"}
                       </p>
                     </div>
 
