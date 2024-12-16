@@ -1,32 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../Layout/Sidebar";
 import NavbarAdmin from "../Layout/NavbarAdmin";
+import axios from "axios";
 
 const ClientsAdmin = () => {
-  const allData = Array.from({ length: 20 }, (_, index) => ({
-    id: index + 1,
-    username: "fadhila12_",
-    email: "fadhila@gmail.com",
-    tanggalRegistrasi: "1-10-2024",
-  }));
-
-  // State for pagination and delete modal
+  const [allData, setAllData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const itemsPerPage = 10;
 
-  // Calculate current data to display
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error(
+            "Token tidak ditemukan, silakan login terlebih dahulu."
+          );
+        }
+
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/admin/clients",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+
+        // Periksa apakah data berupa array atau properti "data"
+        const fetchedData = Array.isArray(response.data)
+          ? response.data
+          : response.data.data || [];
+
+        setAllData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setAllData([]); // Set default ke array kosong jika error
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Hitung data yang ditampilkan untuk pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = allData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentData = Array.isArray(allData)
+    ? allData.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
 
-  // Handle page change
+  // Handle perubahan halaman
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Handle delete action
+  // Handle aksi hapus
   const handleDelete = (item) => {
     setSelectedItem(item);
     setShowModal(true);
@@ -34,8 +67,8 @@ const ClientsAdmin = () => {
 
   const confirmDelete = () => {
     console.log("Deleting item:", selectedItem);
+    // Logic untuk menghapus item bisa ditambahkan di sini
     setShowModal(false);
-    setSelectedItem(null);
   };
 
   return (
@@ -61,7 +94,7 @@ const ClientsAdmin = () => {
           <div className="overflow-x-auto bg-white shadow-md rounded-md">
             {/* Table structure */}
             <table className="min-w-full table-auto">
-              <thead >
+              <thead>
                 <tr className="bg-[#CAE8CB] text-gray-800 uppercase text-sm leading-normal">
                   {/* Table headers with rounded corners */}
                   <th className="px-6 py-4 text-left font-semibold rounded-tl-lg">
@@ -80,17 +113,16 @@ const ClientsAdmin = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentData.map((item, index) => (
+                {currentData.map((item) => (
                   <tr
-                    key={item.id} // Unique key for each row
+                    key={item.id}
                     className="bg-white hover:bg-gray-100 transition-colors"
                   >
                     <td className="px-6 py-4 text-center">{item.id}</td>
                     <td className="px-6 py-4">{item.username}</td>
                     <td className="px-6 py-4">{item.email}</td>
-                    <td className="px-6 py-4">{item.tanggalRegistrasi}</td>
+                    <td className="px-6 py-4">{item.created_at}</td>
                     <td className="px-6 py-4 text-center">
-                      {/* Trash icon button for delete */}
                       <button
                         onClick={() => handleDelete(item)}
                         className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
@@ -176,8 +208,7 @@ const ClientsAdmin = () => {
                 onClick={confirmDelete}
                 className="w-32 px-4 py-2 border border-green-500 text-green-500 rounded-lg hover:bg-green-600 hover:text-white"
               >
-                {"   "}
-                Ya{"   "}
+                Ya
               </button>
             </div>
           </div>
