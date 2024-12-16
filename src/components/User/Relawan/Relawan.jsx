@@ -1,104 +1,72 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
 
 const Relawan = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all"); // State
+  const [relawanData, setRelawanData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 6; // Atur jumlah item per halaman
+  const navigate = useNavigate();
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  useEffect(() => {
+    const fetchRelawan = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token"); // Jika perlu autentikasi
+        if (!token) {
+          throw new Error("Token not found");
+        }
 
-  const relawan = [
-    {
-      id: 1,
-      name: "Solidaritas Bantu Korban Banjir & Longsor",
-      left: "sisa 7 hari",
-      lokasi: "Palu, Sulawesi Tengah",
-      category: "Bencana Alam",
-      image: "src/assets/images/photos/relawan/relawan1.png",
-      description:
-        "Ribuan warga terdampak hingga harus kehilangan nyawa. Ayo bantu segera!",
-      joined: 7,
-      total: 16,
-    },
-    {
-      id: 2,
-      name: "Bantu Warga Terdampak Erupsi Gunung",
-      left: "sisa 7 hari",
-      lokasi: "Wakatobi, Sulawesi Tenggara",
-      category: "Bencana",
-      image: "src/assets/images/photos/relawan/relawan2.png",
-      description:
-        "10.295 warga terdampak, ratusan rumah rusak. Ayo bantu segera!",
-      joined: 5,
-      total: 10,
-    },
-    {
-      id: 3,
-      name: "Bantu Muslim Selesaikan Masjidnya",
-      role: "Relawan Logistik",
-      lokasi: "Temanggung, Jawa Tengah",
-      left: "sisa 7 hari",
-      category: "Gotongroyong",
-      image: "src/assets/images/photos/relawan/relawan3.png",
-      description: "Patungan bangun kembali Masjid Nurul Bhakti, Lubuk Rasak.",
-      joined: 12,
-      total: 20,
-    },
-    {
-      id: 4,
-      name: "Bangun Asrama Santri Penghafal Al Qur’an ",
-      left: "sisa 5 hari",
-      lokasi: "Semarang, Jawa Tengah",
-      category: "Sosial",
-      image: "src/assets/images/photos/relawan/relawan4.png",
-      description:
-        "Belum memiliki asrama, santri penghafal quran tidur di aula....",
-      joined: 8,
-      total: 12,
-    },
-    {
-      id: 5,
-      name: "Panen Pahala jariyah, Sedekah Alat Sholat",
-      left: "sisa 10 hari",
-      lokasi: "Demak , Jawa Tengah",
-      category: "Sosial",
-      image: "src/assets/images/photos/relawan/relawan5.png",
-      description:
-        "Bagaimana bisa beribadah dengan khusyuk jika alat sholat masih lusuh? Yuk, bantu!",
-      joined: 14,
-      total: 25,
-    },
-    {
-      id: 6,
-      name: "Yuk , Muliakan Anak yatim Sekarang!k",
-      left: "sisa 3 hari",
-      lokasi: "Banyuwangi, Jawa Timur",
-      category: "Sosial",
-      image: "src/assets/images/photos/relawan/relawan6.png",
-      description:
-        "Kirim 1000 kado yatim untuk anak yatim di seluruh Indonesia",
-      joined: 9,
-      total: 15,
-    },
-  ];
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/user/programs",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("API Response:", response.data); // Pastikan format data benar
+        setRelawanData(response.data.data || []); // Menyimpan data yang berhasil diambil
+      } catch (err) {
+        console.error("Error fetching data", err);
+        setError(err.response?.data?.message || "Failed to fetch data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Ambil kategori unik dari data relawan
-  const categories = ["all", ...new Set(relawan.map((r) => r.category))];
+    fetchRelawan();
+  }, []); // Dependency array kosong berarti hanya dijalankan sekali saat komponen pertama kali dimuat
 
-  // Fungsi untuk mengubah kategori yang dipilih
+  // Filter relawan berdasarkan kategori
+  const categories = ["all", ...new Set(relawanData.map((r) => r.category))];
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
-  // Filter relawan berdasarkan kategori yang dipilih
   const filteredRelawan =
     selectedCategory === "all"
-      ? relawan
-      : relawan.filter((relawan) => relawan.category === selectedCategory);
+      ? relawanData
+      : relawanData.filter((relawan) => relawan.category === selectedCategory);
+
+  // Pagination logic
+  const indexOfLastRelawan = currentPage * articlesPerPage;
+  const indexOfFirstRelawan = indexOfLastRelawan - articlesPerPage;
+  const currentRelawan = filteredRelawan.slice(
+    indexOfFirstRelawan,
+    indexOfLastRelawan
+  );
+  const totalPages = Math.ceil(filteredRelawan.length / articlesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -135,42 +103,66 @@ const Relawan = () => {
 
           {/* Daftar Relawan */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {filteredRelawan.map((relawan) => (
-              <div
-                key={relawan.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
-              >
-                <a href={`/relawan/${relawan.id}`} className="block">
+            {isLoading ? (
+              <p>Loading data...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : currentRelawan.length === 0 ? (
+              <p>No volunteers found</p>
+            ) : (
+              currentRelawan.map((relawan) => (
+                <div
+                  key={relawan.id}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
+                  onClick={() => navigate(`/relawan/${relawan.ID}`)}
+                >
                   <img
-                    src={relawan.image}
+                    src={relawan.image_url || "/path/to/default-image.png"}
                     alt={relawan.name}
                     className="h-52 w-full object-cover"
                   />
-                </a>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    {relawan.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-5">{relawan.role}</p>
-                  <div className="flex justify-between">
-                    <p className="text-sm text-gray-600">{relawan.lokasi}</p>
-                    <p className="text-sm text-gray-600">
-                      <strong>{relawan.left}</strong>
-                    </p>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-7">
-                    {relawan.description}
-                  </p>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-gray-800">
+                      {relawan.title || "Volunteer Name"}
+                    </h3>
+                    <div className="flex justify-between">
+                      <p className="text-sm text-gray-500 mb-5">
+                        {relawan.location || "Location"}
+                      </p>
+                      <p className="text-sm text-gray-500 mb-5">
+                        {relawan.end_date || "Location"}
+                      </p>
+                    </div>
 
-                  {/* Menampilkan Jumlah Anggota */}
-                  <div className="mt-20">
-                    <p className="text-sm text-blue-600">
-                      anggota yang sudah bergabung {relawan.joined} dari total{" "}
-                      {relawan.total} anggota
+                    <p className="text-sm text-gray-600">{relawan.details}</p>
+
+                    <p className="text-sm text-blue-600 mt-7">
+                      {" "}
+                      <strong>
+                        {"     "}Anggota yang di tersisa{" "}
+                        {relawan.quota || "N/A"}
+                      </strong>
                     </p>
                   </div>
                 </div>
-              </div>
+              ))
+            )}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                className={`px-4 py-2 rounded-lg shadow ${
+                  currentPage === index + 1
+                    ? "bg-custom-green text-white"
+                    : "bg-gray-300 text-gray-600"
+                }`}
+              >
+                {index + 1}
+              </button>
             ))}
           </div>
         </div>

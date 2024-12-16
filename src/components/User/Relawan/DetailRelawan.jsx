@@ -1,89 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../Layout/NavbarDetail";
 import Footer from "../Layout/FooterHome";
 import { CheckIcon } from "@heroicons/react/20/solid";
+import axios from "axios";
 
 const DetailRelawan = () => {
-  const { id } = useParams(); // Mengambil id
+  const { id } = useParams(); // Mengambil id dari URL
+  const [relawanData, setRelawanData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [daysLeft, setDaysLeft] = useState(null); // State untuk menyimpan sisa hari
 
-  const relawan = [
-    {
-      id: 1,
-      name: "Solidaritas Bantu Korban Banjir & Longsor",
-      left: "sisa 7 hari",
-      lokasi: "Palu, Sulawesi Tengah",
-      category: "Bencana Alam",
-      image: "../src/assets/images/photos/relawan/relawan1.png",
-      description:
-        "Ribuan warga terdampak hingga harus kehilangan nyawa. Ayo bantu segera!",
-      joined: 7,
-      total: 16,
-    },
-    {
-      id: 2,
-      name: "Bantu Warga Terdampak Erupsi Gunung",
-      left: "sisa 7 hari",
-      lokasi: "Wakatobi, Sulawesi Tenggara",
-      category: "Bencana",
-      image: "../src/assets/images/photos/relawan/relawan2.png",
-      description:
-        "10.295 warga terdampak, ratusan rumah rusak. Ayo bantu segera!",
-      joined: 5,
-      total: 10,
-    },
-    {
-      id: 3,
-      name: "Bantu Muslim Selesaikan Masjidnya",
-      role: "Relawan Logistik",
-      lokasi: "Temanggung, Jawa Tengah",
-      left: "sisa 7 hari",
-      category: "Gotongroyong",
-      image: "../src/assets/images/photos/relawan/relawan3.png",
-      description: "Patungan bangun kembali Masjid Nurul Bhakti, Lubuk Rasak.",
-      joined: 12,
-      total: 20,
-    },
-    {
-      id: 4,
-      name: "Bangun Asrama Santri Penghafal Al Qur’an ",
-      left: "sisa 5 hari",
-      lokasi: "Semarang, Jawa Tengah",
-      category: "Sosial",
-      image: "../src/assets/images/photos/relawan/relawan4.png",
-      description:
-        "Belum memiliki asrama, santri penghafal quran tidur di aula....",
-      joined: 8,
-      total: 12,
-    },
-    {
-      id: 5,
-      name: "Panen Pahala jariyah, Sedekah Alat Sholat",
-      left: "sisa 10 hari",
-      lokasi: "Demak , Jawa Tengah",
-      category: "Sosial",
-      image: "../src/assets/images/photos/relawan/relawan5.png",
-      description:
-        "Bagaimana bisa beribadah dengan khusyuk jika alat sholat masih lusuh? Yuk, bantu!",
-      joined: 14,
-      total: 25,
-    },
-    {
-      id: 6,
-      name: "Yuk , Muliakan Anak yatim Sekarang!k",
-      left: "sisa 3 hari",
-      lokasi: "Banyuwangi, Jawa Timur",
-      category: "Sosial",
-      image: "../src/assets/images/photos/relawan/relawan6.png",
-      description:
-        "Kirim 1000 kado yatim untuk anak yatim di seluruh Indonesia",
-      joined: 9,
-      total: 15,
-    },
-  ];
+  useEffect(() => {
+    const fetchRelawan = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token"); // Pastikan token disimpan di localStorage setelah login
+        if (!token) {
+          throw new Error(
+            "Token tidak ditemukan, silakan login terlebih dahulu."
+          );
+        }
+        console.log("Fetching data with token:", token);
 
-  // Mencari relawan berdasarkan id
-  const RelawanData = relawan.find((relawan) => relawan.id === parseInt(id));
+        const response = await axios.get(
+          `https://relawanku.xyz/api/v1/user/program/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (response.data && response.data.data) {
+          setRelawanData(response.data.data); // Mengambil data dari response yang benar
+
+          // Ambil tanggal acara (misalnya, tanggal mulai acara)
+          const eventDate = new Date(response.data.data.end_date); // Pastikan format tanggal sesuai
+          const currentDate = new Date(response.data.data.start_date);
+          const timeDiff = eventDate - currentDate; // Menghitung selisih waktu dalam milidetik
+          const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24)); // Menghitung sisa hari
+          setDaysLeft(daysRemaining); // Simpan sisa hari dalam state
+        } else {
+          setError("Data tidak ditemukan");
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err.response || err);
+        setError(
+          err.response
+            ? `Error: ${err.response.status} - ${err.response.data.message}`
+            : "Gagal memuat data dari server"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRelawan();
+  }, [id]); // Menggunakan id sebagai dependency
+
+  if (isLoading) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500 py-10">{error}</div>;
+  }
+
+  if (!relawanData) {
+    return <div className="text-center py-10">Data tidak ditemukan</div>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -109,12 +98,8 @@ const DetailRelawan = () => {
             {/* Konten Relawan (Kiri) */}
             <div className="flex-1 lg:w-2/3 bg-white p-6 rounded-lg shadow-md">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                {RelawanData.name}
+                {relawanData.title}
               </h1>
-              <h3 className="text-2xl text-gray-900 mb-4">
-                {RelawanData.role}
-              </h3>
-              <p className="text-sm text-gray-500 mb-4">{RelawanData.date}</p>
               <div className="mt-6">
                 <a
                   href="/relawan/pendaftaran"
@@ -124,12 +109,12 @@ const DetailRelawan = () => {
                 </a>
               </div>
               <img
-                src={RelawanData.image}
-                alt={RelawanData.name}
+                src={relawanData.image_url}
+                alt={relawanData.title}
                 className="my-6 w-full h-auto rounded-lg"
               />
               <p className="text-lg text-gray-700 mt-6">
-                {RelawanData.description}
+                {relawanData.details}
               </p>
             </div>
 
@@ -141,12 +126,18 @@ const DetailRelawan = () => {
                 </h2>
                 <ul className="text-sm text-black mb-4">
                   <li>
-                    <span className="font-bold">📍 Lokasi: </span>Palu, Sulawesi
-                    Tengah
+                    <span className="font-bold">📍 </span>
+                    {relawanData.location}
                   </li>
                   <li>
-                    <span className="font-bold">📅 Tanggal: </span>1 - 4
-                    Desember 2024
+                    {/* Menampilkan sisa hari */}
+                    {daysLeft !== null && (
+                      <p className="text-sm text-gray-600 mb-4">
+                        {daysLeft > 0
+                          ? `📅 Acara berakhir ${daysLeft} hari.`
+                          : `Acara sudah dimulai.`}
+                      </p>
+                    )}
                   </li>
                 </ul>
                 <h3 className="text-md font-bold text-black mb-2">
@@ -166,7 +157,6 @@ const DetailRelawan = () => {
                     Memperoleh pengalaman baru
                   </li>
                 </ul>
-                {/* Tombol Daftar */}
               </div>
             </div>
           </div>
