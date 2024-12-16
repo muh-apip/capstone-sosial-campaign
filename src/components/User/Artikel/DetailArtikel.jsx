@@ -11,15 +11,16 @@ const DetailArtikel = () => {
   const [articleData, setArticleData] = useState(null); // State untuk menyimpan data artikel
   const [isLoading, setIsLoading] = useState(true); // State untuk loading
   const [error, setError] = useState(null); // State untuk error handling
-  const [relatedArticles, setRelatedArticles] = useState([]); // Gunakan array kosong
 
-  // Fetch detail artikel utama
   useEffect(() => {
     const fetchArticleData = async () => {
+      setIsLoading(true);
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token"); // Pastikan token diambil dari localStorage
         if (!token) {
-          throw new Error("Token not found");
+          throw new Error(
+            "Token tidak ditemukan, silakan login terlebih dahulu."
+          );
         }
 
         const response = await axios.get(
@@ -27,58 +28,44 @@ const DetailArtikel = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
             },
           }
         );
 
-        setArticleData(response.data); // Menyimpan data artikel utama
+        if (response.data && response.data.data) {
+          setArticleData(response.data.data); // Menyimpan data artikel
+        } else {
+          throw new Error("Data artikel tidak ditemukan.");
+        }
       } catch (err) {
-        console.error("Failed to fetch article data", err);
-        setError("Failed to load article");
+        console.error("Error fetching article data:", err.response || err);
+        setError(
+          err.response
+            ? `Error: ${err.response.status} - ${err.response.data.message}`
+            : "Gagal memuat data dari server."
+        );
       } finally {
-        setIsLoading(false); // Matikan loading di akhir
+        setIsLoading(false);
       }
     };
 
     fetchArticleData();
   }, [id]);
 
-  // Fetch artikel terkait
-  useEffect(() => {
-    const fetchRelatedArticles = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Token not found");
-        }
-
-        const response = await axios.get(
-          "https://relawanku.xyz/api/v1/user/articles",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const data = response.data;
-        setRelatedArticles(Array.isArray(data) ? data : []); // Pastikan selalu array
-      } catch (err) {
-        console.error("Failed to fetch related articles", err);
-        setRelatedArticles([]); // Set ke array kosong jika error
-      }
-    };
-
-    fetchRelatedArticles();
-  }, []);
-
-  // Tampilkan loading atau error jika diperlukan
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="text-center py-10">Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center text-red-500 py-10">{error}</div>;
+  }
+
+  if (!articleData) {
+    return (
+      <div className="text-center py-10">Data artikel tidak ditemukan</div>
+    );
   }
 
   return (
@@ -94,22 +81,22 @@ const DetailArtikel = () => {
           {/* Artikel Content (Kiri) */}
           <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              {articleData?.Title || "Article Title"}
+              {articleData.title || "Article Title"}
             </h1>
             <h3 className="text-2xl text-gray-900 mb-4">
-              {articleData?.Category || "Category"}
+              {articleData.category || "Category"}
             </h3>
             <p className="text-sm text-gray-500 mb-4">
-              {new Date(articleData?.CreatedAt).toLocaleDateString("id-ID") ||
+              {new Date(articleData.created_at).toLocaleDateString("id-ID") ||
                 "Creation Date"}
             </p>
             <img
-              src={articleData?.ImageUrl || "/path/to/default-image.png"}
-              alt={articleData?.Title || "Article Image"}
+              src={articleData.image_url || "/path/to/default-image.png"}
+              alt={articleData.title || "Article Image"}
               className="my-6 w-full h-auto rounded-lg"
             />
             <p className="text-lg text-gray-700">
-              {articleData?.Content || "No content available"}
+              {articleData.content || "No content available"}
             </p>
           </div>
 
@@ -129,15 +116,42 @@ const DetailArtikel = () => {
                   className="w-full h-48 object-cover rounded-t-lg mb-4"
                 />
                 <p className="text-xl text-black font-bold mb-2">
-                  Bantu Warga Terdampak Erupsi Gunung
+                  Solidaritas Bantu Korban Banjir & Longsor
                 </p>
                 <p className="text-sm text-black mb-2">
-                  {new Date(articleData?.CreatedAt).toLocaleDateString(
+                  {new Date(articleData.created_at).toLocaleDateString(
                     "id-ID"
                   ) || "Donation Date"}
                 </p>
                 <p className="text-sm text-gray-500 mb-6">
-                  10.295 warga terdampak, ratusan rumah rusak. Ayo bantu segera!
+                  Ribuan warga terdampak hingga harus kehilangan nyawa. Ayo
+                  bantu segera!
+                </p>
+                <button
+                  onClick={() => navigate("/donasi")}
+                  className="text-lg text-blue-500 font-bold hover:underline"
+                >
+                  Detail Donasi &gt;
+                </button>
+              </div>
+              {/* Donasi (Placeholder untuk Komponen Dinamis) */}
+              <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+                <img
+                  src="/img/donasi4.png"
+                  alt="Donasi"
+                  className="w-full h-48 object-cover rounded-t-lg mb-4"
+                />
+                <p className="text-xl text-black font-bold mb-2">
+                  Bantuan Modal, Pejuang mencari Nafkah
+                </p>
+                <p className="text-sm text-black mb-2">
+                  {new Date(articleData.created_at).toLocaleDateString(
+                    "id-ID"
+                  ) || "Donation Date"}
+                </p>
+                <p className="text-sm text-gray-500 mb-6">
+                  Berjuang hingga usia senja demi keluarga. Bantu kuatkan
+                  pejuang keluarga mencari nafkah!
                 </p>
                 <button
                   onClick={() => navigate("/donasi")}
@@ -147,51 +161,6 @@ const DetailArtikel = () => {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Grid Artikel Terkait */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Artikel Terkait
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {relatedArticles.length === 0 ? (
-              <p>No related articles found</p>
-            ) : (
-              relatedArticles.map(
-                ({ ID, Title, ImageUrl, Category, Content, CreatedAt }) => (
-                  <div
-                    key={ID}
-                    className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
-                    onClick={() => navigate(`/artikel/${ID}`)}
-                  >
-                    <img
-                      src={ImageUrl || "/path/to/default-image.png"}
-                      alt={Title}
-                      className="h-48 w-full object-cover"
-                    />
-                    <div className="p-4 sm:p-6">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                        {Title || "Article Title"}
-                      </h3>
-                      <p className="text-sm font-bold text-custom-green tracking-wider uppercase">
-                        {Category || "No Category"}
-                      </p>
-                      <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                        {Content || "No content available"}
-                      </p>
-                      <hr className="my-2 border-t-2 border-gray-100" />
-                      <div className="mt-4 flex justify-between items-center">
-                        <span className="text-xs text-gray-500">
-                          {new Date(CreatedAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )
-              )
-            )}
           </div>
         </div>
       </div>
