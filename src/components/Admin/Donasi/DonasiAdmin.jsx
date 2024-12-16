@@ -37,10 +37,10 @@ const DonasiAdmin = () => {
         );
 
         console.log("Respons API:", response.data); // Debugging
-
         const data = response.data.data || [];
-        setDonasiData(data); // Mengisi data asli
-        setFilteredDonasiData(data); // Default: semua data
+        console.log("Data yang diterima:", data); // Verifikasi apakah lokasi ada
+        setDonasiData(data);
+        setFilteredDonasiData(data);
       } catch (err) {
         console.error("Error API:", err.response?.data || err.message); // Debugging
         setError(
@@ -186,6 +186,7 @@ const DonasiAdmin = () => {
                         <td className="py-4 px-6 text-left">
                           {item.Title || "Tidak ada judul"}
                         </td>
+
                         <td className="py-4 px-6 text-left">
                           {item.StartedAt && item.FinishedAt
                             ? (() => {

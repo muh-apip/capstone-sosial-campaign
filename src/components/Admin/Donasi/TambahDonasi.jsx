@@ -41,19 +41,23 @@ const TambahDonasi = () => {
 
     const formDataToSend = new FormData();
     for (const key in formData) {
-      formDataToSend.append(key, formData[key]);
+      formDataToSend.append(key, formData[key]); // Pastikan data formData termasuk location
     }
 
     console.log("Kategori yang dipilih:", formData.category); // Check the selected category
 
     try {
-      const response = await fetch("https://relawanku.xyz/api/v1/admin/donasi", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formDataToSend,
-      });
+      const response = await fetch(
+        "https://relawanku.xyz/api/v1/admin/donasi",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formDataToSend,
+        }
+      );
+        console.log("Data yang akan dikirim:", formData);
 
       if (!response.ok) {
         throw new Error("Gagal menambahkan donasi. Silakan coba lagi.");
@@ -94,7 +98,9 @@ const TambahDonasi = () => {
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             {error && <p className="text-red-500 mb-4">{error}</p>}
-            {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
+            {successMessage && (
+              <p className="text-green-500 mb-4">{successMessage}</p>
+            )}
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label
@@ -111,7 +117,9 @@ const TambahDonasi = () => {
                 >
                   <option value="">Pilih Kategori</option>
                   <option value="Bencana Alam">Bencana Alam</option>
-                  <option value="Pelestarian Lingkungan">Pelestarian Lingkungan</option>
+                  <option value="Pelestarian Lingkungan">
+                    Pelestarian Lingkungan
+                  </option>
                   <option value="Sosial">Sosial</option>
                 </select>
               </div>
@@ -210,10 +218,10 @@ const TambahDonasi = () => {
                 </label>
                 <input
                   type="text"
-                  id="location"
+                  id="location" // id yang digunakan di sini adalah "location"
                   className="w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
                   placeholder="Masukkan tempat lokasi"
-                  value={formData.location}
+                  value={formData.location} // nilai yang diikat ke state location
                   onChange={handleChange}
                 />
               </div>

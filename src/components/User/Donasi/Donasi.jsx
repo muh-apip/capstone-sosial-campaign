@@ -20,7 +20,7 @@ const Donasi = () => {
   ];
 
   useEffect(() => {
-    const fetchCampaigns = async () => {
+    const  fetchDonationData = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
@@ -48,7 +48,7 @@ const Donasi = () => {
       }
     };
   
-    fetchCampaigns();
+    fetchDonationData();
   }, []);
   
 
@@ -118,7 +118,7 @@ const Donasi = () => {
             {filteredCampaigns.map((campaign, index) => (
               <Link
                 key={index}
-                to={`/donasi/${campaign.id}`}
+                to={`/donasi/${campaign.ID}`}
                 className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col h-full"
               >
                 {/* Campaign Image */}
