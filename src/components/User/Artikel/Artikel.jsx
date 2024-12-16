@@ -68,7 +68,7 @@ const Artikel = () => {
   const totalPages = Math.ceil(filteredArtikel.length / articlesPerPage);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
@@ -97,48 +97,62 @@ const Artikel = () => {
             </div>
           </div>
 
-          {/* Grid Artikel */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {isLoading ? (
-              <p>Loading articles...</p>
-            ) : error ? (
-              <p className="text-red-500">{error}</p>
-            ) : currentArticles.length === 0 ? (
-              <p>No articles found</p>
-            ) : (
-              currentArticles.map(
-                ({ ID, Title, ImageUrl, Category, Content, CreatedAt }) => (
-                  <div
-                    key={ID}
-                    className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
-                    onClick={() => navigate(`/artikel/${ID}`)}
-                  >
-                    <img
-                      src={ImageUrl || "/path/to/default-image.png"}
-                      alt={Title}
-                      className="h-48 w-full object-cover"
-                    />
-                    <div className="p-4 sm:p-6">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                        {Title || "Article Title"}
-                      </h3>
-                      <p className="text-sm font-bold text-custom-green tracking-wider uppercase">
-                        {Category || "No Category"}
-                      </p>
-                      <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                        {Content || "No content available"}
-                      </p>
-                      <hr className="my-2 border-t-2 border-gray-100" />
-                      <div className="mt-4 flex justify-between items-center">
-                        <span className="text-xs text-gray-500">
-                          {new Date(CreatedAt).toLocaleDateString()}
-                        </span>
+          {/* Content Area */}
+          <div className="flex-1 p-2 bg-gray-100">
+            {/* Header Section */}
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">
+                Baca dan temukan inspirasi untuk aksi sosialmu berikutnya
+              </h1>
+              <p className="text-black text-sm">
+                Menampilkan <strong>{filteredArtikel.length}</strong> bacaan
+                dari 138 artikel
+              </p>
+            </div>
+
+            {/* Grid Artikel */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {isLoading ? (
+                <p>Loading articles...</p>
+              ) : error ? (
+                <p className="text-red-500">{error}</p>
+              ) : currentArticles.length === 0 ? (
+                <p>No articles found</p>
+              ) : (
+                currentArticles.map(
+                  ({ ID, Title, ImageUrl, Category, Content, CreatedAt }) => (
+                    <div
+                      key={ID}
+                      className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
+                      onClick={() => navigate(`/artikel/${ID}`)}
+                    >
+                      <img
+                        src={ImageUrl || "/path/to/default-image.png"}
+                        alt={Title}
+                        className="h-48 w-full object-cover"
+                      />
+                      <div className="p-4 sm:p-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                          {Title || "Article Title"}
+                        </h3>
+                        <p className="text-sm font-bold text-custom-green tracking-wider uppercase">
+                          {Category || "No Category"}
+                        </p>
+                        <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                          {Content || "No content available"}
+                        </p>
+                        <hr className="my-2 border-t-2 border-gray-100" />
+                        <div className="mt-4 flex justify-between items-center">
+                          <span className="text-xs text-gray-500">
+                            {new Date(CreatedAt).toLocaleDateString()}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )
                 )
-              )
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
