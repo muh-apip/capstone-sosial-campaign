@@ -11,55 +11,68 @@ const EditKegiatanAdmin = () => {
 
   const [formData, setFormData] = useState({
     category: "",
-    title: "",
     subtitle: "",
+    title: "",
     details: "",
     start_date: "",
     end_date: "",
     location: "",
-    target: "",
-    image: null,
+    quota: "",
+    image_url: "",
   });
 
   const handleChange = (e) => {
     const { id, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [id]: files ? files[0] : value, // Untuk upload file
-    });
+
+    if (files && files.length > 0) {
+      console.log(`File dipilih: ${files[0].name}`);
+      setFormData({ ...formData, [id]: files[0] });
+    } else {
+      setFormData({ ...formData, [id]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const formDataToSend = new FormData(); // Untuk handle data + file
-      formDataToSend.append("category", formData.category);
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("subtitle", formData.subtitle);
-      formDataToSend.append("details", formData.details);
-      formDataToSend.append("start_date", formData.start_date);
-      formDataToSend.append("end_date", formData.end_date);
-      formDataToSend.append("location", formData.location);
-      formDataToSend.append("target", formData.target);
-      if (formData.image_url)
-        formDataToSend.append("image", formData.image_url);
+      const formDataToSend = new FormData();
 
+      // Tambahkan semua field teks
+      Object.keys(formData).forEach((key) => {
+        if (key !== "image_url" && formData[key]) {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+
+      // Tambahkan file gambar
+      if (formData.image_url) {
+        formDataToSend.append("image", formData.image_url); // Sesuaikan nama field
+      } else {
+        console.warn("File gambar belum dipilih!");
+      }
+
+      console.log("FormData yang dikirim:");
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      // Kirim request
       await axios.put(
         `https://relawanku.xyz/api/v1/admin/program/${id}`,
         formDataToSend,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", // Penting untuk file upload
+            // Content-Type tidak perlu diatur secara manual
           },
         }
       );
 
       alert("Data berhasil diperbarui!");
-      navigate("/kegiatan-relawan-admin"); // Redirect setelah update
+      navigate("/relawan-admin");
     } catch (error) {
-      console.error("Error updating data:", error);
+      console.error("Error Response:", error.response?.data);
       alert(
         error.response?.data?.message ||
           "Terjadi kesalahan saat menyimpan data."
@@ -164,24 +177,24 @@ const EditKegiatanAdmin = () => {
 
             {/* Target Peserta */}
             <div className="mb-4">
-              <label className="block text-gray-700">Target Peserta</label>
+              <label className="block text-gray-700">Quota</label>
               <input
                 type="text"
-                id="target"
-                value={formData.target}
+                id="quota"
+                value={formData.quota}
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
               />
             </div>
 
-            {/* Upload Gambar */}
             <div className="mb-4">
-              <label className="block text-gray-700">Upload Gambar</label>
+              <label className="block text-gray-700">Gambar</label>
               <input
                 type="file"
-                id="image"
+                id="image_url" // Pastikan ID ini sesuai dengan yang diharapkan API
                 onChange={handleChange}
                 className="w-full p-2 border rounded"
+                accept="image/*"
               />
             </div>
 
