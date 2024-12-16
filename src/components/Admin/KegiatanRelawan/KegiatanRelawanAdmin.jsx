@@ -180,9 +180,19 @@ const KegiatanRelawanAdmin = () => {
                         key={item.id}
                         className="bg-white hover:bg-gray-100 transition-colors"
                       >
-                        <td className="px-6 py-4 text-center">{item.ID}</td>
+                        <td className="px-6 py-4 text-center">{index + 1}</td>
                         <td className="px-6 py-4">{item.title}</td>
-                        <td className="px-6 py-4">{item.end_date}</td>
+                        <td className="px-6 py-4">
+                          {item.start_date && item.end_date
+                            ? (() => {
+                                const startedAtDate = new Date(item.start_date);
+                                const finishedAtDate = new Date(item.end_date);
+                                const timeDiff = finishedAtDate - startedAtDate;
+                                const dayDiff = timeDiff / (1000 * 3600 * 24);
+                                return `${Math.floor(dayDiff)} hari`;
+                              })()
+                            : "-"}
+                        </td>
                         <td className="px-6 py-4">{item.quota}</td>
                         <td className="px-6 py-4">{item.category}</td>
                         <td className="px-6 py-4 text-center flex justify-center space-x-2">
