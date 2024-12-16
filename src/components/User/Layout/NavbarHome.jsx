@@ -69,7 +69,7 @@ const NavbarHome = ({ onSearch }) => {
 
         if (response.data.status) {
           setProfileImage(
-            response.data.data.image_url || "/images/default-profile.png"
+            response.data.data.image_url || "https://via.placeholder.com/32"
           );
         } else {
           console.error("Failed to fetch profile data:", response.data.message);
