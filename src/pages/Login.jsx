@@ -19,32 +19,32 @@ export default function Login() {
       setIsModalOpen(true);
       return;
     }
-  
+
     try {
       const response = await axios.post("https://relawanku.xyz/api/v1/login", {
         username,
         password,
       });
-  
+
       console.log("API Response:", response.data); // Debug response
-  
+
       if (response.data?.data) {
         const token = response.data.data.token;
         const userRole = response.data.data.role;
         const userId = response.data.data.id; // Ensure userId is in the response
-  
+
         console.log("User Role:", userRole);
         console.log("User ID:", userId); // Debug userId
-  
+
         localStorage.setItem("token", token);
         localStorage.setItem("userId", userId); // Store userId in localStorage
-  
+
         if (userRole === "admin") {
           navigate("/dashboard");
         } else {
           navigate("/home");
         }
-  
+
         // Clear input fields after successful login
         setUsername("");
         setPassword("");
@@ -60,8 +60,6 @@ export default function Login() {
       setIsModalOpen(true);
     }
   };
-  
-  
 
   return (
     <div className="min-h-screen flex">
