@@ -13,9 +13,9 @@ const EditDonasi = () => {
     news: "",
     started_at: "",
     finished_at: "",
+    location: "",  
     target_donation: "",
     image_url: null,
-    location: "",  // Pastikan tidak ada karakter aneh setelahnya
   });  
 
   const [error, setError] = useState(null);
@@ -118,9 +118,9 @@ const EditDonasi = () => {
         news: "",
         started_at: "",
         finished_at: "",
+        location: "", 
         target_donation: "",
         image_url: null,
-        location: "", 
       });
       navigate("/donasi-admin");
     } catch (err) {

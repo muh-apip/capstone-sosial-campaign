@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../Layout/Sidebar";
 import NavbarAdmin from "../Layout/NavbarAdmin";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const ClientsAdmin = () => {
@@ -30,12 +31,14 @@ const ClientsAdmin = () => {
               Accept: "application/json",
             },
           }
+          
         );
-
+        
         // Periksa apakah data berupa array atau properti "data"
         const fetchedData = Array.isArray(response.data)
           ? response.data
           : response.data.data || [];
+          console.log("Fetched Clients Data:", fetchedData);
 
         setAllData(fetchedData);
       } catch (error) {
@@ -71,6 +74,12 @@ const ClientsAdmin = () => {
     setShowModal(false);
   };
 
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "long", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("id-ID", options);
+  };
+  
+
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-100">
       {/* Sidebar component */}
@@ -86,9 +95,11 @@ const ClientsAdmin = () => {
         {/* Table Content */}
         <div className="p-6 flex-1 overflow-auto">
           {/* Breadcrumb */}
-          <div className="text-sm text-gray-500 mb-4 p-4">
-            Dashboard /{" "}
-            <span className="text-gray-800 font-semibold">Clients</span>
+          <div className="text-sm text-gray-500 mb-6">
+            <Link to="/dashboard" className="hover:text-gray-800">
+              Dashboard /
+            </Link>{" "}
+            <span className="text-gray-800 font-semibold">Donasi</span>
           </div>
 
           <div className="overflow-x-auto bg-white shadow-md rounded-md">
@@ -121,27 +132,15 @@ const ClientsAdmin = () => {
                     <td className="px-6 py-4 text-center">{item.id}</td>
                     <td className="px-6 py-4">{item.username}</td>
                     <td className="px-6 py-4">{item.email}</td>
-                    <td className="px-6 py-4">{item.created_at}</td>
+                    <td className="px-6 py-4">{formatDate(item.tanggal_registrasi)}</td>
+
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => handleDelete(item)}
                         className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
                         title="Hapus"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M19 7l-.867 12.142A2 2 0 0116.136 21H7.864a2 2 0 01-1.997-1.858L5 7m5-4h4m-4 0a2 2 0 00-2 2m6-2a2 2 0 012 2m-8 0h8"
-                          />
-                        </svg>
+                         <i className="fas fa-trash"></i>
                       </button>
                     </td>
                   </tr>

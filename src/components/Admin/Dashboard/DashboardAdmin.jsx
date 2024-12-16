@@ -6,26 +6,21 @@ import NavbarAdmin from "../Layout/NavbarAdmin";
 import axios from "axios"; // Import axios for fetching data
 
 const DashboardAdmin = () => {
-  const [artikelData, setArtikelData] = useState([]); // State to store article data
-  const [relawanData, setRelawanData] = useState([]); // State to store volunteer data
-  const [donasiData, setDonasiData] = useState([]); // State to store donation data
-  const [isLoading, setIsLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error handling state
+  const [artikelData, setArtikelData] = useState([]);
+  const [relawanData, setRelawanData] = useState([]);
+  const [donasiData, setDonasiData] = useState([]);
+  const [clientsData, setClientsData] = useState([]); // State untuk data pengguna
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Token not found");
-        }
+        if (!token) throw new Error("Token not found");
         const response = await axios.get(
           "https://relawanku.xyz/api/v1/admin/articles",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setArtikelData(response.data.data);
       } catch (err) {
@@ -37,16 +32,10 @@ const DashboardAdmin = () => {
     const fetchRelawan = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Token not found");
-        }
+        if (!token) throw new Error("Token not found");
         const response = await axios.get(
           "https://relawanku.xyz/api/v1/admin/programs",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setRelawanData(response.data.data);
       } catch (err) {
@@ -58,16 +47,10 @@ const DashboardAdmin = () => {
     const fetchDonasi = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Token not found");
-        }
+        if (!token) throw new Error("Token not found");
         const response = await axios.get(
-          "https://relawanku.xyz/api/v1/admin/donasi", // Assuming this is the donation endpoint
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          "https://relawanku.xyz/api/v1/admin/donasi",
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setDonasiData(response.data.data);
       } catch (err) {
@@ -76,10 +59,29 @@ const DashboardAdmin = () => {
       }
     };
 
-    // Fetch all data concurrently
+    const fetchClients = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("Token not found");
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/admin/clients",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setClientsData(response.data.data);
+      } catch (err) {
+        setError("Failed to fetch client data");
+        console.error(err);
+      }
+    };
+
     const fetchData = async () => {
       setIsLoading(true);
-      await Promise.all([fetchArticles(), fetchRelawan(), fetchDonasi()]);
+      await Promise.all([
+        fetchArticles(),
+        fetchRelawan(),
+        fetchDonasi(),
+        fetchClients(),
+      ]);
       setIsLoading(false);
     };
 
@@ -119,22 +121,11 @@ const DashboardAdmin = () => {
             <CardStats title="Artikel" count={artikelData.length} />
             <CardStats title="Kegiatan Donasi" count={donasiData.length} />
             <CardStats title="Kegiatan Relawan" count={relawanData.length} />
-            <CardStats title="Pengguna" count="200" />
+            <CardStats title="Pengguna" count={clientsData.length} />
           </div>
 
           {/* Tables Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <TableSection
-              title="Transaksi Terbaru"
-              headers={[
-                "No",
-                "Tanggal Transaksi",
-                "Username",
-                "Jumlah",
-                "Status",
-              ]}
-              data={[["IN-00178", "19/10/2024", "fashih12_", "50,000", "PAID"]]}
-            />
             <TableSection
               title="Artikel"
               headers={["Judul Artikel", "Kategori", "Tanggal Publikasi"]}
@@ -165,6 +156,17 @@ const DashboardAdmin = () => {
                 ).toLocaleDateString()}`,
                 `${item.quota}` || "Tidak ada target anggota",
               ])}
+            />
+            <TableSection
+              title="Transaksi Terbaru"
+              headers={[
+                "No",
+                "Tanggal Transaksi",
+                "Username",
+                "Jumlah",
+                "Status",
+              ]}
+              data={[["IN-00178", "19/10/2024", "fashih12_", "50,000", "PAID"]]}
             />
           </div>
         </div>
