@@ -116,7 +116,7 @@ const DetailArtikel = () => {
                   className="w-full h-48 object-cover rounded-t-lg mb-4"
                 />
                 <p className="text-xl text-black font-bold mb-2">
-                  Bantu Warga Terdampak Erupsi Gunung
+                  Solidaritas Bantu Korban Banjir & Longsor
                 </p>
                 <p className="text-sm text-black mb-2">
                   {new Date(articleData.created_at).toLocaleDateString(
@@ -124,7 +124,8 @@ const DetailArtikel = () => {
                   ) || "Donation Date"}
                 </p>
                 <p className="text-sm text-gray-500 mb-6">
-                  10.295 warga terdampak, ratusan rumah rusak. Ayo bantu segera!
+                  Ribuan warga terdampak hingga harus kehilangan nyawa. Ayo
+                  bantu segera!
                 </p>
                 <button
                   onClick={() => navigate("/donasi")}
@@ -136,12 +137,12 @@ const DetailArtikel = () => {
               {/* Donasi (Placeholder untuk Komponen Dinamis) */}
               <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <img
-                  src="../src/assets/images/photos/Donasi1.png"
+                  src="/img/donasi4.png"
                   alt="Donasi"
                   className="w-full h-48 object-cover rounded-t-lg mb-4"
                 />
                 <p className="text-xl text-black font-bold mb-2">
-                  Bantu Warga Terdampak Erupsi Gunung
+                  Bantuan Modal, Pejuang mencari Nafkah
                 </p>
                 <p className="text-sm text-black mb-2">
                   {new Date(articleData.created_at).toLocaleDateString(
@@ -149,7 +150,8 @@ const DetailArtikel = () => {
                   ) || "Donation Date"}
                 </p>
                 <p className="text-sm text-gray-500 mb-6">
-                  10.295 warga terdampak, ratusan rumah rusak. Ayo bantu segera!
+                  Berjuang hingga usia senja demi keluarga. Bantu kuatkan
+                  pejuang keluarga mencari nafkah!
                 </p>
                 <button
                   onClick={() => navigate("/donasi")}
