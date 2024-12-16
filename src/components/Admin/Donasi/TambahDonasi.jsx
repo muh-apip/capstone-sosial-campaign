@@ -59,6 +59,7 @@ const TambahDonasi = () => {
       );
         console.log("Data yang akan dikirim:", formData);
 
+
       if (!response.ok) {
         throw new Error("Gagal menambahkan donasi. Silakan coba lagi.");
       }
