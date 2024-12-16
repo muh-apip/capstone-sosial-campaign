@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import NavbarHome from "../Layout/NavbarHome";
-import { generateContent } from "../../../services/generativeAIService"
-
+import { generateContent } from "../../../services/generativeAIService";
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([
@@ -34,9 +33,8 @@ const ChatBot = () => {
       </div>
       <div className="flex flex-col min-h-screen bg-green-100 p-6">
         <div
-          className="bg-white rounded-lg shadow-lg p-4 mx-auto flex flex-col"
+          className="bg-white rounded-lg shadow-lg p-4 mx-auto flex flex-col sm:w-full md:w-[1101px] lg:w-[1101px]"
           style={{
-            width: "1101px",
             height: "700px",
             top: "96px",
             left: "206px",

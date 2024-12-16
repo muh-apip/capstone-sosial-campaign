@@ -222,7 +222,7 @@ const Profile = () => {
                 <ProfileField
                   label="Email"
                   value={profileData.email}
-                  editable={true}  // Change to true to allow editing
+                  editable={false}  // Change to true to allow editing
                   isEditing={editingField === "email"}
                   tempValue={tempValue}
                   setTempValue={setTempValue}

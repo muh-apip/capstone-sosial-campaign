@@ -1,41 +1,72 @@
-import React, { useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const DetailDonasi = () => {
-  const { id } = useParams();
-  const navigate = useNavigate(); // Inisialisasi navigasi
+  const { id } = useParams(); // ID dari URL
+  const navigate = useNavigate();
+  const [campaign, setCampaign] = useState(null); // State untuk menyimpan data kampanye
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("detailDonasi");
 
-  const campaigns = [
-    {
-      id: 1,
-      title: "Solidaritas Bantu Korban Banjir dan Longsor",
-      location: "Palu, Sulawesi Tengah",
-      collected: "Rp 17.802.477",
-      target: "Rp 18.000.000",
-      progress: 50,
-      image: "/img/donasi1.png",
-      description: `
-        Innalillahi Wainnailaihi Rajiun. Diguyur hujan deras terus menerus selama dua hari,
-        5 orang meninggal dunia setelah terseret arus sungai. Banjir menyebabkan akses jalan utama
-        putus dan ratusan warga terpaksa bertahan di rumah pengungsian. Mari bersama membantu
-        para korban dengan berdonasi melalui platform kami atau mendukung mereka dengan doa terbaik.
-      `,
-    },
-  ];
+  useEffect(() => {
+    const fetchCampaign = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token tidak ditemukan. Silakan login.");
+        }
 
-  const campaign = campaigns.find((c) => c.id === parseInt(id));
+        // Fetch data dari API
+        const response = await axios.get(
+          `https://relawanku.xyz/api/v1/user/donasi/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+
+        // Periksa struktur data (menggunakan data dari properti `data`)
+        if (response.data && response.data.data) {
+          setCampaign(response.data.data);
+        } else {
+          throw new Error("Data kampanye tidak ditemukan.");
+        }
+      } catch (err) {
+        console.error("Error fetching campaign:", err.response || err);
+        setError(
+          err.response?.data?.message || "Terjadi kesalahan saat mengambil data."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampaign();
+  }, [id]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">Error: {error}</p>;
+  }
 
   if (!campaign) {
     return <p>Kampanye dengan ID {id} tidak ditemukan.</p>;
   }
 
   const handleDonasiSekarang = () => {
-    // Navigasi ke halaman InputDonasi
-    navigate(`/input-donasi/${campaign.id}`);
+    navigate(`/input-donasi/${campaign.id}`); // Gunakan ID dari response
   };
 
   const renderContent = () => {
@@ -58,33 +89,27 @@ const DetailDonasi = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarDetail />
       </div>
 
-      {/* Konten Detail */}
       <div className="flex-1 px-4 py-6 sm:px-6 lg:px-8 bg-gray-100">
-        {/* Breadcrumb */}
         <div className="text-sm text-gray-500 mb-4">
-            <Link to="/donasi" className="hover:text-gray-800">
-              Donasi /
-            </Link>
-            <span className="font-semibold text-gray-800"> Detail Donasi</span>
-          </div>
+          <Link to="/donasi" className="hover:text-gray-800">
+            Donasi /
+          </Link>
+          <span className="font-semibold text-gray-800"> Detail Donasi</span>
+        </div>
 
-        {/* Card Donasi */}
         <div className="flex flex-col md:flex-row gap-8 mb-8">
-          {/* Section Gambar */}
           <div className="flex-1">
             <img
-              src={campaign.image}
+              src={campaign.image_url}
               alt={campaign.title}
               className="rounded-lg w-full object-cover"
             />
           </div>
 
-          {/* Section Detail Donasi */}
           <div className="shadow-md bg-white rounded-lg p-6 sm:p-8 md:w-1/3 flex flex-col">
             <h1 className="text-xl sm:text-2xl font-semibold mb-4">
               {campaign.title}
@@ -105,7 +130,7 @@ const DetailDonasi = () => {
               {campaign.progress}% dari Target {campaign.target}
             </p>
             <button
-              onClick={handleDonasiSekarang} // Tambahkan onClick untuk navigasi
+              onClick={handleDonasiSekarang}
               className="bg-custom-green text-white font-semibold py-3 mt-6 rounded-lg hover:bg-green-600"
             >
               Donasi Sekarang
@@ -113,7 +138,6 @@ const DetailDonasi = () => {
           </div>
         </div>
 
-        {/* Tab Navigation */}
         <div className="bg-white shadow-md rounded-lg p-6 sm:p-8">
           <div className="flex border-b mb-6">
             <button

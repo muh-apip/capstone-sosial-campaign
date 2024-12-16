@@ -15,6 +15,7 @@ const EditDonasi = () => {
     finished_at: "",
     target_donation: "",
     image_url: null,
+    location: "", i
   });
 
   const [error, setError] = useState(null);
@@ -25,35 +26,38 @@ const EditDonasi = () => {
   useEffect(() => {
     const fetchDonasi = async () => {
       try {
-        const token = localStorage.getItem("token");  // Ambil token dari localStorage
+        const token = localStorage.getItem("token");
         if (!token) {
-          throw new Error("Token tidak ditemukan. Anda harus login terlebih dahulu.");
+          throw new Error(
+            "Token tidak ditemukan. Anda harus login terlebih dahulu."
+          );
         }
-  
+
         const response = await fetch(
-          `https://relawanku.xyz/api/v1/admin/donasi/`,
+          `https://relawanku.xyz/api/v1/admin/donasi/${id}`,
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`,  // Kirim token di header Authorization
+              Authorization: `Bearer ${token}`,
             },
           }
         );
-  
+
         if (!response.ok) {
           throw new Error("Form not found.");
         }
-  
+
         const data = await response.json();
-        setFormData(data.data);  // Update form data
+        setFormData(data.data); // Update form data
       } catch (error) {
-        setError(error.message);  // Menampilkan pesan error
+        setError(error.message); // Menampilkan pesan error
+      } finally {
+        setIsLoading(false); // Mengubah status loading setelah selesai
       }
     };
-  
+
     fetchDonasi();
   }, [id]);
-  
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -95,7 +99,9 @@ const EditDonasi = () => {
       // Check for errors in the update request
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Gagal memperbarui donasi. Silakan coba lagi.");
+        throw new Error(
+          errorData.message || "Gagal memperbarui donasi. Silakan coba lagi."
+        );
       }
 
       setSuccessMessage("Donasi berhasil diperbarui!");
@@ -108,6 +114,7 @@ const EditDonasi = () => {
         finished_at: "",
         target_donation: "",
         image_url: null,
+        location: "", 
       });
       navigate("/donasi-admin");
     } catch (err) {
@@ -248,7 +255,22 @@ const EditDonasi = () => {
                       />
                     </div>
                   </div>
-
+                  <div className="mb-4">
+                    <label
+                      htmlFor="location"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Lokasi
+                    </label>
+                    <input
+                      type="text"
+                      id="location"
+                      className="w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                      placeholder="Masukkan lokasi kegiatan"
+                      value={formData.location}
+                      onChange={handleChange}
+                    />
+                  </div>
                   <div className="mb-4">
                     <label
                       htmlFor="target_donation"
@@ -265,7 +287,6 @@ const EditDonasi = () => {
                       onChange={handleChange}
                     />
                   </div>
-
                   <div className="mb-4">
                     <label
                       htmlFor="image_url"
