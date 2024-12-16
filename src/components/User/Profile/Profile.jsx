@@ -79,25 +79,16 @@ const Profile = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token not found");
-      }
+      if (!token) throw new Error("Token not found");
   
       const formData = new FormData();
-  
-      // Handle updating profile image
       if (field === "profileImage" && imageFile) {
-        formData.append("profileImage", imageFile); // Attach the image to the form data
+        formData.append("image_url", imageFile);
       } else if (tempValue) {
-        formData.append(field, tempValue); // Attach other fields (username, gender, address, etc.)
+        formData.append(field, tempValue);
       } else {
         setError("No changes to save");
         return;
-      }
-  
-      // Ensure the form data is correctly appended for other fields
-      if (field !== "profileImage" && tempValue) {
-        formData.append(field, tempValue);
       }
   
       const response = await axios.put(
@@ -106,19 +97,26 @@ const Profile = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", // Ensure content type is multipart for file upload
+            "Content-Type": "multipart/form-data",
           },
         }
       );
   
+      console.log("Update response:", response.data);
       if (response.data.status) {
+        // Update profileData state with the latest data from the server
         setProfileData((prev) => ({
           ...prev,
-          [field]: field === "profileImage" ? response.data.data.image_url : tempValue,
+          [field]:
+            field === "profileImage"
+              ? response.data.data.image_url
+              : field === "password"
+              ? "********"
+              : tempValue,
         }));
-        setTempValue(""); // Clear temp value after saving
-        setImageFile(null); // Clear the selected image
-        setEditingField(null); // Close the editing field
+        setTempValue("");
+        setImageFile(null);
+        setEditingField(null);
       } else {
         setError(response.data.message || "Failed to update profile");
       }
@@ -129,6 +127,8 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
+  
+
   
 
   const handleImageChange = (e) => {
@@ -296,14 +296,25 @@ const ProfileField = ({
     <div className="flex gap-4 md:gap-24 items-center">
       <p className="text-sm text-gray-500 w-32">{label}</p>
       {isEditing ? (
-        <input
-          type="text"
-          className="text-base font-semibold text-gray-700 border-b border-gray-300 focus:outline-none"
-          value={tempValue}
-          onChange={(e) => setTempValue(e.target.value)}
-        />
+        label === "Password" ? (
+          <input
+            type="password" // Gunakan type password untuk menampilkan asterisks
+            className="text-base font-semibold text-gray-700 border-b border-gray-300 focus:outline-none"
+            value={tempValue}
+            onChange={(e) => setTempValue(e.target.value)}
+          />
+        ) : (
+          <input
+            type="text"
+            className="text-base font-semibold text-gray-700 border-b border-gray-300 focus:outline-none"
+            value={tempValue}
+            onChange={(e) => setTempValue(e.target.value)}
+          />
+        )
       ) : (
-        <p className="text-base font-semibold text-gray-700">{value}</p>
+        <p className="text-base font-semibold text-gray-700">
+          {label === "Password" ? "********" : value}
+        </p> // Tampilkan asterisks saat tidak mengedit password
       )}
     </div>
     {editable &&
@@ -332,5 +343,6 @@ const ProfileField = ({
       ))}
   </div>
 );
+
 
 export default Profile;

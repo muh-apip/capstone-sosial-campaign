@@ -157,7 +157,7 @@ const DonasiAdmin = () => {
                     <th className="py-4 px-6 text-left">Judul Kegiatan</th>
                     <th className="py-4 px-6 text-left">Rentang Waktu</th>
                     <th className="py-4 px-6 text-left">Target Donasi</th>
-                    <th className="py-4 px-6 text-left">Kategori</th>{" "}
+                    <th className="py-4 px-6 text-left">Kategori</th>
                     {/* Menambahkan kolom Category */}
                     <th className="py-4 px-6 text-center">Opsi</th>
                   </tr>
@@ -214,9 +214,17 @@ const DonasiAdmin = () => {
                           <div className="flex item-center justify-center">
                             <button
                               className="w-4 mr-2 transform hover:text-blue-500 hover:scale-110"
-                              onClick={() =>
-                                navigate(`/edit-donasi/${item.ID}`)
-                              }
+                              onClick={() => {
+                                if (!item.ID) {
+                                  console.error(
+                                    "ID tidak ditemukan pada item:",
+                                    item
+                                  );
+                                  alert("ID item tidak valid.");
+                                  return;
+                                }
+                                navigate(`/edit-donasi/${item.ID}`);
+                              }}
                             >
                               <i className="fas fa-edit"></i>
                             </button>

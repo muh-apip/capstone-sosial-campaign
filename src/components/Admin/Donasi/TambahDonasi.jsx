@@ -31,18 +31,20 @@ const TambahDonasi = () => {
     e.preventDefault();
     setError(null);
     setSuccessMessage("");
-
+  
     const token = localStorage.getItem("token");
     if (!token) {
       setError("Anda harus login terlebih dahulu.");
       return;
     }
-
+  
     const formDataToSend = new FormData();
     for (const key in formData) {
       formDataToSend.append(key, formData[key]);
     }
-
+  
+    console.log("Kategori yang dipilih:", formData.category); // Periksa kategori yang dipilih
+  
     try {
       const response = await fetch("https://relawanku.xyz/api/v1/admin/donasi", {
         method: "POST",
@@ -51,11 +53,11 @@ const TambahDonasi = () => {
         },
         body: formDataToSend,
       });
-
+  
       if (!response.ok) {
         throw new Error("Gagal menambahkan donasi. Silakan coba lagi.");
       }
-
+  
       setSuccessMessage("Donasi berhasil ditambahkan!");
       setFormData({
         category: "",
@@ -71,6 +73,7 @@ const TambahDonasi = () => {
       setError(err.message);
     }
   };
+  
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
@@ -106,9 +109,9 @@ const TambahDonasi = () => {
                   onChange={handleChange}
                 >
                   <option value="">Pilih Kategori</option>
-                  <option value="Sosial">Bencana Alam</option>
-                  <option value="Pendidikan">Pelestarian Lingkungan</option>
-                  <option value="Kesehatan">Sosial</option>
+                  <option value="Bencana Alam">Bencana Alam</option>
+                  <option value="Pelestarian Lingkungan">Pelestarian Lingkungan</option>
+                  <option value="Sosial">Sosial</option>
                 </select>
               </div>
 
