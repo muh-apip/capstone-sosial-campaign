@@ -15,41 +15,57 @@ const DonasiAdmin = () => {
 
   const navigate = useNavigate();
 
-  const categories = ["all", "Bencana Alam", "Pelestarian Lingkungan", "Sosial"];
+  const categories = [
+    "all",
+    "Bencana Alam",
+    "Pelestarian Lingkungan",
+    "Sosial",
+  ];
 
   useEffect(() => {
-    const fetchDonasiData = async () => {
+    const fetchDonasi = async () => {
       setIsLoading(true);
       try {
         const token = localStorage.getItem("token");
-        if (!token) throw new Error("Token not found");
+        if (!token) throw new Error("Token tidak ditemukan");
 
-        const response = await axios.get("https://relawanku.xyz/api/v1/admin/donasi", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/admin/donasi",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-        setDonasiData(response.data.data || []);
+        console.log("Respons API:", response.data); // Debugging
+
+        const data = response.data.data || [];
+        setDonasiData(data); // Mengisi data asli
+        setFilteredDonasiData(data); // Default: semua data
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch donation data");
+        console.error("Error API:", err.response?.data || err.message); // Debugging
+        setError(
+          err.response?.data?.message || "Gagal mengambil data kampanye"
+        );
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchDonasiData();
+    fetchDonasi();
   }, []);
 
   useEffect(() => {
+    console.log(donasiData); // Menampilkan data donasi untuk memverifikasi nama kategori
     if (selectedCategory === "all") {
       setFilteredDonasiData(donasiData);
     } else {
       setFilteredDonasiData(
-        donasiData.filter((donasi) => donasi.category === selectedCategory)
+        donasiData.filter((donasi) => donasi.Category === selectedCategory)
       );
     }
   }, [selectedCategory, donasiData]);
 
-  const handleDelete = async (item) => {
+  const handleDelete = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
@@ -57,17 +73,37 @@ const DonasiAdmin = () => {
   const confirmDelete = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("Token not found");
+      if (!token) throw new Error("Token tidak ditemukan");
 
-      await axios.delete(`https://relawanku.xyz/api/v1/admin/donasi/${selectedItem.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      console.log(`Deleting item with ID: ${selectedItem.ID}`);
 
-      setDonasiData((prevData) => prevData.filter((data) => data.id !== selectedItem.id));
+      const response = await axios.delete(
+        `https://relawanku.xyz/api/v1/admin/donasi/${selectedItem.ID}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("Delete response:", response.data);
+
+      // Hapus item dari donasiData dan filteredDonasiData
+      setDonasiData(
+        (prevData) => prevData.filter((data) => data.ID !== selectedItem.ID) // Memastikan ID sesuai dengan yang digunakan dalam data
+      );
+
+      // Perbarui filteredDonasiData untuk menghindari tampilan kosong
+      setFilteredDonasiData((prevData) =>
+        prevData.filter((data) => data.ID !== selectedItem.ID)
+      );
+
       setIsModalOpen(false);
       alert("Donasi berhasil dihapus.");
     } catch (err) {
-      alert("Gagal menghapus donasi: " + (err.response?.data?.message || err.message));
+      console.error("Delete error:", err.response?.data || err.message);
+      alert(
+        "Gagal menghapus donasi: " +
+          (err.response?.data?.message || err.message)
+      );
     }
   };
 
@@ -108,7 +144,9 @@ const DonasiAdmin = () => {
           </div>
           <div className="overflow-x-auto bg-white shadow-md rounded-md">
             {isLoading ? (
-              <div className="p-6 text-center text-gray-500">Memuat data...</div>
+              <div className="p-6 text-center text-gray-500">
+                Memuat data...
+              </div>
             ) : error ? (
               <div className="p-6 text-center text-red-500">{error}</div>
             ) : (
@@ -119,39 +157,80 @@ const DonasiAdmin = () => {
                     <th className="py-4 px-6 text-left">Judul Kegiatan</th>
                     <th className="py-4 px-6 text-left">Rentang Waktu</th>
                     <th className="py-4 px-6 text-left">Target Donasi</th>
+                    <th className="py-4 px-6 text-left">Kategori</th>{" "}
+                    {/* Menambahkan kolom Category */}
                     <th className="py-4 px-6 text-center">Opsi</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredDonasiData.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      className={`border-b border-gray-200 hover:bg-gray-100 ${
-                        index % 2 === 0 ? "bg-gray-50" : ""
-                      }`}
-                    >
-                      <td className="py-4 px-6 text-left whitespace-nowrap">{index + 1}</td>
-                      <td className="py-4 px-6 text-left">{item.title}</td>
-                      <td className="py-4 px-6 text-left">{item.time}</td>
-                      <td className="py-4 px-6 text-left">{item.target}</td>
-                      <td className="py-4 px-6 text-center">
-                        <div className="flex item-center justify-center">
-                          <button
-                            className="w-4 mr-2 transform hover:text-blue-500 hover:scale-110"
-                            onClick={() => navigate(`/edit-donasi/${item.id}`)}
-                          >
-                            <i className="fas fa-edit"></i>
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item)}
-                            className="w-4 transform hover:text-red-500 hover:scale-110"
-                          >
-                            <i className="fas fa-trash"></i>
-                          </button>
-                        </div>
+                  {filteredDonasiData.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="6"
+                        className="py-4 px-6 text-center text-gray-500"
+                      >
+                        Tidak ada data untuk ditampilkan
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    filteredDonasiData.map((item, index) => (
+                      <tr
+                        key={item.ID}
+                        className={`border-b border-gray-200 hover:bg-gray-100 ${
+                          index % 2 === 0 ? "bg-gray-50" : ""
+                        }`}
+                      >
+                        <td className="py-4 px-6 text-left whitespace-nowrap">
+                          {index + 1}
+                        </td>
+                        <td className="py-4 px-6 text-left">
+                          {item.Title || "Tidak ada judul"}
+                        </td>
+                        <td className="py-4 px-6 text-left">
+                          {item.StartedAt && item.FinishedAt
+                            ? (() => {
+                                const startedAtDate = new Date(item.StartedAt);
+                                const finishedAtDate = new Date(
+                                  item.FinishedAt
+                                );
+                                const timeDiff = finishedAtDate - startedAtDate; // Selisih dalam milidetik
+                                const dayDiff = timeDiff / (1000 * 3600 * 24); // Menghitung jumlah hari
+                                return `${Math.floor(dayDiff)} hari`; // Menampilkan selisih dalam hari
+                              })()
+                            : "-"}
+                        </td>
+                        <td className="py-4 px-6 text-left">
+                          {item.TargetDonation && !isNaN(item.TargetDonation)
+                            ? `Rp. ${parseInt(
+                                item.TargetDonation
+                              ).toLocaleString()}`
+                            : "Tidak ada target"}
+                        </td>
+                        <td className="py-4 px-6 text-left">
+                          {item.Category || "Tidak ada kategori"}{" "}
+                          {/* Menambahkan Category */}
+                        </td>
+                        <td className="py-4 px-6 text-center">
+                          <div className="flex item-center justify-center">
+                            <button
+                              className="w-4 mr-2 transform hover:text-blue-500 hover:scale-110"
+                              onClick={() =>
+                                navigate(`/edit-donasi/${item.ID}`)
+                              }
+                            >
+                              <i className="fas fa-edit"></i>
+                            </button>
+                            <button
+                              onClick={() => handleDelete(item)}
+                              className="w-4 transform hover:text-red-500 hover:scale-110"
+                            >
+                              <i className="fas fa-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             )}
@@ -166,7 +245,7 @@ const DonasiAdmin = () => {
               Konfirmasi Penghapusan
             </h2>
             <p className="text-center text-gray-600 mb-8">
-              Apakah Anda yakin ingin menghapus {" "}
+              Apakah Anda yakin ingin menghapus{" "}
               <span className="font-bold">{selectedItem?.title}</span>?
             </p>
             <div className="flex justify-center gap-6">

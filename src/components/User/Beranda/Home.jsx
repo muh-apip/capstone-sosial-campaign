@@ -12,6 +12,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [artikelData, setArtikelData] = useState([]);
+  const [popularArticles, setPopularArticles] = useState([]); // State untuk artikel populer
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -60,15 +61,30 @@ const Home = () => {
 
   const totalPages = Math.ceil(artikelData.length / articlesPerPage);
 
-  const popularArticles = [
-    { title: "Teknologi dan Empati", date: "1 Desember 2024" },
-    { title: "Kota Hijau untuk Semua", date: "25 November 2024" },
-    { title: "Energi Terbarukan untuk Masa Depan", date: "18 November 2024" },
-    { title: "Aksi Bersama: Gerakan Zero Waste", date: "3 November 2024" },
-    { title: "Dampak Sosial Sampah", date: "28 Oktober 2024" },
-    { title: "Hutan Kota: Paru-Paru di Tengah Beton", date: "26 Oktober 2024" },
-    { title: "Mengubah Sampah Menjadi Emas", date: "30 Agustus 2024" },
-  ];
+   // Fetch Artikel Populer (Trending)
+   useEffect(() => {
+    const fetchTrendingArticles = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found");
+        }
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/user/article-trending",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setPopularArticles(response.data.data || []);
+      } catch (err) {
+        console.error("Error fetching trending articles", err);
+      }
+    };
+
+    fetchTrendingArticles();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -156,35 +172,38 @@ const Home = () => {
                 <p>No articles available</p>
               ) : (
                 currentArticles.map(
-                  ({ ID, Title, ImageUrl, Category, Content, CreatedAt }) => (
+                  ({ ID, Title, ImageUrl, Category, Content, CreatedAt, View }) => (
                     <div
                       key={ID} // Gunakan ID sebagai key
-                      className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer"
+                      className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer p-4" // Tambahkan padding di sini
                       onClick={() => navigate(`/artikel/${ID}`)} // Sesuaikan dengan ID
                     >
                       <img
                         src={ImageUrl || "/path/to/default-image.png"} // Sesuaikan nama properti
                         alt={`Gambar artikel ${Title}`}
-                        className="h-48 w-full object-cover"
+                        className="h-48 w-full object-cover mb-4" // Tambahkan margin bawah untuk spasi dengan konten
                       />
-                      <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                          {Title || "Article Title"}
-                        </h3>
-                        <p className="text-sm font-light text-gray-600 tracking-wider uppercase">
-                          {Category || "No Category"}
-                        </p>
-                        <p className="text-base text-gray-600 mt-2 line-clamp-2">
-                          {Content || "No content available"}
-                        </p>
-                        <hr className="my-2 border-t-2 border-gray-100" />
-                        <span className="text-xs text-gray-500">
-                          {new Date(CreatedAt).toLocaleDateString()}
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                        {Title || "Article Title"}
+                      </h3>
+                      <p className="text-sm font-light text-gray-600 tracking-wider uppercase mb-2">
+                        {Category || "No Category"}
+                      </p>
+                      <p className="text-base text-gray-600 mt-2 line-clamp-2 mb-4">
+                        {Content || "No content available"}
+                      </p>
+                      <hr className="my-2 border-t-2 border-gray-100" />
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>{new Date(CreatedAt).toLocaleDateString()}</span>
+                        <span>
+                          <i className="fas fa-eye mr-1"></i> {/* Ikon views (opsional) */}
+                          {View} views
                         </span>
                       </div>
                     </div>
                   )
                 )
+                
               )}
             </div>
 
@@ -210,22 +229,28 @@ const Home = () => {
             <h2 className="text-lg font-semibold text-gray-800 mb-6 border-b pb-2">
               Artikel Populer
             </h2>
-            {popularArticles.map((article, index) => (
-              <div
-                key={index}
-                className="flex items-start mb-6 border-b pb-4 last:border-b-0"
-              >
-                <span className="text-3xl font-bold text-gray-400 mr-6">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h3 className="text-base font-medium text-gray-800">
-                    {article.title}
-                  </h3>
-                  <p className="text-sm text-gray-500">{article.date}</p>
+            {popularArticles.length === 0 ? (
+              <p className="text-gray-500">Loading popular articles...</p>
+            ) : (
+              popularArticles.map((article, index) => (
+                <div
+                  key={article.id}
+                  className="flex items-start mb-6 border-b pb-4 last:border-b-0"
+                >
+                  <span className="text-3xl font-bold text-gray-400 mr-6">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="text-base font-medium text-gray-800">
+                      {article.Title}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {new Date(article.CreatedAt).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
