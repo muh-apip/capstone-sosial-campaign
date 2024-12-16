@@ -4,7 +4,7 @@ import NavbarAdmin from "../Layout/NavbarAdmin";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 const EditDonasi = () => {
-  const { ID } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     category: "",
@@ -23,49 +23,40 @@ const EditDonasi = () => {
 
   // Fetch data for editing
   useEffect(() => {
-  const fetchDonasi = async () => {
-    try {
-      console.log("Fetching donasi dengan ID:", ID); // Debug ID
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("Token tidak ditemukan");
-        setError("Anda harus login terlebih dahulu.");
-        return;
-      }
-
-      const response = await fetch(
-        `https://relawanku.xyz/api/v1/admin/donasi/${ID}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    const fetchDonasi = async () => {
+      try {
+        const token = localStorage.getItem("token");  // Ambil token dari localStorage
+        if (!token) {
+          throw new Error("Token tidak ditemukan. Anda harus login terlebih dahulu.");
         }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Response error:", errorData); // Debug response error
-        throw new Error(errorData.message || "Gagal mengambil data donasi.");
+  
+        const response = await fetch(
+          `https://relawanku.xyz/api/v1/admin/donasi/`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,  // Kirim token di header Authorization
+            },
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Form not found.");
+        }
+  
+        const data = await response.json();
+        setFormData(data.data);  // Update form data
+      } catch (error) {
+        setError(error.message);  // Menampilkan pesan error
       }
-
-      const data = await response.json();
-      console.log("Data diterima:", data); // Debug data yang diterima
-      setFormData(data.data);
-      setIsLoading(false);
-    } catch (err) {
-      console.error("Fetch error:", err.message); // Debug error
-      setError(err.message);
-      setIsLoading(false);
-    }
-  };
-
-  fetchDonasi();
-}, [ID]);
-
+    };
+  
+    fetchDonasi();
+  }, [id]);
+  
 
   const handleChange = (e) => {
-    const { id, value } = e.target; // Changed ID to id
+    const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
@@ -91,7 +82,7 @@ const EditDonasi = () => {
 
     try {
       const response = await fetch(
-        `https://relawanku.xyz/api/v1/admin/donasi/${ID}`,
+        `https://relawanku.xyz/api/v1/admin/donasi/${id}`, // Use the dynamic ID here
         {
           method: "PUT",
           headers: {
