@@ -3,14 +3,14 @@ import Sidebar from "../Layout/Sidebar";
 import CardStats from "./CardStats";
 import TableSection from "./TableSection";
 import NavbarAdmin from "../Layout/NavbarAdmin";
-import axios from "axios"; // Import axios untuk mengambil data dari API
+import axios from "axios"; // Import axios for fetching data
 
 const DashboardAdmin = () => {
-  const [artikelData, setArtikelData] = useState([]); // State untuk menyimpan data artikel
-  const [relawanData, setRelawanData] = useState([]); // State untuk menyimpan data relawan
-  const [donasiData, setDonasiData] = useState([]); // State untuk menyimpan data donasi
-  const [isLoading, setIsLoading] = useState(true); // Untuk loading state
-  const [error, setError] = useState(null); // Untuk error handling
+  const [artikelData, setArtikelData] = useState([]); // State to store article data
+  const [relawanData, setRelawanData] = useState([]); // State to store volunteer data
+  const [donasiData, setDonasiData] = useState([]); // State to store donation data
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error handling state
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -27,9 +27,9 @@ const DashboardAdmin = () => {
             },
           }
         );
-        setArtikelData(response.data.data); // Menyimpan data artikel yang didapat ke state
+        setArtikelData(response.data.data);
       } catch (err) {
-        setError("Gagal mengambil data artikel");
+        setError("Failed to fetch article data");
         console.error(err);
       }
     };
@@ -48,9 +48,9 @@ const DashboardAdmin = () => {
             },
           }
         );
-        setRelawanData(response.data.data); // Menyimpan data relawan yang didapat ke state
+        setRelawanData(response.data.data);
       } catch (err) {
-        setError("Gagal mengambil data relawan");
+        setError("Failed to fetch volunteer data");
         console.error(err);
       }
     };
@@ -69,17 +69,38 @@ const DashboardAdmin = () => {
             },
           }
         );
-        setDonasiData(response.data.data); // Menyimpan data donasi yang didapat ke state
+        setDonasiData(response.data.data);
       } catch (err) {
-        setError("Gagal mengambil data donasi");
+        setError("Failed to fetch donation data");
         console.error(err);
       }
     };
 
-    fetchArticles();
-    fetchRelawan();
-    fetchDonasi();
-  }, []); // Empty dependency array to run this effect once on component mount
+    // Fetch all data concurrently
+    const fetchData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchArticles(), fetchRelawan(), fetchDonasi()]);
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="spinner">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
@@ -95,9 +116,9 @@ const DashboardAdmin = () => {
         <div className="p-4 lg:p-6">
           {/* Cards Section */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <CardStats title="Artikel" count={artikelData.length} /> {/* Menampilkan jumlah artikel */}
-            <CardStats title="Kegiatan Donasi" count={donasiData.length} /> {/* Menampilkan jumlah kegiatan donasi */}
-            <CardStats title="Kegiatan Relawan" count={relawanData.length} /> {/* Menampilkan jumlah kegiatan relawan */}
+            <CardStats title="Artikel" count={artikelData.length} />
+            <CardStats title="Kegiatan Donasi" count={donasiData.length} />
+            <CardStats title="Kegiatan Relawan" count={relawanData.length} />
             <CardStats title="Pengguna" count="200" />
           </div>
 
@@ -105,8 +126,14 @@ const DashboardAdmin = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <TableSection
               title="Transaksi Terbaru"
-              headers={["No", "Tanggal Transaksi", "Username", "Jumlah", "Status"]}
-              data={[["IN-00178", "19/10/2024", "fashih12_", "50,000", "PAID"]]} // Tambahkan data lainnya
+              headers={[
+                "No",
+                "Tanggal Transaksi",
+                "Username",
+                "Jumlah",
+                "Status",
+              ]}
+              data={[["IN-00178", "19/10/2024", "fashih12_", "50,000", "PAID"]]}
             />
             <TableSection
               title="Artikel"
@@ -123,17 +150,19 @@ const DashboardAdmin = () => {
               title="Donasi"
               headers={["Judul Kegiatan", "Rentang Waktu", "Target Donasi"]}
               data={donasiData.map((item) => [
-                item.title || "Tidak ada judul",
-                `${item.start_date} - ${item.end_date}`,
-                item.target || "Tidak ada target",
-              ])} // Menggunakan donasiData.map untuk memetakan data donasi ke dalam tabel
+                item.Title || "Tidak ada judul",
+                `${item.StartedAt} - ${item.FinishedAt}`,
+                item.TargetDonation || "Tidak ada target",
+              ])}
             />
             <TableSection
               title="Relawan"
               headers={["Judul Kegiatan", "Rentang Waktu", "Target Anggota"]}
               data={relawanData.map((item) => [
                 item.title || "Tidak ada judul",
-                `${item.start_date} - ${item.end_date}`,
+                `${new Date(item.start_date).toLocaleDateString()} - ${new Date(
+                  item.end_date
+                ).toLocaleDateString()}`,
                 `${item.quota}` || "Tidak ada target anggota",
               ])}
             />

@@ -27,14 +27,14 @@ const Profile = () => {
         navigate("/login");
         return;
       }
-
+  
       setIsLoading(true);
       try {
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("Token not found");
         }
-
+  
         const response = await axios.get(
           `https://relawanku.xyz/api/v1/user/profile/${userId}`,
           {
@@ -43,7 +43,9 @@ const Profile = () => {
             },
           }
         );
-
+  
+        console.log("Profile data fetched:", response.data); // Tambahkan console.log di sini
+  
         if (response.data.status) {
           setProfileData({
             username: response.data.data.username || "Belum diatur",
@@ -57,14 +59,16 @@ const Profile = () => {
           setError(response.data.message || "Failed to fetch profile data");
         }
       } catch (err) {
+        console.log("Error fetching profile data:", err.message || err); // Tambahkan log untuk error
         setError(err.message || "Failed to fetch profile data");
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchProfileData();
   }, [userId, navigate]);
+  
 
   const handleSave = async (field) => {
     if (!tempValue && !imageFile) {
