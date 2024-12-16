@@ -15,8 +15,8 @@ const EditDonasi = () => {
     finished_at: "",
     target_donation: "",
     image_url: null,
-    location: "", i
-  });
+    location: "",  // Pastikan tidak ada karakter aneh setelahnya
+  });  
 
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
@@ -61,32 +61,39 @@ const EditDonasi = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [id]: value };
+      console.log("Updated form data:", updatedData); // Menambahkan log untuk melihat perubahan
+      return updatedData;
+    });
   };
-
+  
   const handleFileChange = (e) => {
-    setFormData({ ...formData, image_url: e.target.files[0] });
+    const updatedData = { ...formData, image_url: e.target.files[0] };
+    setFormData(updatedData);
+    console.log("Updated form data with file:", updatedData); // Menambahkan log untuk melihat perubahan file
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccessMessage("");
-
+  
     const token = localStorage.getItem("token");
     if (!token) {
       setError("Anda harus login terlebih dahulu.");
       return;
     }
-
+  
     const formDataToSend = new FormData();
     for (const key in formData) {
       formDataToSend.append(key, formData[key]);
     }
-
+    console.log("Form data to send:", formDataToSend); // Menambahkan log untuk melihat data yang dikirim
+  
     try {
       const response = await fetch(
-        `https://relawanku.xyz/api/v1/admin/donasi/${id}`, // Use the dynamic ID here
+        `https://relawanku.xyz/api/v1/admin/donasi/${id}`, 
         {
           method: "PUT",
           headers: {
@@ -95,15 +102,14 @@ const EditDonasi = () => {
           body: formDataToSend,
         }
       );
-
-      // Check for errors in the update request
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(
           errorData.message || "Gagal memperbarui donasi. Silakan coba lagi."
         );
       }
-
+  
       setSuccessMessage("Donasi berhasil diperbarui!");
       setFormData({
         category: "",
@@ -121,6 +127,7 @@ const EditDonasi = () => {
       setError(err.message);
     }
   };
+  
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">

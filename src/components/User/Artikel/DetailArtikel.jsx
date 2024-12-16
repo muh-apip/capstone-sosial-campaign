@@ -33,7 +33,6 @@ const DetailArtikel = () => {
             },
           }
         );
-
         if (response.data && response.data.data) {
           setArticleData(response.data.data); // Menyimpan data artikel
         } else {
