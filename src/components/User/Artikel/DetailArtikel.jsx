@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import NavbarDetail from "../Layout/NavbarDetail";
 import FooterHome from "../Layout/FooterHome";
@@ -73,7 +73,12 @@ const DetailArtikel = () => {
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarDetail />
       </div>
-
+      <div className="text-sm text-gray-500 px-6 py-4">
+          <Link to="/donasi" className="hover:text-gray-800">
+            Donasi /
+          </Link>
+          <span className="font-semibold text-gray-800"> Detail Donasi</span>
+        </div>
       {/* Artikel Content */}
       <div className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
