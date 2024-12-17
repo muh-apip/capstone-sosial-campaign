@@ -110,7 +110,7 @@ const DetailArtikel = () => {
               {/* Donasi (Placeholder untuk Komponen Dinamis) */}
               <div className="bg-white p-4 rounded-lg shadow-md mb-6">
                 <img
-                  src="../src/assets/images/photos/Donasi1.png"
+                  src="/img/donasi1.png"
                   alt="Donasi"
                   className="w-full h-48 object-cover rounded-t-lg mb-4"
                 />
