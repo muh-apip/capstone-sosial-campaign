@@ -1,4 +1,4 @@
-# Backend Relawanku - Capstone Project MSIB 7 Alterra Academy
+# Frontend Relawanku - Capstone Project MSIB 7 Alterra Academy
 
 ## Deskripsi
 Relawanku adalah API yang dirancang sebagai bentuk kampanye sosial guna mengajak masyarakat untuk saling membantu sesama dengan cara menjadi relawan untuk beberapa program sosial kemanusiaan yang tersedia. API ini menyediakan beberapa fitur interaktif bagi pengguna seperti:
