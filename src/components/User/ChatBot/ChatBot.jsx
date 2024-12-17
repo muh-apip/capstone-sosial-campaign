@@ -6,7 +6,7 @@ const ChatBot = () => {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Selamat datang! Saya chatbot yang siap membantu Anda.",
+      text: "Selamat datang di website RelawanKu! Saya chatbot yang siap membantu Anda.",
     },
     {
       sender: "bot",
