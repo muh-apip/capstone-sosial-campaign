@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const Kegiatanku = () => {
+  const { id } = useParams(); // Ambil ID dari URL parameter
   const [activities, setActivities] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +22,7 @@ const Kegiatanku = () => {
         }
 
         const response = await axios.get(
-          "https://relawanku.xyz/api/v1/user/my-program/1",
+          `https://relawanku.xyz/api/v1/user/my-program/${id}`, // Menggunakan ID dinamis
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -37,7 +38,7 @@ const Kegiatanku = () => {
     };
 
     fetchActivities();
-  }, []);
+  }, [id]); // Tambahkan ID sebagai dependensi
 
   const handlePresensiClick = () => {
     navigate("/presensi-kegiatan");
