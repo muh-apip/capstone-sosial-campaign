@@ -11,7 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 const NavbarHome = ({ onSearch }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState("/images/default-profile.png");
+  const [profileImage, setProfileImage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
