@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../Layout/NavbarDetail";
-import { useNavigate } from "react-router-dom"; // Import navigate
+import { useNavigate, Link } from "react-router-dom";
 
 const Relawan = () => {
   const [formData, setFormData] = useState({
@@ -117,15 +117,25 @@ const Relawan = () => {
         <Navbar />
       </div>
 
+      {/* Breadcrumb */}
+      <div className="text-sm text-gray-500 mb-6 p-6">
+        <Link to="/relawan" className="hover:text-gray-800">
+          Relawan /
+        </Link>
+        <Link to="/relawan" className="hover:text-gray-800">
+          Detail Program /
+        </Link>
+        <span className="font-semibold text-gray-800">
+          {" "}
+          Pendaftaran Relawan
+        </span>
+      </div>
+
       {/* Konten Utama */}
       <div className="w-full bg-white p-6 rounded-lg shadow-lg space-y-6 mx-auto max-w-4xl">
         <h2 className="text-3xl font-semibold text-gray-900 text-center">
-          Solidaritas Bantu Korban Banjir & Longsor
+          Form pendaftaran
         </h2>
-        <p className="text-lg text-gray-700 text-center">
-          Ribuan warga terdampak hingga harus kehilangan nyawa. Ayo bantu
-          segera!
-        </p>
 
         {/* Tampilkan Pesan Error */}
         {errorMessage && (
