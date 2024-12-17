@@ -166,8 +166,41 @@ const ClientsAdmin = () => {
           )}
 
           {/* Pagination Component */}
-          <div className="mt-4 flex justify-center">
-            {/* Implementasi pagination jika perlu */}
+          <div className="flex justify-center items-center mt-4 space-x-2">
+            <button
+              onClick={() =>
+                handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
+              }
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"
+            >
+              {"<<"}
+            </button>
+            {Array.from(
+              { length: Math.ceil(allData.length / itemsPerPage) },
+              (_, index) => index + 1
+            ).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100 ${
+                  currentPage === page ? "bg-gray-200 font-bold" : ""
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                handlePageChange(
+                  currentPage < Math.ceil(allData.length / itemsPerPage)
+                    ? currentPage + 1
+                    : currentPage
+                )
+              }
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"
+            >
+              {">>"}
+            </button>
           </div>
         </div>
       </div>
