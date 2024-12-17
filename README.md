@@ -31,34 +31,6 @@ API ini juga menyediakan berita serta informasi terkait kegiatan sosial lingkung
 - Melihat "event donasi" yang tersedia dan langsung melakukan transaksi donasi ke program yang diinginkan.
 - Mengedit data diri dan password.
 
-## Struktur Folder
-TBD
-
-## Instalasi
-1. Clone repository ini:
-   ```bash
-   git clone <repository-url>
-   ```
-2. Masuk ke folder proyek:
-   ```bash
-   cd relawanku-backend
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Setup environment:
-   - Tambahkan file `.env` sesuai konfigurasi berikut:
-     ```env
-     DB_HOST=<host_database>
-     DB_USER=<user_database>
-     DB_PASSWORD=<password_database>
-     JWT_SECRET=<jwt_secret>
-     ```
-5. Jalankan aplikasi:
-   ```bash
-   npm start
-   ```
 
 ## Teknologi yang Digunakan
 - **Node.js**: Platform menjalankan JavaScript di server.
