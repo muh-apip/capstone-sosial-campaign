@@ -131,14 +131,14 @@ const Donasi = () => {
 
                 {/* Campaign Content */}
                 <div className="p-4 flex flex-col justify-between flex-grow">
-                  <h2 className="text-base font-bold text-gray-900 mb-2">
+                  <h2 className="text-2xl font-bold text-gray-900">
                     {campaign.Title || "Tidak ada judul"}
                   </h2>
                   <div className="flex justify-between items-center mb-4">
                     <p className="text-xs text-gray-600">
                       {campaign.location || "Lokasi tidak tersedia"}
                     </p>
-                    <p className="text-xs font-bold text-black">
+                    <p className="text-xs text-red-800 mb-5 font-bold">
                       Sisa hari{" "}
                       {campaign.FinishedAt
                         ? Math.max(
@@ -148,7 +148,7 @@ const Donasi = () => {
                                 (1000 * 60 * 60 * 24)
                             )
                           )
-                        : 0}
+                        : 0} hari
                     </p>
                   </div>
                   <p className="text-gray-700 text-sm font-normal mt-2 mb-4 line-clamp-2">
@@ -156,7 +156,7 @@ const Donasi = () => {
                   </p>
                   <hr className="my-2 border-t-2 border-gray-100" />
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Target Donasi</p>
+                    <p className="text-sm text-gray-500 mb-1">Terkumpul</p>
                     <p className="text-2xl font-semibold text-black mb-2">
                       {campaign.TargetDonation
                         ? campaign.TargetDonation.toLocaleString("id-ID", {
