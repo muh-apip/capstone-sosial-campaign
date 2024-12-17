@@ -94,7 +94,6 @@ const ClientsAdmin = () => {
     }
   };
 
-  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = allData.slice(indexOfFirstItem, indexOfLastItem);
