@@ -87,7 +87,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="mx-auto min-h-screen max-w-[1920px] max-h-[1080px] w-full h-full flex flex-col" style={{ overflow: "hidden" }}>
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />

@@ -136,7 +136,7 @@ const Donasi = () => {
                   </h2>
                   <div className="flex justify-between items-center mb-4">
                     <p className="text-xs text-gray-600">
-                      {campaign.location || "Lokasi tidak tersedia"}
+                      {campaign.Location || "Lokasi tidak tersedia"}
                     </p>
                     <p className="text-xs text-red-800 mb-5 font-bold">
                       Sisa hari{" "}
