@@ -78,16 +78,6 @@ const Donasi = () => {
       {/* Content Area */}
       <div className="flex-1 p-8 bg-gray-100">
         {/* Header Section */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Mari Bantu Mereka yang Membutuhkan
-          </h1>
-          <p className="text-black text-sm">
-            Menampilkan <strong>{filteredCampaigns.length}</strong> kampanye
-          </p>
-        </div>
-
-        {/* Category Filter Buttons */}
         <div className="flex flex-wrap gap-3 mb-6">
           {categories.map((category) => (
             <button
@@ -103,6 +93,17 @@ const Donasi = () => {
             </button>
           ))}
         </div>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Mari Bantu Mereka yang Membutuhkan
+          </h1>
+          <p className="text-black text-sm">
+            Menampilkan <strong>{filteredCampaigns.length}</strong> kampanye dari 138 kampanye
+          </p>
+        </div>
+
+        {/* Category Filter Buttons */}
+        
 
         {/* Loading/Error Handling */}
         {loading ? (
