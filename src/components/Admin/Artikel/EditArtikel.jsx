@@ -110,9 +110,15 @@ const EditArtikel = () => {
           <NavbarAdmin />
         </div>
         <main className="flex-1 p-8 overflow-y-auto">
-          <div className="text-sm text-gray-500 mb-4 p-4">
-            Dashboard / Artikel /{" "}
-            <span className="font-semibold">Edit Artikel</span>
+          <div className="text-sm text-gray-500 mb-6">
+            <Link to="/dashboard" className="hover:text-gray-800">
+              Dashboard
+            </Link>{" "}
+            /{" "}
+            <Link to="/artikel-admin" className="hover:text-gray-800">
+              Artikel
+            </Link>{" "}
+            / <span className="text-gray-800 font-semibold">Edit Donasi</span>
           </div>
           <div className="p-8 bg-white shadow-md rounded-lg max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 text-gray-700">

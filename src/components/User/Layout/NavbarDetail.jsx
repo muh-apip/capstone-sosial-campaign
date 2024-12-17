@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -9,6 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 const NavbarDetail = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState(""); // Menyimpan gambar profil
   const profileMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
@@ -26,35 +28,51 @@ const NavbarDetail = () => {
 
   const handleToggle = (setter) => () => setter((prev) => !prev);
 
+  // Fetch Profile Data
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target)
-      ) {
-        setIsProfileMenuOpen(false);
+    const fetchProfileData = async () => {
+      const userId = localStorage.getItem("userId"); // Ambil `userId` dari localStorage
+      if (!userId) {
+        navigate("/login");
+        return;
       }
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target)
-      ) {
-        setIsMobileMenuOpen(false);
+
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found");
+        }
+
+        const response = await axios.get(
+          `https://relawanku.xyz/api/v1/user/profile/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("Profile data fetched:", response.data);
+
+        if (response.data.status) {
+          setProfileImage(
+            response.data.data.image_url || "https://via.placeholder.com/32"
+          );
+        } else {
+          console.error("Failed to fetch profile data:", response.data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching profile data:", err.message || err);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    fetchProfileData();
+  }, [navigate]);
 
   // Logout function
   const handleLogout = () => {
-    // Remove the token from localStorage (or sessionStorage)
     localStorage.removeItem("authToken");
-
-    // Redirect to login page or home page
-    navigate("/login"); // Adjust the path according to your app's structure
+    navigate("/login");
   };
 
   return (
@@ -78,7 +96,9 @@ const NavbarDetail = () => {
             <Link
               key={link.href}
               to={link.href}
-              className={`px-6 py-2 ${location.pathname === link.href ? 'font-bold text-black' : 'text-gray-700'} hover:bg-gray-100`}
+              className={`px-6 py-2 ${
+                location.pathname === link.href ? "font-bold text-black" : "text-gray-700"
+              } hover:bg-gray-100`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {link.label}
@@ -93,7 +113,9 @@ const NavbarDetail = () => {
           <Link
             key={link.href}
             to={link.href}
-            className={`px-2 py-1 ${location.pathname === link.href ? 'font-bold text-black' : 'text-gray-700'} hover:text-blue-500`}
+            className={`px-2 py-1 ${
+              location.pathname === link.href ? "font-bold text-black" : "text-gray-700"
+            } hover:text-blue-500`}
           >
             {link.label}
           </Link>
@@ -102,13 +124,13 @@ const NavbarDetail = () => {
 
       {/* Icons and Profile Menu */}
       <div className="flex items-center space-x-4">
-      <a href="/notifikasi">
-        <button
-          className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Notifications"
-        >
-          <NotificationsOutlinedIcon className="h-6 w-6" />
-        </button>
+        <a href="/notifikasi">
+          <button
+            className="relative text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Notifications"
+          >
+            <NotificationsOutlinedIcon className="h-6 w-6" />
+          </button>
         </a>
         <a href="/chatbot">
           <button
@@ -119,12 +141,12 @@ const NavbarDetail = () => {
           </button>
         </a>
         <a href="/laporan">
-        <button
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Email"
-        >
-          <EmailOutlinedIcon className="h-6 w-6" />
-        </button>
+          <button
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Email"
+          >
+            <EmailOutlinedIcon className="h-6 w-6" />
+          </button>
         </a>
 
         {/* Profile Menu */}
@@ -136,7 +158,7 @@ const NavbarDetail = () => {
             aria-label="Profile menu"
           >
             <img
-              src="https://via.placeholder.com/32"
+              src={profileImage}
               alt="Profile"
               className="h-8 w-8 rounded-full border border-gray-300"
             />
@@ -144,7 +166,7 @@ const NavbarDetail = () => {
           {isProfileMenuOpen && (
             <div className="absolute right-0 mt-24 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
               <Link
-                to="/profile"
+                to="/profile/:id"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Profile

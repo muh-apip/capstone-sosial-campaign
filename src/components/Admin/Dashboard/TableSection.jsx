@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 const TableSection = ({ title, headers, data }) => {
   return (
@@ -6,9 +7,27 @@ const TableSection = ({ title, headers, data }) => {
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold text-gray-700">{title}</h2>
-        <a href="#" className="text-sm text-blue-500 hover:underline">
-          View All
-        </a>
+        {/* Update View All link based on the table title */}
+        {title === "Artikel" && (
+          <Link to="/artikel-admin" className="text-sm text-blue-500 hover:underline">
+            View All
+          </Link>
+        )}
+        {title === "Donasi" && (
+          <Link to="/donasi-admin" className="text-sm text-blue-500 hover:underline">
+            View All
+          </Link>
+        )}
+        {title === "Relawan" && (
+          <Link to="/relawan-admin" className="text-sm text-blue-500 hover:underline">
+            View All
+          </Link>
+        )}
+        {title === "Transaksi Terbaru" && (
+          <Link to="/invoices-admin" className="text-sm text-blue-500 hover:underline">
+            View All
+          </Link>
+        )}
       </div>
 
       {/* Responsive Table Wrapper */}
@@ -31,7 +50,8 @@ const TableSection = ({ title, headers, data }) => {
               <tr key={rowIndex} className="border-b hover:bg-gray-50">
                 {row.map((cell, cellIndex) => (
                   <td key={cellIndex} className="p-2 text-gray-700">
-                    {cellIndex === row.length - 1 ? (
+                    {/* Apply green background only to the last column of "Transaksi Terbaru" */}
+                    {title === "Transaksi Terbaru" && cellIndex === row.length - 1 ? (
                       <span className="inline-block px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
                         {cell}
                       </span>

@@ -19,9 +19,22 @@ const Sidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Fungsi untuk memeriksa apakah link aktif
-  const isActive = (path) => location.pathname === path;
-
+  function isActive(paths) {
+    const location = useLocation();
+  
+    // Jika paths adalah string, ubah menjadi array
+    const pathsArray = Array.isArray(paths) ? paths : [paths];
+  
+    return pathsArray.some((path) => {
+      if (path.includes(":")) {
+        // Jika path dinamis, ubah ke regex
+        const regex = new RegExp(`^${path.replace(":id", "[^/]+")}$`);
+        return regex.test(location.pathname);
+      }
+      // Untuk path statis
+      return location.pathname === path;
+    });
+  }
   // Fungsi untuk logout
   const handleLogout = () => {
     // Hapus data autentikasi (token atau sesi pengguna) dari storage
@@ -92,7 +105,11 @@ const Sidebar = () => {
               <Link
                 to="/artikel-admin"
                 className={`flex items-center px-4 py-2 ${
-                  isActive("/artikel-admin")
+                  isActive([
+                    "/artikel-admin",
+                    "/tambah-artikel",
+                    "/edit-artikel/:id",
+                  ])
                     ? "bg-custom-green text-white"
                     : "text-gray-700 hover:bg-gray-100"
                 }`}
@@ -105,7 +122,11 @@ const Sidebar = () => {
               <Link
                 to="/donasi-admin"
                 className={`flex items-center px-4 py-2 ${
-                  isActive("/donasi-admin")
+                  isActive([
+                    "/donasi-admin",
+                    "/tambah-donasi",
+                    "/edit-donasi/:id"
+                  ])
                     ? "bg-custom-green text-white"
                     : "text-gray-700 hover:bg-gray-100"
                 }`}
@@ -118,7 +139,12 @@ const Sidebar = () => {
               <Link
                 to="/relawan-admin"
                 className={`flex items-center px-4 py-2 ${
-                  isActive("/relawan-admin")
+                  isActive([
+                    "/relawan-tambah",
+                    "/relawan-admin",
+                    "/relawan-edit/:id",
+
+                  ])
                     ? "bg-custom-green text-white"
                     : "text-gray-700 hover:bg-gray-100"
                 }`}

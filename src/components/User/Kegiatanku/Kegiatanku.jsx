@@ -1,68 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavbarHome from "../Layout/NavbarHome";
 import FooterHome from "../Layout/FooterHome";
-import { Link, useNavigate } from "react-router-dom";
-
-const activities = [
-  {
-    id: 1,
-    title: "Solidaritas Bantu Korban Banjir & Longsor",
-    location: "Palu, Sulawesi Tengah",
-    daysLeft: "7",
-    description:
-      "Ribuan warga terdampak hingga harus kehilangan nyawa. Ayo bantu segera!",
-    image: "/img/kegiatanku1.png",
-  },
-  {
-    id: 2,
-    title: "Solidaritas Bantu Korban Gempa",
-    location: "Lombok, Nusa Tenggara Barat",
-    daysLeft: "5",
-    description:
-      "Gempa bumi melanda dan merusak ribuan rumah. Bantuan Anda sangat berarti!",
-    image: "/img/kegiatanku1.png",
-  },
-  {
-    id: 3,
-    title: "Solidaritas Bantu Korban Kebakaran Hutan",
-    location: "Kalimantan Tengah",
-    daysLeft: "3",
-    description:
-      "Kebakaran hutan mengancam satwa liar dan warga. Ayo bantu memulihkan lingkungan!",
-    image: "/img/kegiatanku1.png",
-  },
-  {
-    id: 4,
-    title: "Bantu Penyediaan Air Bersih",
-    location: "Kupang, Nusa Tenggara Timur",
-    daysLeft: "10",
-    description:
-      "Akses air bersih terbatas bagi warga. Mari bergabung untuk mendukung kebutuhan dasar mereka!",
-    image: "/img/kegiatanku1.png",
-  },
-  {
-    id: 5,
-    title: "Solidaritas Bantu Korban Tsunami",
-    location: "Banten, Jawa Barat",
-    daysLeft: "4",
-    description:
-      "Tsunami melanda dan banyak warga kehilangan tempat tinggal. Ayo bantu mereka bangkit kembali!",
-    image: "/img/kegiatanku1.png",
-  },
-  {
-    id: 6,
-    title: "Donasi Pangan untuk Korban Kekeringan",
-    location: "Sumbawa, Nusa Tenggara Barat",
-    daysLeft: "6",
-    description:
-      "Kekeringan melanda, dan kebutuhan pangan menjadi mendesak. Mari berbagi kebaikan!",
-    image: "/img/kegiatanku1.png",
-  },
-];
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Kegiatanku = () => {
+  const [activities, setActivities] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found");
+        }
+
+        const response = await axios.get(
+          "https://relawanku.xyz/api/v1/user/my-program/1",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setActivities(response.data.data || []);
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to fetch activities");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchActivities();
+  }, []);
 
   const handlePresensiClick = () => {
     navigate("/presensi-kegiatan");
@@ -78,31 +53,39 @@ const Kegiatanku = () => {
       <div className="flex flex-wrap lg:flex-nowrap flex-1 p-6 gap-6">
         {/* Sidebar kiri */}
         <div className="w-full lg:w-1/3 bg-white rounded-lg shadow-md p-4 overflow-y-auto">
-          {activities.map((activity) => (
-            <div
-              key={activity.id}
-              className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer transition-transform transform hover:scale-105"
-              onClick={() => setSelectedActivity(activity)}
-            >
-              <img
-                src={activity.image || "/img/default.png"}
-                alt={activity.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-3">
-                <h3 className="text-gray-800 font-bold">{activity.title}</h3>
-                <p className="text-gray-500 text-sm">{activity.location}</p>
-                <p className="text-gray-600 text-sm mt-2">
-                  {activity.description}
-                </p>
-                <div className="flex justify-end mt-3">
-                  <p className="text-red-500 text-sm font-semibold">
-                    Sisa hari {activity.daysLeft}
+          {isLoading ? (
+            <p>Loading data...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : activities.length === 0 ? (
+            <p>No activities found</p>
+          ) : (
+            activities.map((activity) => (
+              <div
+                key={activity.id}
+                className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer transition-transform transform hover:scale-105"
+                onClick={() => setSelectedActivity(activity)}
+              >
+                <img
+                  src={activity.image_url || "/img/default.png"}
+                  alt={activity.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-3">
+                  <h3 className="text-gray-800 font-bold">{activity.title}</h3>
+                  <p className="text-gray-500 text-sm">{activity.location}</p>
+                  <p className="text-gray-600 text-sm mt-2">
+                    {activity.details}
                   </p>
+                  <div className="flex justify-end mt-3">
+                    <p className="text-red-500 text-sm font-semibold">
+                      Kuota Relawan: {activity.volunteer_quota || "N/A"}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         {/* Kotak konten kanan */}
