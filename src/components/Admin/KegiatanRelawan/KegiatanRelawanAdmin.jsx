@@ -126,7 +126,7 @@ const KegiatanRelawanAdmin = () => {
         </div>
 
         <div className="p-6 flex-1 overflow-auto">
-          <div className="text-sm text-gray-500 mb-4 p-4">
+          <div className="text-sm text-gray-500 mb-6">
             Dashboard /{" "}
             <span className="text-gray-800 font-semibold">Relawan</span>
           </div>
