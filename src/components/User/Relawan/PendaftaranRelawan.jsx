@@ -98,7 +98,7 @@ const Relawan = () => {
 
       // Setelah berhasil daftar, arahkan ke /kegiatanku
       setTimeout(() => {
-        navigate("/relawan");
+        navigate("/kegiatanku");
       }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error.response?.data || error);
