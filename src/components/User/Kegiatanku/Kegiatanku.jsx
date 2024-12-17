@@ -21,28 +21,15 @@ const Kegiatanku = () => {
           throw new Error("Token not found");
         }
 
-        // Gunakan backticks untuk menyisipkan ID dalam URL
         const response = await axios.get(
-          `https://relawanku.xyz/api/v1/user/my-program/1`,
+          `https://relawanku.xyz/api/v1/user/my-program/${id}`, // Menggunakan ID dinamis
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Gunakan template literal untuk Authorization
+              Authorization: `Bearer ${token}`,
             },
           }
         );
-
-        // Filter untuk menghapus duplikat berdasarkan ID
-        const uniqueActivities = response.data.data.filter(
-          (value, index, self) =>
-            index === self.findIndex((t) => t.ID === value.ID)
-        );
-
-        setActivities(uniqueActivities);
-
-        // Set first activity as selected by default
-        if (uniqueActivities.length > 0) {
-          setSelectedActivity(uniqueActivities[0]);
-        }
+        setActivities(response.data.data || []);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch activities");
       } finally {
@@ -76,7 +63,7 @@ const Kegiatanku = () => {
           ) : (
             activities.map((activity) => (
               <div
-                key={activity.ID}
+                key={activity.id}
                 className="bg-white border rounded-lg overflow-hidden shadow-sm mb-4 cursor-pointer transition-transform transform hover:scale-105"
                 onClick={() => setSelectedActivity(activity)}
               >
@@ -93,7 +80,7 @@ const Kegiatanku = () => {
                   </p>
                   <div className="flex justify-end mt-3">
                     <p className="text-red-500 text-sm font-semibold">
-                      Kuota Relawan: {activity.quota || "N/A"}
+                      Kuota Relawan: {activity.volunteer_quota || "N/A"}
                     </p>
                   </div>
                 </div>
