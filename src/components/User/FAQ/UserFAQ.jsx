@@ -69,8 +69,8 @@ const UserFAQ = () => {
       </div>
 
       <div className="text-sm text-gray-500 mb-5 mt-5 px-4 sm:px-6">
-      <Link to="/dashboard" className="hover:text-gray-800">
-              Dashboard /
+      <Link to="/home" className="hover:text-gray-800">
+              Beranda /
             </Link>{" "}
         <span className="text-gray-800 font-semibold">FAQ</span>
       </div>

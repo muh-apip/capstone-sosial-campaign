@@ -19,6 +19,7 @@ const ClientsAdmin = () => {
   const [loading, setLoading] = useState(false); // Menangani loading state
   const [error, setError] = useState(null); // Menangani error state
 
+
   const itemsPerPage = 10;
 
   // Fetch data client
@@ -56,6 +57,7 @@ const ClientsAdmin = () => {
 
     fetchData();
   }, []);
+
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -98,6 +100,7 @@ const ClientsAdmin = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentData = allData.slice(indexOfFirstItem, indexOfLastItem);
 
+
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-100">
       <Sidebar className="w-full lg:w-1/4 xl:w-1/5" />
@@ -112,6 +115,7 @@ const ClientsAdmin = () => {
             </Link>{" "}
             <span className="text-gray-800 font-semibold">Clients</span>
           </div>
+
 
           {loading ? (
             <div>Loading...</div>
@@ -205,8 +209,10 @@ const ClientsAdmin = () => {
         </div>
       </div>
 
+
       {isModalOpen && selectedItem && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+
           <div className="bg-white p-6 rounded-lg shadow-md w-96">
             <p className="text-center text-gray-800 font-medium mb-6">
               Apakah kamu yakin ingin menghapus akun {selectedItem.username}?
@@ -214,6 +220,7 @@ const ClientsAdmin = () => {
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => setIsModalOpen(false)} // Tutup modal
+
                 className="w-32 px-4 py-2 border border-green-500 text-green-500 rounded-lg hover:bg-green-600 hover:text-white"
               >
                 Kembali

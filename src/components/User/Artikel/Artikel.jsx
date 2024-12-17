@@ -85,7 +85,7 @@ const Artikel = () => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)} // Ubah kategori yang dipilih
-                  className={`px-4 py-2 rounded-full text-sm transition-all duration-300 shadow-md ${
+                  className={`px-4 py-2 rounded-lg text-sm transition-all duration-300 shadow-md ${
                     selectedCategory === category
                       ? "bg-custom-green text-white font-medium hover:bg-green-600"
                       : "bg-gray-200 text-gray-800 hover:bg-gray-300"
