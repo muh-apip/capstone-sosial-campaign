@@ -147,7 +147,7 @@ const DetailDonasi = () => {
                 ></div>
               </div>
               <p className="text-sm text-gray-500">
-                {donationData.progress}% dari Target {donationData.target_donation}
+                100{donationData.progress}% dari Target {donationData.target_donation}
               </p>
             </div>
 
