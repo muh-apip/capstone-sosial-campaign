@@ -41,8 +41,7 @@ const Relawan = () => {
     };
 
     fetchRelawan();
-  }, []); // Dependency array kosong berarti hanya dijalankan sekali saat komponen pertama kali dimuat
-
+  }, []);
   // Filter relawan berdasarkan kategori
   const categories = ["all", ...new Set(relawanData.map((r) => r.category))];
 
@@ -80,10 +79,6 @@ const Relawan = () => {
         {/* Konten Relawan */}
         <div className="flex-1">
           {/* Judul Halaman */}
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
-            Relawan Kami
-          </h1>
-
           {/* Filter Kategori */}
           <div className="flex flex-wrap space-x-4 mb-6">
             {categories.map((category) => (
@@ -99,6 +94,15 @@ const Relawan = () => {
                 {category === "all" ? "Semua" : category}
               </button>
             ))}
+          </div>
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">
+              Jadikan hidup lebih berarti dengan bergabung menjadi relawan
+            </h1>
+            <p className="text-black text-sm">
+              Menampilkan <strong>{filteredRelawan.length}</strong> kampanye
+              dari 138 kampanye
+            </p>
           </div>
 
           {/* Daftar Relawan */}
@@ -136,9 +140,9 @@ const Relawan = () => {
                                 relawan.start_date
                               );
                               const finishedAtDate = new Date(relawan.end_date);
-                              const timeDiff = finishedAtDate - startedAtDate; // Selisih dalam milidetik
-                              const dayDiff = timeDiff / (1000 * 3600 * 24); // Menghitung jumlah hari
-                              return `${Math.floor(dayDiff)} hari`; // Menampilkan selisih dalam hari
+                              const timeDiff = finishedAtDate - startedAtDate;
+                              const dayDiff = timeDiff / (1000 * 3600 * 24);
+                              return `${Math.floor(dayDiff)} hari`;
                             })()
                           : relawan.dayDiff || "Location"}
                       </p>
