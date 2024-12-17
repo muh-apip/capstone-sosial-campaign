@@ -87,7 +87,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex max-w-[1920px] max-h-[1080px] flex-col min-h-screen mx-auto h-full">
       {/* Navbar */}
       <div className="sticky top-0 z-50 w-full bg-white shadow-md">
         <NavbarHome />
